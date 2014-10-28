@@ -1,0 +1,12 @@
+
+import("grid")
+
+export("dlReplay")
+export("setPrefix")
+
+# For test code in ./tests/
+export("plotdiff")
+export("plotdiffResult")
+
+S3method("dlReplay", "default")
+S3method("dlReplay", "recordedplot")
