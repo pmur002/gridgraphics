@@ -41,6 +41,10 @@ currentPar <- function(inlinePars) {
         opar <- par(inlinePars)
     }
     cpar <- par()
+    # For some weird reason, par()$lty gives different result from par("lty")
+    # (and the former can be WRONG or at least an invalid value)
+    # Until figure out what is going on, use this workaround
+    cpar$lty <- par("lty")
     if (length(inlinePars)) {
         par(opar)
     }

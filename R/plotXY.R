@@ -23,6 +23,12 @@ step <- function(x, y, lty, col, lwd) {
                name=grobname("step"))
 }
 
+bar <- function(x, y, lty, col, lwd) {
+    grid.segments(x, unit(0, "npc"), x, y, default.units="native",
+                  gp=gpar(lty=lty, col=col, lwd=lwd),
+                  name=grobname("spike"))
+}
+
 # C_plotXY(xy, type, pch, lty, col, bg, cex, lwd, ...)
 C_plotXY <- function(x) {
     dev.set(recordDev())
@@ -43,7 +49,8 @@ C_plotXY <- function(x) {
     switch(type,
            p=points(xx, yy, pch, lty, col, bg, cex, lwd, par$cin),
            l=lines(xx, yy, lty, col, lwd),
-           s=step(xx, yy, lty, col, lwd))
+           s=step(xx, yy, lty, col, lwd),
+           h=bar(xx, yy, lty, col, lwd))
     upViewport(depth)
 }
 
