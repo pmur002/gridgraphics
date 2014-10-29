@@ -99,6 +99,7 @@ ComputeAtValue <- function(at, adj, side, las) {
 
 # NOTE that 'mgp' is in 'mex' units
 # NOTE the 'yLineBias' "fudge factor" of 0.2 (taken from PDF/PS/X11 values)
+# TODO:  use par$ylbias instead of explicit 0.2 !!!
 # NOTE we use par("cin") rather than 'grid' "lines"
 # NOTE that 'linecex' attempts to capture the fact that 'cex' has a different
 #      effect in C_title (where it only affects text size) and C_axis

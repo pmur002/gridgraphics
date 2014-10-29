@@ -5,22 +5,34 @@
 C_axis <- function(x) {
     dev.set(recordDev())
     par <- currentPar(x[-(1:16)])
-    defaultTicks <- axTicks(x[[2]])
     dev.set(playDev())
     # TODO:  write a more complex grid.axis() that can handle
-    #        'tick', 'line', 'pos', 'outer', 'lwd.ticks', 'col.ticks',
-    # TODO: Take other par() settings into account (e.g., 'las', 'adj', ...)
+    #        'tick', 'line', 'pos', 'outer'
     depth <- gotovp(NA)
     # TODO: use axTicks() and/or axisTicks() to get axis tick locations
     #       when at=NULL, plus formatC() to format those locations for
     #       the tick labels
     side <- x[[2]]
     if (is.null(x[[3]])) {
-        ticks <- defaultTicks
+        ticks <- defaultTicks(side, par)
     } else {
         ticks <- x[[3]]
     }
     labels <- x[[4]]
+
+    lty <- x[[10]]
+    lwd <- x[[11]]
+    lwd.ticks <- x[[12]]
+    if (!is.finite(lwd.ticks))
+        lwd.ticks <- 1
+    col <- x[[13]]
+    if (is.null(col))
+        col <- par$fg
+    col.ticks <- x[[14]]
+    if (is.null(col.ticks))
+        col.ticks <- col    
+    hadj <- x[[15]]
+    padj <- x[[16]]
     # NOTE: the use of 'trim=TRUE' in format() to mimic use of,
     #       e.g., EncodeReal0(), within labelformat() in plot.c
     if (is.null(labels)) {
@@ -36,13 +48,12 @@ C_axis <- function(x) {
     } else {
         drawLabels <- TRUE
     }
-    hadj <- x[[15]]
-    padj <- x[[16]]
-    if (side == 1) {
+    if (side == 1 && par$xaxt != "n") {
         grid.segments(unit(min(ticks), "native"),
                       unit(0, "npc"),
                       unit(max(ticks), "native"),
                       unit(0, "npc"),
+                      gp=gpar(col=col, lwd=lwd, lty=lty),
                       name=grobname("bottom-axis-line"))
         # TODO: More complex calculation of tick length if par(tck) set
         tickLength <- unit(par$cin[2]*par$tcl*par$cex, "in")
@@ -50,6 +61,7 @@ C_axis <- function(x) {
                       unit(0, "npc"),
                       unit(ticks, "native"),
                       unit(0, "npc") + tickLength,
+                      gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty),
                       name=grobname("bottom-axis-ticks"))
         # TODO: use 'labels' if given
         # NOTE: the following includes calculation based on par(mgp)
@@ -66,17 +78,19 @@ C_axis <- function(x) {
                    allowOverlap=FALSE,
                    label="bottom-axis-labels")
         }
-    } else if (side == 2) {
+    } else if (side == 2 && par$yaxt != "n") {
         grid.segments(unit(0, "npc"),
                       unit(min(ticks), "native"),
                       unit(0, "npc"),
                       unit(max(ticks), "native"),
+                      gp=gpar(col=col, lwd=lwd, lty=lty),
                       name=grobname("left-axis-line"))
         tickLength <- unit(par$cin[2]*par$tcl*par$cex, "in")
         grid.segments(unit(0, "npc"),
                       unit(ticks, "native"),
                       unit(0, "npc") + tickLength,
                       unit(ticks, "native"),
+                      gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty),
                       name=grobname("left-axis-ticks"))
         if (drawLabels) {
             GMtext(labels, 2, line=par$mgp[2],
@@ -89,17 +103,19 @@ C_axis <- function(x) {
                    allowOverlap=FALSE,
                    label="left-axis-labels")
         }
-    } else if (side == 3) {
+    } else if (side == 3 && par$xaxt != "n") {
         grid.segments(unit(min(ticks), "native"),
                       unit(1, "npc"),
                       unit(max(ticks), "native"),
                       unit(1, "npc"),
+                      gp=gpar(col=col, lwd=lwd, lty=lty),
                       name=grobname("top-axis-line"))
         tickLength <- unit(par$cin[2]*par$tcl*par$cex, "in")
         grid.segments(unit(ticks, "native"),
                       unit(1, "npc"),
                       unit(ticks, "native"),
                       unit(1, "npc") - tickLength,
+                      gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty),
                       name=grobname("top-axis-ticks"))
         if (drawLabels) {
             GMtext(labels, 3, line=par$mgp[2],
@@ -112,17 +128,19 @@ C_axis <- function(x) {
                    allowOverlap=FALSE,
                    label="top-axis-labels")
         }
-    } else if (side == 4) {
+    } else if (side == 4 && par$yaxt != "n") {
         grid.segments(unit(1, "npc"),
                       unit(min(ticks), "native"),
                       unit(1, "npc"),
                       unit(max(ticks), "native"),
+                      gp=gpar(col=col, lwd=lwd, lty=lty),
                       name=grobname("right-axis-line"))
         tickLength <- unit(par$cin[2]*par$tcl*par$cex, "in")
         grid.segments(unit(1, "npc"),
                       unit(ticks, "native"),
                       unit(1, "npc") - tickLength,
                       unit(ticks, "native"),
+                      gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty),
                       name=grobname("right-axis-ticks"))
         if (drawLabels) {
             GMtext(labels, 4, line=par$mgp[2],
@@ -135,10 +153,14 @@ C_axis <- function(x) {
                    allowOverlap=FALSE,
                    label="right-axis-labels")
         }
-    } else {
-        stop("Invalid 'side' argument")
-    }
+    } 
     upViewport(depth)
+}
+
+defaultTicks <- function(side, par) {
+    axp <- switch(side, par$xaxp, par$yaxp, par$xaxp, par$yaxp)
+    usr <- switch(side, par$usr[1:2], par$usr[3:4], par$usr[1:2], par$usr[3:4])
+    axTicks(side, axp, usr)
 }
 
 computeXAdj <- function(hadj, side, las) {

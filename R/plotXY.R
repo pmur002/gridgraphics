@@ -14,6 +14,15 @@ lines <- function(x, y, lty, col, lwd) {
                name=grobname("lines"))
 }
 
+step <- function(x, y, lty, col, lwd) {
+    n <- length(x)
+    grid.lines(rep(x, each=2)[-1],
+               rep(y, each=2, length.out=2*n - 1),
+               default.units="native",
+               gp=gpar(lty=lty, col=col, lwd=lwd),
+               name=grobname("step"))
+}
+
 # C_plotXY(xy, type, pch, lty, col, bg, cex, lwd, ...)
 C_plotXY <- function(x) {
     dev.set(recordDev())
@@ -33,7 +42,8 @@ C_plotXY <- function(x) {
     lwd <- x[[9]]
     switch(type,
            p=points(xx, yy, pch, lty, col, bg, cex, lwd, par$cin),
-           l=lines(xx, yy, lty, col, lwd))
+           l=lines(xx, yy, lty, col, lwd),
+           s=step(xx, yy, lty, col, lwd))
     upViewport(depth)
 }
 

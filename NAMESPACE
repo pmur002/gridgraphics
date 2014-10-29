@@ -5,6 +5,7 @@ export("dlReplay")
 export("setPrefix")
 
 # For test code in ./tests/
+export("plotdiffInit")
 export("plotdiff")
 export("plotdiffResult")
 

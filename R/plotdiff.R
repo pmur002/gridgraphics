@@ -22,6 +22,10 @@ fungen <- function() {
     
     diffs <- NULL
 
+    pdInit <- function() {
+        diffs <<- NULL
+    }
+    
     # Generate PDF because that is where 'gridGraphics' will mimic best
     # Convert to PNG for compare because that will provide a little bit
     # of tolerance for infinitessimal differences (?)
@@ -69,13 +73,13 @@ fungen <- function() {
         }
     }
 
-    list(pd=pd, pdresult=pdresult)
+    list(pdInit=pdInit, pd=pd, pdresult=pdresult)
 }
 
 funs <- fungen()
 
+plotdiffInit <- funs
 plotdiff <- funs$pd
-
 plotdiffResult <- funs$pdresult
 
 
