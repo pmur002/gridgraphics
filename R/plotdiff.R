@@ -25,14 +25,15 @@ fungen <- function() {
     # Generate PDF because that is where 'gridGraphics' will mimic best
     # Convert to PNG for compare because that will provide a little bit
     # of tolerance for infinitessimal differences (?)
-    pd <- function(expr, label, antialias=TRUE, width=7, height=7) {
+    pd <- function(expr, label,
+                   antialias=TRUE, density=100, width=7, height=7) {
         pdf(paste0(label, "-graphics.pdf"),
             width=width, height=height, compress=FALSE)
         dev.control("enable")
         eval(expr)
         dl <- recordPlot()
         dev.off()
-        options <-"-density 100x100"
+        options <- paste0("-density ", density, "x", density)
         # 'antialias' must be off to get reliable comparison of
         # images that include adjacent polygon fills
         if (!antialias)

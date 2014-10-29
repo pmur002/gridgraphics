@@ -8,11 +8,24 @@ C_abline <- function(x) {
     par <- currentPar(x[-(1:9)])
     dev.set(playDev())
     depth <- gotovp(par$xpd)
+    a <- x[[2]]
+    b <- x[[3]]
     h <- x[[4]]
     v <- x[[5]]
+    untf <- x[[6]]
     col <- x[[7]]
     lty <- x[[8]]
     lwd <- x[[9]]
+    if (!is.null(a)) {
+        if (is.null(b)) {
+            a <- a[1]
+            b <- a[2]
+        }
+        # TODO: handle "log" axes
+        # TODO: this may have to be smarter to handle drawing outside
+        #       the plot region
+        grid.abline(a, b, gp=gpar(col=col, lty=lty, lwd=lwd))
+    }
     if (!is.null(h)) {
         grid.segments(0, unit(h, "native"), 1, unit(h, "native"),
                       gp=gpar(col=col, lty=lty, lwd=lwd),

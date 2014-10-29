@@ -22,10 +22,10 @@ dlDispatch <- function(x) {
            C_path = C_path(x[[2]]),
            C_raster = C_raster(x[[2]]),
            # These only partially supported
-           C_contour = C_contour(x[[2]])
+           C_contour = C_contour(x[[2]]),
            # These unsupported
-           C_persp = warning("gridGraphics cannot emulate persp()")
-           C_filledcontour = warning("gridGraphics cannot emulate persp()")
+           C_persp = warning("gridGraphics cannot emulate persp()"),
+           C_filledcontour = warning("gridGraphics cannot emulate persp()"),
            # These are ignored
            C_strWidth = NULL,
            C_strHeight = NULL,
