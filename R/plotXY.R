@@ -24,7 +24,7 @@ step <- function(x, y, lty, col, lwd) {
 }
 
 bar <- function(x, y, lty, col, lwd) {
-    grid.segments(x, unit(0, "npc"), x, y, default.units="native",
+    grid.segments(x, 0, x, y, default.units="native",
                   gp=gpar(lty=lty, col=col, lwd=lwd),
                   name=grobname("spike"))
 }

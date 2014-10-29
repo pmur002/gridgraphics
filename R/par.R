@@ -50,3 +50,57 @@ currentPar <- function(inlinePars) {
     }
     cpar
 }
+
+FixupPch <- function(pch, dflt) {
+    if (length(pch) == 0) {
+        dflt
+    } else {
+        pch
+    }
+}
+
+FixupLty <- function(lty, dflt) {
+    if (length(lty) == 0) {
+        dflt
+    } else {
+        lty
+    }
+}
+
+FixupLwd <- function(lwd, dflt) {
+    if (length(lwd) == 0) {
+        dflt
+    } else {
+        ifelse(is.finite(lwd) | lwd >=0, lwd, NA)
+    }
+}
+
+FixupCol <- function(col, dflt, par) {
+    if (length(col) == 0) {
+        dflt
+    } else {
+        col
+    }
+}
+
+FixupCex <- function(cex, dflt) {
+    if (length(cex) == 0) {
+        dflt
+    } else {
+        ifelse(is.finite(cex) & cex > 0, cex, NA)
+    }
+}
+
+FixupFont <- function(font, dflt) {
+    if (length(font) == 0) {
+        dflt
+    } else {
+        if (is.numeric(font)) {
+            ifelse(font < 1 | font > 5, NA, font)
+        } else {
+            font
+        }
+    }
+}
+
+

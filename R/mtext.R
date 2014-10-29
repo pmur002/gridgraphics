@@ -12,16 +12,14 @@ C_mtext <- function(x) {
     adj <- ComputeAdjValue(x[[7]], side, par$las)
     at <- ComputeAtValue(x[[6]], adj, side, par$las)
     padj <- ComputePAdjValue(x[[8]], side, par$las)
-    cex <- x[[9]]
     # NOTE: default is not par$cex, but 1.0 
-    if (!is.finite(cex))
-        cex <- 1
-    col <- x[[10]]
-    if (!is.finite(col))
-        col <- par$col
-    font <- x[[11]]
-    if (!is.finite(font))
-        font <- par$font
+    # NOTE: yes, mtext() really does override 'col=NA', 'cex=NA', and 'font=NA'
+    cex <- FixupCex(x[[9]], 1)
+    cex <- ifelse(is.na(cex), par$cex, cex)
+    col <- FixupCol(x[[10]], NA)
+    col <- ifelse(is.na(col), par$col, col)
+    font <- FixupFont(x[[11]], par$font)
+    font <- ifelse(is.na(font), par$font, font)
     if (outer) {
         depth <- gotovp(NA, "inner")
     } else {
@@ -77,19 +75,19 @@ ComputePAdjValue <- function(padj, side, las) {
 
 ComputeAtValue <- function(at, adj, side, las) {
     if (is.finite(at)) {
-        at
+        unit(at, "native")
     } else {
 	# If the text is parallel to the axis, use "adj" for "at"
 	# Otherwise, centre the text
-	switch(las + 1,
-	       # parallel to axis 
-               at <- adj,
-               # horizontal 
-               switch(side, adj, 0.5, adj, 0.5),
-               # perpendicular to axis
-               0.5,
-               # vertical 
-               switch(side, 0.5, adj, 0.5, adj))
+	unit(switch(las + 1,
+	            # parallel to axis 
+                    at <- adj,
+                    # horizontal 
+                    switch(side, adj, 0.5, adj, 0.5),
+                    # perpendicular to axis
+                    0.5,
+                    # vertical 
+                    switch(side, 0.5, adj, 0.5, adj)), "npc")
     }
 }
 
@@ -105,10 +103,6 @@ ComputeAtValue <- function(at, adj, side, las) {
 #      effect in C_title (where it only affects text size) and C_axis
 #      (where it affects both text size and line size)
 
-# TODO:  take notice of 'line'
-# TODO:  take notice of 'outer'
-# TODO:  take notice of 'las'
-# TODO:  take notice of 'yadj'
 GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
                    mex, cin, cex, linecex, font, col,
                    allowOverlap=TRUE, label) {
@@ -119,7 +113,7 @@ GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
             line <- line + 1/mex*(1 - 0.2)
             angle <- 0
         }
-        x <- unit(at, "native")
+        x <- at
         y <- unit(-line*cin[2]*linecex, "in")
     } else if (side == 2) {
         if(las == 1 || las == 2) {
@@ -129,7 +123,7 @@ GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
 	    angle <- 90
 	}
         x <- unit(-line*cin[2]*linecex, "in")
-        y <- unit(at, "native")
+        y <- at
     } else if (side == 3) {
         if(las == 2 || las == 3) {
 	    angle <- 90
@@ -138,7 +132,7 @@ GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
 	    line <- line + 1/mex*0.2
 	    angle <- 0
 	}
-        x <- unit(at, "native")
+        x <- at
         y <- unit(1, "npc") + unit(line*cin[2]*linecex, "in")
     } else if (side == 4) {
 	if(las == 1 || las == 2) {
@@ -149,7 +143,7 @@ GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
 	    angle <- 90
 	}
         x <- unit(1, "npc") + unit(line*cin[2]*linecex, "in")
-        y <- unit(at, "native")
+        y <- at
     } else {
         stop("Invalid 'side'")
     }
