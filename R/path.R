@@ -1,5 +1,5 @@
 
-# path(x, y, lengths, rule, col, border, lty, ...)
+# C_path(x, y, lengths, rule, col, border, lty, ...)
 
 C_path <- function(x) {
     dev.set(recordDev())

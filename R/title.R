@@ -3,7 +3,6 @@
 C_title <- function(x) {
     # TODO: Handle 'sub'
     # TODO: Handle 'line' argument
-    # TODO: Handle 'outer' argument
     # TODO: Query par() for default 'line'
     # TODO: Take other par() settings into account (e.g., 'las', 'adj', ...)
     # TODO: Handle annotation-specific pars like cex.main
@@ -20,14 +19,33 @@ C_title <- function(x) {
     line <- x[[6]]
     outer <- x[[7]]
     if (outer) {
-        depth <- gotovp(NA, "plot")
+        depth <- gotovp(NA, "inner")
     } else {
         depth <- gotovp(if (is.na(par$xpd)) NA else TRUE, "plot")
     }        
     if (!is.null(main)) {
+	if (outer) {
+	    if (is.finite(line)) {
+		vpos <- line
+		adjy <- 0
+	    } else {
+		vpos <- 0.5*par$oma[3]
+		adjy = 0.5
+	    }
+	} else {
+	    if (is.finite(line)) {
+		vpos = line
+		adjy = 0
+	    } else {
+		vpos = 0.5*par$mar[3]
+		adjy = 0.5
+	    }
+	}
         grid.text(main,
+                  x=unit(par$adj, "npc"),
                   y=unit(1, "npc") +
-                    unit(0.5*par$mar[3]*par$cex*par$cin[2], "in"),
+                    unit(vpos*par$cex*par$cin[2], "in"),
+                  vjust=adjy,
                   gp=gpar(cex=par$cex.main*par$cex, fontface=par$font.main,
                           col=par$col.main),
                   name=grobname("main"))

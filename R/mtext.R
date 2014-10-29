@@ -9,12 +9,13 @@ C_mtext <- function(x) {
     side <- x[[3]]
     line <- x[[4]]
     outer <- x[[5]]
-    at <- x[[6]]
     adj <- ComputeAdjValue(x[[7]], side, par$las)
+    at <- ComputeAtValue(x[[6]], adj, side, par$las)
     padj <- ComputePAdjValue(x[[8]], side, par$las)
     cex <- x[[9]]
+    # NOTE: default is not par$cex, but 1.0 
     if (!is.finite(cex))
-        cex <- par$cex
+        cex <- 1
     col <- x[[10]]
     if (!is.finite(col))
         col <- par$col
@@ -24,7 +25,11 @@ C_mtext <- function(x) {
     if (outer) {
         depth <- gotovp(NA, "inner")
     } else {
-        depth <- gotovp(if (is.na(par$xpd)) NA else TRUE, "window")
+        # NOTE: there is a bug in C_mtext() in plot.c where it checks
+        #       "if (outer)" when 'outer' is still an SEXP, so the
+        #       result is ALWAYS TRUE, so xpd is ALWAYS set to 2
+        depth <- gotovp(NA, "window")
+        # depth <- gotovp(if (is.na(par$xpd)) NA else TRUE, "window")
     }
     name <- paste0("mtext-side", side)
     if (outer)
@@ -67,6 +72,24 @@ ComputePAdjValue <- function(padj, side, las) {
                0.5,
                # las = 3
                switch(side, 0.5, 0, 0.5, 0))
+    }
+}
+
+ComputeAtValue <- function(at, adj, side, las) {
+    if (is.finite(at)) {
+        at
+    } else {
+	# If the text is parallel to the axis, use "adj" for "at"
+	# Otherwise, centre the text
+	switch(las + 1,
+	       # parallel to axis 
+               at <- adj,
+               # horizontal 
+               switch(side, adj, 0.5, adj, 0.5),
+               # perpendicular to axis
+               0.5,
+               # vertical 
+               switch(side, 0.5, adj, 0.5, adj))
     }
 }
 

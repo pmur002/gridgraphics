@@ -1,4 +1,0 @@
-
-# 'graphics' system conversions
-
-

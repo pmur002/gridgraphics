@@ -1,14 +1,6 @@
 
 .gridGraphicsEnv <- new.env()
 
-playDev <- function() {
-    get("pd", .gridGraphicsEnv)
-}
-    
-recordDev <- function() {
-    get("rd", .gridGraphicsEnv)
-}
-
 init <- function(dl) {
     if (dev.cur() == 1) {
         dev.new()
@@ -28,12 +20,33 @@ init <- function(dl) {
     dev.set(playDev())
     initPlotIndex()
     initWindowIndex()
+    initClip()
 }
 
 shutdown <- function() {
     # Close the off-screen graphics device
     dev.set(recordDev())
     invisible(dev.off())
+}
+
+initClip <- function() {
+    assign("currentClip", NULL, .gridGraphicsEnv)
+}
+
+setClip <- function(x, y, w, h) {
+    assign("currentClip", c(x, y, w, h), .gridGraphicsEnv)
+}
+
+getClip <- function() {
+    get("currentClip", .gridGraphicsEnv)
+}
+
+playDev <- function() {
+    get("pd", .gridGraphicsEnv)
+}
+    
+recordDev <- function() {
+    get("rd", .gridGraphicsEnv)
 }
 
 indexFuns <- function() {

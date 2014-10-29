@@ -11,6 +11,7 @@ C_plot_new <- function(x) {
     dev.set(playDev())
     incrementPlotIndex()
     initWindowIndex()
+    initClip()
     nvp <- 0
     if (page) {
         grid.newpage()
@@ -70,14 +71,20 @@ C_plot_new <- function(x) {
                            just=c("left", "bottom"),
                            clip=TRUE,
                            name=vpname("plot", clip=TRUE))
+    # Default windowvp;  will be overridden by a plot.window() call
+    windowvp <- viewport(name=vpname("window"))
+    windowvpclip <- viewport(clip=TRUE, name=vpname("window", clip=TRUE))     
     pushViewport(figurevp)
     pushViewport(plotvp)
-    upViewport()
-    pushViewport(plotvpclip)
+    pushViewport(windowvp)
     upViewport(2)
+    pushViewport(plotvpclip)
+    pushViewport(windowvpclip)
+    upViewport(3)
     pushViewport(figurevpclip)
     pushViewport(plotvp)
-    upViewport(2)
+    pushViewport(windowvp)
+    upViewport(3)
     if (nvp > 0)
         upViewport(nvp)
 }
