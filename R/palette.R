@@ -1,5 +1,5 @@
 
-palette2 <- function(x) {
+C_palette2 <- function(x) {
     # TODO: Record current colour "palette"
 }
 

@@ -47,20 +47,23 @@ C_title <- function(x) {
                     unit(vpos*par$cex*par$cin[2], "in"),
                   vjust=adjy,
                   gp=gpar(cex=par$cex.main*par$cex, fontface=par$font.main,
-                          col=par$col.main),
+                          col=par$col.main, lineheight=par$lheight),
                   name=grobname("main"))
     }
     if (!is.null(sub)) {
         GMtext(sub, 1, line=par$mgp[1] + 1, at=0.5, las=0, xadj=0.5, yadj=0,
-               mex=par$mex, cin=par$cin, cex=par$cex.sub*par$cex, linecex=par$cex,
-               font=par$font.sub, col=par$col.sub, label="sub")
+               mex=par$mex, cin=par$cin, cex=par$cex.sub*par$cex,
+               linecex=par$cex, font=par$font.sub, col=par$col.sub,
+               lheight=par$lheight, label="sub")
     }
     GMtext(xlab, 1, line=par$mgp[1], at=0.5, las=0, xadj=0.5, yadj=0, 
            mex=par$mex, cin=par$cin, cex=par$cex.lab*par$cex, linecex=par$cex,
-           font=par$font.lab, col=par$col.lab, label="xlab")
+           lheight=par$lheight, font=par$font.lab, col=par$col.lab,
+           label="xlab")
     GMtext(ylab, 2, line=par$mgp[1], at=0.5, las=0, xadj=0.5, yadj=0,
            mex=par$mex, cin=par$cin, cex=par$cex.lab*par$cex, linecex=par$cex,
-           font=par$font.lab, col=par$col.lab, label="ylab")
+           lheight=par$lheight, font=par$font.lab, col=par$col.lab,
+           label="ylab")
     upViewport(depth)
 }
 

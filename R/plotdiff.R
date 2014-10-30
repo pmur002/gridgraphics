@@ -29,29 +29,39 @@ fungen <- function() {
     # Generate PDF because that is where 'gridGraphics' will mimic best
     # Convert to PNG for compare because that will provide a little bit
     # of tolerance for infinitessimal differences (?)
-    pd <- function(expr, label,
+    pd <- function(expr, label, dev="pdf",
                    antialias=TRUE, density=100, width=7, height=7) {
-        pdf(paste0(label, "-graphics.pdf"),
-            width=width, height=height, compress=FALSE)
+        suffix <- switch(dev, pdf=".pdf", png=".png",
+                         stop("I do not like your choice of device"))
+        switch(dev,
+               pdf=pdf(paste0(label, "-graphics", suffix),
+                       width=width, height=height, compress=FALSE),
+               png=png(paste0(label, "-graphics", suffix),
+                       width=width*100, height=height*100))
         dev.control("enable")
         eval(expr)
         dl <- recordPlot()
         dev.off()
-        options <- paste0("-density ", density, "x", density)
-        # 'antialias' must be off to get reliable comparison of
-        # images that include adjacent polygon fills
-        if (!antialias)
-            options <- c(options, "+antialias")
-        system2("convert",
-                c(options,
-                  paste0(label, c("-graphics.pdf", "-graphics.png"))))
-        pdf(paste0(label, "-grid.pdf"), 
-            width=width, height=height, compress=FALSE)
+        switch(dev,
+               pdf=pdf(paste0(label, "-grid.pdf"),
+                       width=width, height=height, compress=FALSE),
+               png=png(paste0(label, "-grid.png"),
+                       width=width*100, height=height*100))
         dlReplay(dl)
         dev.off()
-        system2("convert",
-                c(options,
-                  paste0(label, c("-grid.pdf", "-grid.png"))))
+        if (dev != "png") {
+            options <- paste0("-density ", density, "x", density)
+            # 'antialias' must be off to get reliable comparison of
+            # images that include adjacent polygon fills
+            if (!antialias)
+                options <- c(options, "+antialias")
+            system2("convert",
+                    c(options,
+                      paste0(label, c("-graphics.pdf", "-graphics.png"))))
+            system2("convert",
+                    c(options,
+                      paste0(label, c("-grid.pdf", "-grid.png"))))
+        }
         result <- plotcompare(label)
         if (result != "0") {
             diffs <<- c(diffs,
@@ -78,7 +88,7 @@ fungen <- function() {
 
 funs <- fungen()
 
-plotdiffInit <- funs
+plotdiffInit <- funs$pdInit
 plotdiff <- funs$pd
 plotdiffResult <- funs$pdresult
 

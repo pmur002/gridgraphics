@@ -36,7 +36,7 @@ C_mtext <- function(x) {
     GMtext(text, side, line, outer, at,
            las=par$las, xadj=adj, yadj=padj,
            mex=par$mex, cin=par$cin, cex=cex, linecex=par$cex,
-           font=font, col=col,
+           font=font, col=col, lheight=par$lheight,
            label=grobname(name))
     upViewport(depth)
 }
@@ -120,7 +120,7 @@ ComputeAtValue <- function(at, adj, side, las) {
 #      (where it affects both text size and line size)
 
 GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
-                   mex, cin, cex, linecex, font, col,
+                   mex, cin, cex, linecex, font, col, lheight,
                    allowOverlap=TRUE, label) {
     if (side == 1) {
         if (las == 2 || las == 3) {
@@ -164,7 +164,7 @@ GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
         stop("Invalid 'side'")
     }
     grid.text(str, x, y, hjust=xadj, vjust=yadj, rot=angle,
-              gp=gpar(cex=cex, fontface=font, col=col),
+              gp=gpar(cex=cex, fontface=font, col=col, lineheight=lheight),
               check.overlap=!allowOverlap,
               name=grobname(label))
 }

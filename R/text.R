@@ -20,7 +20,7 @@ C_text <- function(x) {
     font <- ifelse(is.na(font), par$font, font)
     grid.text(labels, xx, yy, default.units="native",
               hjust=just[1], vjust=just[2],
-              gp=gpar(cex=cex, col=col, fontface=font),
+              gp=gpar(cex=cex, col=col, fontface=font, lineheight=par$lheight),
               name=grobname("text"))
     upViewport(depth)
 }

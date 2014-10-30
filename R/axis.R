@@ -72,7 +72,7 @@ C_axis <- function(x) {
                    yadj=computePAdj(padj, side, par$las),
                    mex=par$mex, cin=par$cin, 
                    cex=par$cex.axis*par$cex, linecex=par$cex.axis*par$cex,
-                   font=par$font.axis, col=par$col.axis,
+                   font=par$font.axis, col=par$col.axis, lheight=par$lheight,
                    allowOverlap=FALSE,
                    label="bottom-axis-labels")
         }
@@ -98,7 +98,7 @@ C_axis <- function(x) {
                    yadj=computePAdj(padj, side, par$las),
                    mex=par$mex, cin=par$cin,
                    cex=par$cex.axis*par$cex, linecex=par$cex.axis*par$cex,
-                   font=par$font.axis, col=par$col.axis,
+                   font=par$font.axis, col=par$col.axis, lheight=par$lheight,
                    allowOverlap=FALSE,
                    label="left-axis-labels")
         }
@@ -124,7 +124,7 @@ C_axis <- function(x) {
                    yadj=computePAdj(padj, side, par$las),
                    mex=par$mex, cin=par$cin, 
                    cex=par$cex.axis*par$cex, linecex=par$cex.axis*par$cex,
-                   font=par$font.axis, col=par$col.axis,
+                   font=par$font.axis, col=par$col.axis, lheight=par$lheight,
                    allowOverlap=FALSE,
                    label="top-axis-labels")
         }
@@ -150,7 +150,7 @@ C_axis <- function(x) {
                    yadj=computePAdj(padj, side, par$las),
                    mex=par$mex, cin=par$cin,
                    cex=par$cex.axis*par$cex, linecex=par$cex.axis*par$cex,
-                   font=par$font.axis, col=par$col.axis,
+                   font=par$font.axis, col=par$col.axis, lheight=par$lheight,
                    allowOverlap=FALSE,
                    label="right-axis-labels")
         }
