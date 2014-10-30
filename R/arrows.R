@@ -13,9 +13,9 @@ C_arrows <- function(x) {
     length <- x[[6]]
     angle <- x[[7]]
     code <- x[[8]]
-    col <- x[[9]]
-    lty <- x[[10]]
-    lwd <- x[[11]]
+    col <- FixupCol(x[[9]], NA)
+    lty <- FixupLty(x[[10]], par$lty)
+    lwd <- FixupLwd(x[[11]], par$lwd)
     grid.segments(x0, y0, x1, y1, default.units="native",
                   gp=gpar(col=col, lty=lty, lwd=lwd, lineend=par$lend),
                   arrow=arrow(angle=angle, length=unit(length, "in"),

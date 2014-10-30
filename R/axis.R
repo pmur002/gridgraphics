@@ -20,17 +20,12 @@ C_axis <- function(x) {
     }
     labels <- x[[4]]
 
-    lty <- x[[10]]
-    lwd <- x[[11]]
-    lwd.ticks <- x[[12]]
-    if (!is.finite(lwd.ticks))
-        lwd.ticks <- 1
-    col <- x[[13]]
-    if (is.null(col))
-        col <- par$fg
-    col.ticks <- x[[14]]
-    if (is.null(col.ticks))
-        col.ticks <- col    
+    font <- FixupFont(x[[9]], NA)
+    lty <- FixupLty(x[[10]], 0)
+    lwd <- FixupLwd(x[[11]], 1)
+    lwd.ticks <- FixupLwd(x[[12]], 1)
+    col <- FixupCol(x[[13]], par$fg)
+    col.ticks <- FixupCol(x[[14]], col)
     hadj <- x[[15]]
     padj <- x[[16]]
     # NOTE: the use of 'trim=TRUE' in format() to mimic use of,

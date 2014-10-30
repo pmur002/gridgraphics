@@ -12,9 +12,12 @@ C_contour <- function(x) {
     zz <- x[[4]]
     levels <- x[[5]]
     drawlabels <- x[[8]]
-    col <- x[[11]]
-    lty <- x[[12]]
-    lwd <- x[[13]]
+    col <- FixupCol(x[[11]], NA)
+    col <- ifelse(is.na(col), par$col, col)
+    lty <- FixupLty(x[[12]], par$lty)
+    lty <- ifelse(is.na(lty), par$lty, lty)
+    lwd <- FixupLwd(x[[13]], par$lwd)
+    lwd <- ifelse(is.na(lwd), par$lwd, lwd)
     if (drawlabels) {
         warning("gridGraphics cannot emulate labels on contour lines")
     }

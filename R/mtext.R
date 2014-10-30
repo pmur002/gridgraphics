@@ -15,7 +15,8 @@ C_mtext <- function(x) {
     # NOTE: default is not par$cex, but 1.0 
     # NOTE: yes, mtext() really does override 'col=NA', 'cex=NA', and 'font=NA'
     cex <- FixupCex(x[[9]], 1)
-    cex <- ifelse(is.na(cex), par$cex, cex)
+    # NOTE: deliberately reverse any auto scaling of 0.66 or 0.83 
+    cex <- ifelse(is.finite(cex), cex, unadjustedCex(par))
     col <- FixupCol(x[[10]], NA)
     col <- ifelse(is.na(col), par$col, col)
     font <- FixupFont(x[[11]], par$font)
@@ -41,6 +42,21 @@ C_mtext <- function(x) {
 }
 
 # Helpers for C_mtext()
+unadjustedCex <- function(par) {
+    # If par(mfrow/mfcol) is exactly 2x2 then there is a 0.83 scaling
+    # If it is more than 3 in either dimension there is a 0.66 scaling
+    # We want to reverse that scaling here
+    nr <- par$mfrow[1]
+    nc <- par$mfrow[2]
+    if (nr == 2 && nc == 2) {
+        par$cex/0.83
+    } else if (nr > 2 || nc > 2) {
+        par$cex/0.66
+    } else {
+        par$cex
+    }
+}
+
 ComputeAdjValue <- function(adj, side, las) {
     if (is.finite(adj)) {
         adj

@@ -39,13 +39,13 @@ C_plotXY <- function(x) {
     xx <- x[[2]]$x
     yy <- x[[2]]$y
     type <- x[[3]]
-    pch <- x[[4]]
-    lty <- x[[5]]
-    col <- x[[6]]
-    bg <- x[[7]]
+    pch <- FixupPch(x[[4]], par$pch)
+    lty <- FixupLty(x[[5]], par$lty)
+    col <- FixupCol(x[[6]], 0)
+    bg <- FixupCol(x[[7]], NA)
     # NOTE: cex multiplied by "base" cex
-    cex <- x[[8]]*par$cex
-    lwd <- x[[9]]
+    cex <- FixupCex(x[[8]]*par$cex, 1)
+    lwd <- FixupLwd(x[[9]], par$lwd)
     switch(type,
            p=points(xx, yy, pch, lty, col, bg, cex, lwd, par$cin),
            l=lines(xx, yy, lty, col, lwd),

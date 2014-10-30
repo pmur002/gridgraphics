@@ -8,9 +8,9 @@ C_polygon <- function(x) {
     depth <- gotovp(par$xpd)
     xx <- x[[2]]
     yy <- x[[3]]
-    col <- x[[4]]
-    border <- x[[5]]
-    lty <- x[[6]]
+    col <- FixupCol(x[[4]], NA)
+    border <- FixupCol(x[[5]], par$fg)
+    lty <- FixupCol(x[[6]], par$lty)
     grid.polygon(xx, yy, default.units="native",
                  gp=gpar(col=border, fill=col, lty=lty),
                  name=grobname("polygon"))
