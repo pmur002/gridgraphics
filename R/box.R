@@ -9,9 +9,29 @@ C_box <- function(x) {
     depth <- gotovp(NA, "plot")
     # NOTE: copy GBox which draws *polygon* (not rect) AND
     #       explicitly sets fill to NA
-    grid.polygon(c(0, 1, 1, 0), c(0, 0, 1, 1),
-                 gp=gpar(col=par$col, lty=par$lty, lwd=par$lwd, fill=NA),
-                 name=grobname("box"))
+    xy <- switch(par$bty,
+                 "o"=,
+                 "O"=list(x=c(0, 1, 1, 0), y=c(0, 0, 1, 1)),
+                 "l"=,
+                 "L"=list(x=c(0, 0, 1), y=c(1, 0, 0)),
+                 "7"=list(x=c(0, 1, 1), y=c(1, 1, 0)),
+                 "c"=,
+                 "C"=,
+                 "["=list(x=c(1, 0, 0, 1), y=c(1, 1, 0, 0)),
+                 "]"=list(x=c(0, 1, 1, 0), y=c(1, 1, 0, 0)),
+                 "u"=,
+                 "U"=list(x=c(0, 0, 1, 1), y=c(1, 0, 0, 1)))
+    if (par$bty %in% c("n", "N")) {
+        # do nothing
+    } else if (par$bty %in% c("o", "O")) {
+        grid.polygon(xy$x, xy$y,
+                     gp=gpar(col=par$col, lty=par$lty, lwd=par$lwd, fill=NA),
+                     name=grobname("box"))
+    } else {
+        grid.lines(xy$x, xy$y,
+                   gp=gpar(col=par$col, lty=par$lty, lwd=par$lwd),
+                   name=grobname("box"))
+    }
     upViewport(depth)
 }
 

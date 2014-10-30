@@ -5,8 +5,8 @@ if ("graphics" %in% tests || "all" %in% tests) {
     testfiles <- c("test-abline.R", "test-arrows.R", "test-axis.R", 
                    "test-box.R", "test-clip.R", "test-contour.R", 
                    "test-image.R", "test-layout.R", "test-mtext.R", 
-                   "test-palette.R", "test-path.R", "test-plot.R",
-                   "test-raster.R", "test-xspline.R")
+                   "test-palette.R", "test-par.R", "test-path.R", 
+                   "test-plot.R", "test-raster.R", "test-xspline.R")
     for (i in testfiles) {
         file.copy(system.file("test-scripts", i, package="gridGraphics"), ".")  
     }

@@ -34,6 +34,25 @@ bar <- function(x, y, lty, col, lwd, ylog, usr) {
                   name=grobname("spike"))
 }
 
+brokenlines <- function(x, y, lty, col, lwd, par) {
+    d <- 0.5*par$cin[2]*par$cex
+    xx <- convertX(unit(x, "native"), "in", valueOnly=TRUE)
+    yy <- convertY(unit(y, "native"), "in", valueOnly=TRUE)
+    dx <- diff(xx)
+    dy <- diff(yy)
+    hypot <- sqrt(dx^2 + dy^2)
+    f <- d/hypot
+    n <- length(x)
+    sx <- xx[-n] + f*dx
+    sy <- yy[-n] + f*dy
+    ex <- xx[-1] - f*dx
+    ey <- yy[-1] - f*dy
+    grid.segments(sx, sy, ex, ey, 
+                  default.units="in",
+                  gp=gpar(lty=lty, col=col, lwd=lwd),
+                  name=grobname("brokenline"))
+}
+
 # C_plotXY(xy, type, pch, lty, col, bg, cex, lwd, ...)
 C_plotXY <- function(x) {
     dev.set(recordDev())
@@ -55,7 +74,9 @@ C_plotXY <- function(x) {
            p=points(xx, yy, pch, lty, col, bg, cex, lwd, par$cin),
            l=lines(xx, yy, lty, col, lwd),
            s=step(xx, yy, lty, col, lwd),
-           h=bar(xx, yy, lty, col, lwd, par$ylog, par$usr))
+           h=bar(xx, yy, lty, col, lwd, par$ylog, par$usr),
+           b={ brokenlines(xx, yy, lty, col, lwd, par);
+               points(xx, yy, pch, lty, col, bg, cex, lwd, par$cin) })
     upViewport(depth)
 }
 
