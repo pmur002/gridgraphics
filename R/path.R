@@ -6,8 +6,8 @@ C_path <- function(x) {
     par <- currentPar(x[-(1:8)])
     dev.set(playDev())
     depth <- gotovp(par$xpd)
-    xx <- x[[2]]
-    yy <- x[[3]]
+    xx <- tx(x[[2]], par)
+    yy <- ty(x[[3]], par)
     lengths <- x[[4]]
     rule <- x[[5]]
     col <- FixupCol(x[[6]], NA)

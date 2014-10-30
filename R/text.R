@@ -7,8 +7,8 @@ C_text <- function(x) {
     dev.set(playDev())
     # TODO:  handle 'pos', 'offset', 'vfont'
     depth <- gotovp(par$xpd)
-    xx <- x[[2]]$x
-    yy <- x[[2]]$y
+    xx <- tx(x[[2]]$x, par)
+    yy <- ty(x[[2]]$y, par)
     labels <- x[[3]]
     adj <- x[[4]]
     just <- just(adj, par)

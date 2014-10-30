@@ -7,10 +7,10 @@ C_raster <- function(x) {
     dev.set(playDev())
     depth <- gotovp(par$xpd)
     image <- x[[2]]
-    xl <- x[[3]]
-    yb <- x[[4]]
-    xr <- x[[5]]
-    yt <- x[[6]]
+    xl <- tx(x[[3]], par)
+    yb <- ty(x[[4]], par)
+    xr <- tx(x[[5]], par)
+    yt <- ty(x[[6]], par)
     angle <- x[[7]]
     interpolate <- x[[8]]
     pushViewport(viewport(xl, yb, xr - xl, yt - yb, default.units="native",

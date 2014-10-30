@@ -7,8 +7,8 @@ C_image <- function(x) {
     dev.set(playDev())
     # NOTE: Deliberately override par$xpd
     depth <- gotovp(FALSE)
-    xx <- x[[2]]
-    yy <- x[[3]]
+    xx <- tx(x[[2]], par)
+    yy <- ty(x[[3]], par)
     zz <- x[[4]]
     col <- FixupCol(x[[5]], NA)
     # NOTE: 'breaks' not used

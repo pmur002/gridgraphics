@@ -6,10 +6,10 @@ C_segments <- function(x) {
     par <- currentPar(x[-(1:8)])
     dev.set(playDev())
     depth <- gotovp(par$xpd)
-    x0 <- x[[2]]
-    y0 <- x[[3]]
-    x1 <- x[[4]]
-    y1 <- x[[5]]
+    x0 <- tx(x[[2]], par)
+    y0 <- ty(x[[3]], par)
+    x1 <- tx(x[[4]], par)
+    y1 <- ty(x[[5]], par)
     col <- FixupCol(x[[6]], NA)
     lty <- FixupLty(x[[7]], par$lty)
     lwd <- FixupLwd(x[[8]], par$lwd)

@@ -23,8 +23,13 @@ step <- function(x, y, lty, col, lwd) {
                name=grobname("step"))
 }
 
-bar <- function(x, y, lty, col, lwd) {
-    grid.segments(x, 0, x, y, default.units="native",
+bar <- function(x, y, lty, col, lwd, ylog, usr) {
+    if (ylog) {
+        root <- usr[3]
+    } else {
+        root <- 0
+    }
+    grid.segments(x, root, x, y, default.units="native",
                   gp=gpar(lty=lty, col=col, lwd=lwd),
                   name=grobname("spike"))
 }
@@ -34,10 +39,10 @@ C_plotXY <- function(x) {
     dev.set(recordDev())
     par <- currentPar(x[-(1:9)])
     dev.set(playDev())
-    # TODO:  handle 'type'
+    # TODO:  handle all 'type's
     depth <- gotovp(par$xpd)
-    xx <- x[[2]]$x
-    yy <- x[[2]]$y
+    xx <- tx(x[[2]]$x, par)
+    yy <- ty(x[[2]]$y, par)
     type <- x[[3]]
     pch <- FixupPch(x[[4]], par$pch)
     lty <- FixupLty(x[[5]], par$lty)
@@ -50,7 +55,7 @@ C_plotXY <- function(x) {
            p=points(xx, yy, pch, lty, col, bg, cex, lwd, par$cin),
            l=lines(xx, yy, lty, col, lwd),
            s=step(xx, yy, lty, col, lwd),
-           h=bar(xx, yy, lty, col, lwd))
+           h=bar(xx, yy, lty, col, lwd, par$ylog, par$usr))
     upViewport(depth)
 }
 

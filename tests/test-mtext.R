@@ -18,7 +18,7 @@ mtext2 <- function() {
     for(s in 1:4) mtext(paste("mtext(...,side=", s ,")"), side = s)
 }
 
-plotdiff(expression(mtext1()), "mtext-1")
-plotdiff(expression(mtext2()), "mtext-2")
+plotdiff(expression(mtext1()), "mtext-1", width=10, height=10)
+plotdiff(expression(mtext2()), "mtext-2", width=10, height=10)
 
 plotdiffResult()

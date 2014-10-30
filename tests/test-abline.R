@@ -32,8 +32,11 @@ abline3 <- function() {
     abline(a = coef(mC), b = 0, col = "blue")
 }
 
-plotdiff(expression(abline1()), "abline-1", antialias=FALSE)
-plotdiff(expression(abline2()), "abline-2", density=50, antialias=FALSE)
-plotdiff(expression(abline3()), "abline-3", density=40, antialias=FALSE)
+plotdiff(expression(abline1()), "abline-1")
+plotdiff(expression(abline2()), "abline-2")
+plotdiff(expression(abline3()), "abline-3")
+# plotdiff(expression(abline1()), "abline-1", antialias=FALSE)
+# plotdiff(expression(abline2()), "abline-2", density=50, antialias=FALSE)
+# plotdiff(expression(abline3()), "abline-3", density=40, antialias=FALSE)
 
 plotdiffResult()

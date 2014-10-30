@@ -6,8 +6,8 @@ C_polygon <- function(x) {
     par <- currentPar(x[-(1:6)])
     dev.set(playDev())
     depth <- gotovp(par$xpd)
-    xx <- x[[2]]
-    yy <- x[[3]]
+    xx <- tx(x[[2]], par)
+    yy <- ty(x[[3]], par)
     col <- FixupCol(x[[4]], NA)
     border <- FixupCol(x[[5]], par$fg)
     lty <- FixupCol(x[[6]], par$lty)

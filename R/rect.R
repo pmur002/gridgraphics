@@ -6,10 +6,10 @@ C_rect <- function(x) {
     par <- currentPar(x[-(1:9)])
     dev.set(playDev())
     depth <- gotovp(par$xpd)
-    xleft <- x[[2]]
-    ybottom <- x[[3]]
-    xright <- x[[4]]
-    ytop <- x[[5]]
+    xleft <- tx(x[[2]], par)
+    ybottom <- ty(x[[3]], par)
+    xright <- tx(x[[4]], par)
+    ytop <- ty(x[[5]], par)
     col <- FixupCol(x[[6]], NA)
     border <- FixupCol(x[[7]], par$fg)
     lty <- FixupLty(x[[8]], par$lty)

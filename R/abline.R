@@ -10,8 +10,8 @@ C_abline <- function(x) {
     depth <- gotovp(par$xpd)
     a <- x[[2]]
     b <- x[[3]]
-    h <- x[[4]]
-    v <- x[[5]]
+    h <- ty(x[[4]], par)
+    v <- tx(x[[5]], par)
     untf <- x[[6]]
     col <- FixupCol(x[[7]], NA)
     lty <- FixupLty(x[[8]], par$lty)
@@ -21,10 +21,23 @@ C_abline <- function(x) {
             a <- a[1]
             b <- a[2]
         }
-        # TODO: handle "log" axes
-        # TODO: this may have to be smarter to handle drawing outside
+        xx <- par$usr[1:2]
+        if (untf && (par$xlog || par$ylog)) {
+            # TODO: draw a curve instead of straight line
+        } else {
+            if (par$xlog) {
+                xx <- log10(xx)
+            }
+            yy <- a + b*xx
+            if (par$ylog) {
+                yy <- 10^yy
+            }
+        }
+        # TODO: this will have to be smarter to handle drawing outside
         #       the plot region
-        grid.abline(a, b, gp=gpar(col=col, lty=lty, lwd=lwd))
+        grid.lines(xx, yy, default.units="native",
+                   gp=gpar(col=col, lty=lty, lwd=lwd),
+                   name=grobname("abline-ab"))
     }
     if (!is.null(h)) {
         grid.segments(0, unit(h, "native"), 1, unit(h, "native"),

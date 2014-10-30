@@ -43,7 +43,10 @@ C_axis <- function(x) {
     } else {
         drawLabels <- TRUE
     }
+    # Now that have generated tick labels from tick locations (if necessary)
+    # can transform tick locations (if necessary) for log transforms
     if (side == 1 && par$xaxt != "n") {
+        ticks <- tx(ticks, par)
         grid.segments(unit(min(ticks), "native"),
                       unit(0, "npc"),
                       unit(max(ticks), "native"),
@@ -74,6 +77,7 @@ C_axis <- function(x) {
                    label="bottom-axis-labels")
         }
     } else if (side == 2 && par$yaxt != "n") {
+        ticks <- ty(ticks, par)
         grid.segments(unit(0, "npc"),
                       unit(min(ticks), "native"),
                       unit(0, "npc"),
@@ -99,6 +103,7 @@ C_axis <- function(x) {
                    label="left-axis-labels")
         }
     } else if (side == 3 && par$xaxt != "n") {
+        ticks <- tx(ticks, par)
         grid.segments(unit(min(ticks), "native"),
                       unit(1, "npc"),
                       unit(max(ticks), "native"),
@@ -124,6 +129,7 @@ C_axis <- function(x) {
                    label="top-axis-labels")
         }
     } else if (side == 4 && par$yaxt != "n") {
+        ticks <- ty(ticks, par)
         grid.segments(unit(1, "npc"),
                       unit(min(ticks), "native"),
                       unit(1, "npc"),
@@ -155,7 +161,8 @@ C_axis <- function(x) {
 defaultTicks <- function(side, par) {
     axp <- switch(side, par$xaxp, par$yaxp, par$xaxp, par$yaxp)
     usr <- switch(side, par$usr[1:2], par$usr[3:4], par$usr[1:2], par$usr[3:4])
-    axTicks(side, axp, usr)
+    log <- switch(side, par$xlog, par$ylog, par$xlog, par$ylog)
+    axTicks(side, axp, usr, log)
 }
 
 computeXAdj <- function(hadj, side, las) {

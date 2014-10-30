@@ -4,10 +4,13 @@
 # Just record this clipping setting and enforce it whenever subsequently
 # descend into window viewport
 C_clip <- function(x) {
-    x1 <- x[[2]]
-    x2 <- x[[3]]
-    y1 <- x[[4]]
-    y2 <- x[[5]]
+    dev.set(recordDev())
+    par <- currentPar(x[-(1:5)])
+    dev.set(playDev())
+    x1 <- tx(x[[2]], par)
+    x2 <- tx(x[[3]], par)
+    y1 <- ty(x[[4]], par)
+    y2 <- ty(x[[5]], par)
     setClip(x1, y1, x2 - x1, y2 - y1)
 }
 

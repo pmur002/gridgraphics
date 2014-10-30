@@ -8,8 +8,8 @@ C_xspline <- function(x) {
     par <- currentPar(x[-(1:9)])
     dev.set(playDev())
     depth <- gotovp(par$xpd)
-    xx <- x[[2]]
-    yy <- x[[3]]
+    xx <- tx(x[[2]], par)
+    yy <- ty(x[[3]], par)
     s <- x[[4]]
     open <- x[[5]]
     repEnds <- x[[6]]

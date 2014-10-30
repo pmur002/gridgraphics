@@ -7,8 +7,8 @@ C_contour <- function(x) {
     par <- currentPar(x[-(1:13)])
     dev.set(playDev())
     depth <- gotovp(par$xpd)
-    xx <- x[[2]]
-    yy <- x[[3]]
+    xx <- tx(x[[2]], par)
+    yy <- ty(x[[3]], par)
     zz <- x[[4]]
     levels <- x[[5]]
     drawlabels <- x[[8]]
