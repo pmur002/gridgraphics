@@ -42,13 +42,16 @@ dlReplay.default <- function(x = NULL) {
         stop("Invalid graphics display list")
     }
     if (is.null(dev.list())) {
-        stop("No graphics to replay")
+        stop("No graphics device")
     }
     dlReplay(recordPlot())
 }
 
 dlReplay.recordedplot <- function(x = NULL) {
     init(x)
+    if (is.null(x[[1]][[2]])) {
+        stop("No graphics to replay")
+    }
     lapply(x[[1]], dlDispatch)
     shutdown()
 }

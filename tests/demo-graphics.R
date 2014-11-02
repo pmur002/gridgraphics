@@ -3,8 +3,6 @@ require(grDevices); require(graphics)
 
 library(gridGraphics)
 
-# TODO:  test par(bg)
-
 demo1 <- function() {
     x <- stats::rnorm(50)
     par(bg = "white")

@@ -7,7 +7,8 @@ if ("graphics" %in% tests || "all" %in% tests) {
                    "test-image.R", "test-layout.R", "test-mtext.R", 
                    "test-palette.R", "test-par.R", "test-path.R", 
                    "test-plot.R", "test-plotwindow.R", "test-polygon.R",
-                   "test-rect.R", "test-raster.R", "test-xspline.R")
+                   "test-rect.R", "test-raster.R", "test-segments",
+                   "test-text.R", "test-title.R", "test-xspline.R")
     for (i in testfiles) {
         file.copy(system.file("test-scripts", i, package="gridGraphics"), ".")  
     }
