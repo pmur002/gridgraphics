@@ -12,7 +12,7 @@ C_contour <- function(x) {
     zz <- x[[4]]
     levels <- x[[5]]
     drawlabels <- x[[8]]
-    col <- FixupCol(x[[11]], NA)
+    col <- FixupCol(x[[11]], NA, par$bg)
     col <- ifelse(is.na(col), par$col, col)
     lty <- FixupLty(x[[12]], par$lty)
     lty <- ifelse(is.na(lty), par$lty, lty)

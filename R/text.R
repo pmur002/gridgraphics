@@ -14,7 +14,7 @@ C_text <- function(x) {
     just <- just(adj, par)
     cex <- FixupCex(x[[8]]*par$cex, 1)
     cex <- ifelse(is.na(cex), par$cex, cex)
-    col <- FixupCol(x[[9]], NA)
+    col <- FixupCol(x[[9]], NA, par$bg)
     col <- ifelse(is.na(col), par$col, col)
     font <- FixupFont(x[[10]], NA)
     font <- ifelse(is.na(font), par$font, font)

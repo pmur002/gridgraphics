@@ -8,9 +8,9 @@ C_polygon <- function(x) {
     depth <- gotovp(par$xpd)
     xx <- tx(x[[2]], par)
     yy <- ty(x[[3]], par)
-    col <- FixupCol(x[[4]], NA)
-    border <- FixupCol(x[[5]], par$fg)
-    lty <- FixupCol(x[[6]], par$lty)
+    col <- FixupCol(x[[4]], NA, par$bg)
+    border <- FixupCol(x[[5]], par$fg, par$bg)
+    lty <- FixupLty(x[[6]], par$lty)
     lty <- ifelse(is.na(lty), par$lty, lty)
     # NOTE: allow for NA values in x/y
     breaks <- which(is.na(xx) | is.na(yy))

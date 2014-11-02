@@ -10,8 +10,8 @@ C_path <- function(x) {
     yy <- ty(x[[3]], par)
     lengths <- x[[4]]
     rule <- x[[5]]
-    col <- FixupCol(x[[6]], NA)
-    border <- FixupCol(x[[7]], par$fg)
+    col <- FixupCol(x[[6]], NA, par$bg)
+    border <- FixupCol(x[[7]], par$fg, par$bg)
     lty <- FixupLty(x[[8]], par$lty)
     lty <- ifelse(is.na(lty), par$lty, lty)
     grid.path(xx, yy, default="native",

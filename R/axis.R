@@ -24,8 +24,8 @@ C_axis <- function(x) {
     lty <- FixupLty(x[[10]], 0)
     lwd <- FixupLwd(x[[11]], 1)
     lwd.ticks <- FixupLwd(x[[12]], 1)
-    col <- FixupCol(x[[13]], par$fg)
-    col.ticks <- FixupCol(x[[14]], col)
+    col <- FixupCol(x[[13]], par$fg, par$bg)
+    col.ticks <- FixupCol(x[[14]], col, par$bg)
     hadj <- x[[15]]
     padj <- x[[16]]
     # NOTE: the use of 'trim=TRUE' in format() to mimic use of,

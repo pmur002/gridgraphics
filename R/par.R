@@ -75,10 +75,14 @@ FixupLwd <- function(lwd, dflt) {
     }
 }
 
-FixupCol <- function(col, dflt, par) {
+FixupCol <- function(col, dflt, bg) {
     if (length(col) == 0) {
         dflt
     } else {
+        # col=0 means par$bg in 'graphics'
+        if (is.numeric(col)) {
+            col <- ifelse(col == 0, bg, col)
+        }
         col
     }
 }

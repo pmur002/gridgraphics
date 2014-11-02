@@ -13,8 +13,8 @@ C_xspline <- function(x) {
     open <- x[[5]]
     repEnds <- x[[6]]
     draw <- x[[7]]
-    col <- FixupCol(x[[8]], NA)
-    border <- FixupCol(x[[9]], par$fg)
+    col <- FixupCol(x[[8]], NA, par$bg)
+    border <- FixupCol(x[[9]], par$fg, par$bg)
     if (draw) {
         grid.xspline(xx, yy, default.units="native",
                      shape=s, open=open, repEnds=repEnds,

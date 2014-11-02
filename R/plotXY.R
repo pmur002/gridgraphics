@@ -65,8 +65,8 @@ C_plotXY <- function(x) {
     type <- x[[3]]
     pch <- FixupPch(x[[4]], par$pch)
     lty <- FixupLty(x[[5]], par$lty)
-    col <- FixupCol(x[[6]], 0)
-    bg <- FixupCol(x[[7]], NA)
+    col <- FixupCol(x[[6]], 0, par$bg)
+    bg <- FixupCol(x[[7]], NA, par$bg)
     # NOTE: cex multiplied by "base" cex
     cex <- FixupCex(x[[8]]*par$cex, 1)
     lwd <- FixupLwd(x[[9]], par$lwd)

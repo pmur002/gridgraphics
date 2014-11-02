@@ -17,7 +17,7 @@ C_mtext <- function(x) {
     cex <- FixupCex(x[[9]], 1)
     # NOTE: deliberately reverse any auto scaling of 0.66 or 0.83 
     cex <- ifelse(is.finite(cex), cex, unadjustedCex(par))
-    col <- FixupCol(x[[10]], NA)
+    col <- FixupCol(x[[10]], NA, par$bg)
     col <- ifelse(is.na(col), par$col, col)
     font <- FixupFont(x[[11]], par$font)
     font <- ifelse(is.na(font), par$font, font)

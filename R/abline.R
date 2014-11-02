@@ -13,7 +13,7 @@ C_abline <- function(x) {
     h <- ty(x[[4]], par)
     v <- tx(x[[5]], par)
     untf <- x[[6]]
-    col <- FixupCol(x[[7]], NA)
+    col <- FixupCol(x[[7]], NA, par$bg)
     lty <- FixupLty(x[[8]], par$lty)
     lwd <- FixupLwd(x[[9]], par$lwd)
     if (!is.null(a)) {

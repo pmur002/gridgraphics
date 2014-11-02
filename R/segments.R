@@ -10,7 +10,7 @@ C_segments <- function(x) {
     y0 <- ty(x[[3]], par)
     x1 <- tx(x[[4]], par)
     y1 <- ty(x[[5]], par)
-    col <- FixupCol(x[[6]], NA)
+    col <- FixupCol(x[[6]], NA, par$bg)
     lty <- FixupLty(x[[7]], par$lty)
     lwd <- FixupLwd(x[[8]], par$lwd)
     grid.segments(x0, y0, x1, y1, default.units="native",

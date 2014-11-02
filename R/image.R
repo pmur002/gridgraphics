@@ -10,7 +10,7 @@ C_image <- function(x) {
     xx <- tx(x[[2]], par)
     yy <- ty(x[[3]], par)
     zz <- x[[4]]
-    col <- FixupCol(x[[5]], NA)
+    col <- FixupCol(x[[5]], NA, par$bg)
     # NOTE: 'breaks' not used
     # NOTE: 'z' is index into 'col'
     nx <- length(xx)
