@@ -36,7 +36,9 @@ gotovp <- function(xpd, end="window") {
     path <- switch(end,
                    window=vpPath(root, inner, figure, plot, window),
                    plot=vpPath(root, inner, figure, plot),
-                   inner=vpPath(root, inner))
+                   figure=vpPath(root, inner, figure),
+                   inner=vpPath(root, inner),
+                   outer=vpPath(root))
     depth <- downViewport(path, strict=TRUE)
     if (end == "window" && !is.null(clipRegion <- getClip())) {
         grid.clip(clipRegion[1], clipRegion[2], clipRegion[3], clipRegion[4],

@@ -1,8 +1,7 @@
 
 # C_xspline(x, y, s, open, repEnds, draw, col, border, ...)
 
-# TODO: handle NA's in x and/or y
-#       (see source for polypath() ?)
+# TODO: handle NA's in x and/or y (see polygon.R)
 C_xspline <- function(x) {
     dev.set(recordDev())
     par <- currentPar(x[-(1:9)])
