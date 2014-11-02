@@ -21,10 +21,12 @@ setUpUsr <- function(usr) {
 # C_plot_window(xlim, ylim, log, asp, ...)
 C_plot_window <- function(x) {
     dev.set(recordDev())
+    # NOTE: This takes care of 'asp' (and 'log') by setting par("usr")
+    #       appropriately and then we just cream those settings off
+    #       for the 'grid' viewports
     do.call("plot.window", x[-1])
     usr <- par("usr")
     dev.set(playDev())
-    # TODO: Need to handle 'log' axes !!!
     setUpUsr(usr)
 }
 
