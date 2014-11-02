@@ -3,6 +3,7 @@ require(grDevices); require(graphics)
 library(gridGraphics)
 
 exampleArrows <- function() {
+    set.seed(1)
     x <- stats::runif(12); y <- stats::rnorm(12)
     i <- order(x, y); x <- x[i]; y <- y[i]
     plot(x,y, main = "arrows(.) and segments(.)")

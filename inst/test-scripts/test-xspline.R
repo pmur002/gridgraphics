@@ -38,6 +38,7 @@ xspline2 <- function() {
 }
 
 xspline3 <- function() {
+    set.seed(1)
     x <- sort(stats::rnorm(5))
     y <- sort(stats::rnorm(5))
     plot(x, y, pch = 19)

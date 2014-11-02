@@ -16,6 +16,7 @@ palette2 <- function() {
     palette(gray(seq(0,.9,len = 25))) # gray scales
     mycols <- adjustcolor(palette(), alpha.f = 0.3)
     opal <- palette(mycols)
+    set.seed(1)
     x <- rnorm(1000); xy <- cbind(x, 3*x + rnorm(1000))
     plot (xy, lwd = 2,
           main = "Alpha-Transparency Palette\n alpha = 0.3")

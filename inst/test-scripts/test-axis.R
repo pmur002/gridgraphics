@@ -4,6 +4,7 @@ library(gridGraphics)
 require(stats) # for rnorm
 
 axis1 <- function() {
+    set.seed(1)
     plot(1:4, rnorm(4), axes = FALSE)
     axis(1, 1:4, LETTERS[1:4])
     axis(2)
@@ -11,6 +12,7 @@ axis1 <- function() {
 }
 
 axis2 <- function() {
+    set.seed(1)
     plot(1:7, rnorm(7), main = "axis() examples",
          type = "s", xaxt = "n", frame = FALSE, col = "red")
     axis(1, 1:7, LETTERS[1:7], col.axis = "blue")

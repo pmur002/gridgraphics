@@ -25,6 +25,7 @@ layout3 <- function() {
 }
 
 layout4 <- function() {
+    set.seed(1)
     x <- pmin(3, pmax(-3, stats::rnorm(50)))
     y <- pmin(3, pmax(-3, stats::rnorm(50)))
     xhist <- hist(x, breaks = seq(-3,3,0.5), plot = FALSE)

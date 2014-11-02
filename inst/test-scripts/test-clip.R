@@ -2,6 +2,7 @@
 library(gridGraphics)
 
 clip1 <- function() {
+    set.seed(1)
     x <- rnorm(1000)
     hist(x, xlim = c(-4,4))
     usr <- par("usr")
