@@ -26,7 +26,7 @@ if ("graphics-pkg" %in% tests || "all" %in% tests) {
                    "test-text.R", "test-title.R", "test-xspline.R",
                    # Higher-level plot functions
                    "test-assocplot.R", "test-axis.POSIXct.R", "test-axTicks.R",
-                   "test-plot.R")
+                   "test-barplot.R", "test-plot.R")
     for (i in testfiles) {
         file.copy(system.file("test-scripts", i, package="gridGraphics"), ".")  
     }

@@ -22,6 +22,16 @@ C_axis <- function(x) {
     doticks <- x[[5]]
     if (is.na(doticks))
         doticks <- TRUE
+    line <- x[[6]]
+    pos <- x[[7]]
+    # Not sure on the logic of the following, just emulating C code
+    lineoff <- 0
+    if (!is.finite(line)) {
+        line <- par$mgp[3]
+        lineoff <- line
+    } 
+    if (is.finite(pos))
+        lineoff <- 0
 
     font <- FixupFont(x[[9]], NA)
     lty <- FixupLty(x[[10]], 0)
@@ -57,6 +67,11 @@ C_axis <- function(x) {
         tickLength <- unit(par$cin[2]*par$tcl*par$cex, "in")
     }
     if (side == 1 && par$xaxt != "n") {
+        if (is.finite(pos)) {
+            axis_base <- unit(pos, "native")
+        } else {
+            axis_base <- unit(-line*par$cin[2]*par$cex, "in")
+        }
         if (doticks) {
             # Now that have generated tick labels from tick locations
             # (if necessary), can transform tick locations (if necessary)
@@ -64,32 +79,34 @@ C_axis <- function(x) {
             ticks <- tx(ticks, par)
             if (lwd > 0) {
                 grid.segments(unit(min(ticks), "native"),
-                              unit(0, "npc"),
+                              axis_base,
                               unit(max(ticks), "native"),
-                              unit(0, "npc"),
+                              axis_base,
                               gp=gpar(col=col, lwd=lwd, lty=lty),
                               name=grobname("bottom-axis-line"))
             }
             if (lwd.ticks > 0) {
                 grid.segments(unit(ticks, "native"),
-                              unit(0, "npc"),
+                              axis_base,
                               unit(ticks, "native"),
-                              unit(0, "npc") + tickLength,
+                              axis_base + tickLength,
                               gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty),
                               name=grobname("bottom-axis-ticks"))
             }
         }
-        # TODO: use 'labels' if given
         # NOTE: the following includes calculation based on par(mgp)
         #       to get the margin line to draw on
         #       PLUS adjustment made in GMtext() based on that line value
         if (drawLabels) {
-            GMtext(labels, 1, line=par$mgp[2],
+            labLine <- - (convertY(axis_base, "in", valueOnly=TRUE)/
+                          (par$cin[2]*par$cex)) +
+                         par$mgp[2] - lineoff
+            GMtext(labels, 1, line=labLine,
                    at=unit(ticks, "native"), las=par$las, 
                    xadj=computeXAdj(hadj, side, par$las),
                    yadj=computePAdj(padj, side, par$las),
                    mex=par$mex, cin=par$cin, 
-                   cex=par$cex.axis*par$cex, linecex=par$cex.axis*par$cex,
+                   cex=par$cex.axis*par$cex, linecex=par$mex*par$cex,
                    font=par$font.axis, col=par$col.axis, lheight=par$lheight,
                    allowOverlap=FALSE,
                    label="bottom-axis-labels")
@@ -120,7 +137,7 @@ C_axis <- function(x) {
                    xadj=computeXAdj(hadj, side, par$las),
                    yadj=computePAdj(padj, side, par$las),
                    mex=par$mex, cin=par$cin,
-                   cex=par$cex.axis*par$cex, linecex=par$cex.axis*par$cex,
+                   cex=par$cex.axis*par$cex, linecex=par$mex*par$cex,
                    font=par$font.axis, col=par$col.axis, lheight=par$lheight,
                    allowOverlap=FALSE,
                    label="left-axis-labels")
@@ -151,7 +168,7 @@ C_axis <- function(x) {
                    xadj=computeXAdj(hadj, side, par$las),
                    yadj=computePAdj(padj, side, par$las),
                    mex=par$mex, cin=par$cin, 
-                   cex=par$cex.axis*par$cex, linecex=par$cex.axis*par$cex,
+                   cex=par$cex.axis*par$cex, linecex=par$mex*par$cex,
                    font=par$font.axis, col=par$col.axis, lheight=par$lheight,
                    allowOverlap=FALSE,
                    label="top-axis-labels")
@@ -182,7 +199,7 @@ C_axis <- function(x) {
                    xadj=computeXAdj(hadj, side, par$las),
                    yadj=computePAdj(padj, side, par$las),
                    mex=par$mex, cin=par$cin,
-                   cex=par$cex.axis*par$cex, linecex=par$cex.axis*par$cex,
+                   cex=par$cex.axis*par$cex, linecex=par$mex*par$cex,
                    font=par$font.axis, col=par$col.axis, lheight=par$lheight,
                    allowOverlap=FALSE,
                    label="right-axis-labels")
