@@ -3,7 +3,7 @@ require(stats)  # normally loaded
 
 library(gridGraphics)
 
-plotwindow1 <- function() {
+plot.window1 <- function() {
     loc <- cmdscale(eurodist)
     rx <- range(x <- loc[,1])
     ry <- range(y <- -loc[,2])
@@ -12,6 +12,6 @@ plotwindow1 <- function() {
     text(x, y, labels(eurodist), cex = 0.8)
 }
 
-plotdiff(expression(plotwindow1()), "plotwindow-1")
+plotdiff(expression(plot.window1()), "plot.window-1")
 
 plotdiffResult()
