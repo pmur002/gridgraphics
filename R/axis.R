@@ -19,6 +19,9 @@ C_axis <- function(x) {
         ticks <- x[[3]]
     }
     labels <- x[[4]]
+    doticks <- x[[5]]
+    if (is.na(doticks))
+        doticks <- TRUE
 
     font <- FixupFont(x[[9]], NA)
     lty <- FixupLty(x[[10]], 0)
@@ -46,21 +49,23 @@ C_axis <- function(x) {
     # Now that have generated tick labels from tick locations (if necessary)
     # can transform tick locations (if necessary) for log transforms
     if (side == 1 && par$xaxt != "n") {
-        ticks <- tx(ticks, par)
-        grid.segments(unit(min(ticks), "native"),
-                      unit(0, "npc"),
-                      unit(max(ticks), "native"),
-                      unit(0, "npc"),
-                      gp=gpar(col=col, lwd=lwd, lty=lty),
-                      name=grobname("bottom-axis-line"))
-        # TODO: More complex calculation of tick length if par(tck) set
-        tickLength <- unit(par$cin[2]*par$tcl*par$cex, "in")
-        grid.segments(unit(ticks, "native"),
-                      unit(0, "npc"),
-                      unit(ticks, "native"),
-                      unit(0, "npc") + tickLength,
-                      gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty),
-                      name=grobname("bottom-axis-ticks"))
+        if (doticks) {
+            ticks <- tx(ticks, par)
+            grid.segments(unit(min(ticks), "native"),
+                          unit(0, "npc"),
+                          unit(max(ticks), "native"),
+                          unit(0, "npc"),
+                          gp=gpar(col=col, lwd=lwd, lty=lty),
+                          name=grobname("bottom-axis-line"))
+            # TODO: More complex calculation of tick length if par(tck) set
+            tickLength <- unit(par$cin[2]*par$tcl*par$cex, "in")
+            grid.segments(unit(ticks, "native"),
+                          unit(0, "npc"),
+                          unit(ticks, "native"),
+                          unit(0, "npc") + tickLength,
+                          gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty),
+                          name=grobname("bottom-axis-ticks"))
+        }
         # TODO: use 'labels' if given
         # NOTE: the following includes calculation based on par(mgp)
         #       to get the margin line to draw on
@@ -77,20 +82,22 @@ C_axis <- function(x) {
                    label="bottom-axis-labels")
         }
     } else if (side == 2 && par$yaxt != "n") {
-        ticks <- ty(ticks, par)
-        grid.segments(unit(0, "npc"),
-                      unit(min(ticks), "native"),
-                      unit(0, "npc"),
-                      unit(max(ticks), "native"),
-                      gp=gpar(col=col, lwd=lwd, lty=lty),
-                      name=grobname("left-axis-line"))
-        tickLength <- unit(par$cin[2]*par$tcl*par$cex, "in")
-        grid.segments(unit(0, "npc"),
-                      unit(ticks, "native"),
-                      unit(0, "npc") + tickLength,
-                      unit(ticks, "native"),
-                      gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty),
-                      name=grobname("left-axis-ticks"))
+        if (doticks) {
+            ticks <- ty(ticks, par)
+            grid.segments(unit(0, "npc"),
+                          unit(min(ticks), "native"),
+                          unit(0, "npc"),
+                          unit(max(ticks), "native"),
+                          gp=gpar(col=col, lwd=lwd, lty=lty),
+                          name=grobname("left-axis-line"))
+            tickLength <- unit(par$cin[2]*par$tcl*par$cex, "in")
+            grid.segments(unit(0, "npc"),
+                          unit(ticks, "native"),
+                          unit(0, "npc") + tickLength,
+                          unit(ticks, "native"),
+                          gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty),
+                          name=grobname("left-axis-ticks"))
+        }
         if (drawLabels) {
             GMtext(labels, 2, line=par$mgp[2],
                    at=unit(ticks, "native"), las=par$las,
@@ -103,20 +110,22 @@ C_axis <- function(x) {
                    label="left-axis-labels")
         }
     } else if (side == 3 && par$xaxt != "n") {
-        ticks <- tx(ticks, par)
-        grid.segments(unit(min(ticks), "native"),
-                      unit(1, "npc"),
-                      unit(max(ticks), "native"),
-                      unit(1, "npc"),
-                      gp=gpar(col=col, lwd=lwd, lty=lty),
-                      name=grobname("top-axis-line"))
-        tickLength <- unit(par$cin[2]*par$tcl*par$cex, "in")
-        grid.segments(unit(ticks, "native"),
-                      unit(1, "npc"),
-                      unit(ticks, "native"),
-                      unit(1, "npc") - tickLength,
-                      gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty),
-                      name=grobname("top-axis-ticks"))
+        if (doticks) {
+            ticks <- tx(ticks, par)
+            grid.segments(unit(min(ticks), "native"),
+                          unit(1, "npc"),
+                          unit(max(ticks), "native"),
+                          unit(1, "npc"),
+                          gp=gpar(col=col, lwd=lwd, lty=lty),
+                          name=grobname("top-axis-line"))
+            tickLength <- unit(par$cin[2]*par$tcl*par$cex, "in")
+            grid.segments(unit(ticks, "native"),
+                          unit(1, "npc"),
+                          unit(ticks, "native"),
+                          unit(1, "npc") - tickLength,
+                          gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty),
+                          name=grobname("top-axis-ticks"))
+        }
         if (drawLabels) {
             GMtext(labels, 3, line=par$mgp[2],
                    at=unit(ticks, "native"), las=par$las, 
@@ -129,20 +138,22 @@ C_axis <- function(x) {
                    label="top-axis-labels")
         }
     } else if (side == 4 && par$yaxt != "n") {
-        ticks <- ty(ticks, par)
-        grid.segments(unit(1, "npc"),
-                      unit(min(ticks), "native"),
-                      unit(1, "npc"),
-                      unit(max(ticks), "native"),
-                      gp=gpar(col=col, lwd=lwd, lty=lty),
-                      name=grobname("right-axis-line"))
-        tickLength <- unit(par$cin[2]*par$tcl*par$cex, "in")
-        grid.segments(unit(1, "npc"),
-                      unit(ticks, "native"),
-                      unit(1, "npc") - tickLength,
-                      unit(ticks, "native"),
-                      gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty),
-                      name=grobname("right-axis-ticks"))
+        if (doticks) {
+            ticks <- ty(ticks, par)
+            grid.segments(unit(1, "npc"),
+                          unit(min(ticks), "native"),
+                          unit(1, "npc"),
+                          unit(max(ticks), "native"),
+                          gp=gpar(col=col, lwd=lwd, lty=lty),
+                          name=grobname("right-axis-line"))
+            tickLength <- unit(par$cin[2]*par$tcl*par$cex, "in")
+            grid.segments(unit(1, "npc"),
+                          unit(ticks, "native"),
+                          unit(1, "npc") - tickLength,
+                          unit(ticks, "native"),
+                          gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty),
+                          name=grobname("right-axis-ticks"))
+        }
         if (drawLabels) {
             GMtext(labels, 4, line=par$mgp[2],
                    at=unit(ticks, "native"), las=par$las,

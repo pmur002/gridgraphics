@@ -1,14 +1,32 @@
 
 tests <- unlist(strsplit(Sys.getenv("R_GRIDGRAPHICS_TESTS"), ","))
 
-if ("graphics" %in% tests || "all" %in% tests) { 
-    testfiles <- c("test-abline.R", "test-arrows.R", "test-axis.R", 
+# Will look for test targets in test-scripts/
+# e.g., 'R_GRIDGRAPHICS_TESTS=abline' will copy "test-abline.R" test script
+files <- list.files(system.file("test-scripts", package="gridGraphics"))
+for (i in tests) {
+    matches <- gsub("^test-|[.]R$", "", files) %in% tests
+    if (any(matches)) {
+        for (j in files[matches]) {
+            file.copy(system.file("test-scripts", j, package="gridGraphics"), 
+                      ".")
+        }
+    } 
+}
+
+# A set of tests for the graphics package
+if ("graphics-pkg" %in% tests || "all" %in% tests) { 
+    testfiles <- c(# Core C-level entry points
+                   "test-abline.R", "test-arrows.R", "test-axis.R", 
                    "test-box.R", "test-clip.R", "test-contour.R", 
                    "test-image.R", "test-layout.R", "test-mtext.R", 
                    "test-palette.R", "test-par.R", "test-path.R", 
-                   "test-plot.R", "test-plotwindow.R", "test-polygon.R",
+                   "test-plot.window.R", "test-polygon.R",
                    "test-rect.R", "test-raster.R", "test-segments",
-                   "test-text.R", "test-title.R", "test-xspline.R")
+                   "test-text.R", "test-title.R", "test-xspline.R",
+                   # Higher-level plot functions
+                   "test-assocplot.R",
+                   "test-plot.R")
     for (i in testfiles) {
         file.copy(system.file("test-scripts", i, package="gridGraphics"), ".")  
     }

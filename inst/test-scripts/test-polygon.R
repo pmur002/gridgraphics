@@ -16,6 +16,7 @@ polygon1 <- function() {
 polygon2 <- function() {
     n <- 100
     xx <- c(0:n, n:0)
+    set.seed(1)
     yy <- c(c(0, cumsum(stats::rnorm(n))), rev(c(0, cumsum(stats::rnorm(n)))))
     plot   (xx, yy, type = "n", xlab = "Time", ylab = "Distance")
     polygon(xx, yy, col = "gray", border = "red")
