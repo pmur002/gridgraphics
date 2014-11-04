@@ -1,36 +1,41 @@
 
 tests <- unlist(strsplit(Sys.getenv("R_GRIDGRAPHICS_TESTS"), ","))
 
+testfiles <- character(0)
+
 # Will look for test targets in test-scripts/
 # e.g., 'R_GRIDGRAPHICS_TESTS=abline' will copy "test-abline.R" test script
 files <- list.files(system.file("test-scripts", package="gridGraphics"))
 for (i in tests) {
     matches <- gsub("^test-|[.]R$", "", files) %in% tests
     if (any(matches)) {
-        for (j in files[matches]) {
-            file.copy(system.file("test-scripts", j, package="gridGraphics"), 
-                      ".")
-        }
+        testfiles <- c(testfiles, files[matches])
     } 
 }
 
 # A set of tests for the graphics package
+# Core C-level entry points
+graphics.pkg.core <- c("test-abline.R", "test-arrows.R", "test-axis.R", 
+                       "test-box.R", "test-clip.R", "test-contour.R", 
+                       "test-image.R", "test-layout.R", "test-mtext.R", 
+                       "test-palette.R", "test-par.R", "test-path.R", 
+                       "test-plot.window.R", "test-polygon.R",
+                       "test-rect.R", "test-raster.R", "test-segments.R",
+                       "test-text.R", "test-title.R", "test-xspline.R")
+# Higher-level plot functions
+graphics.pkg <- c("test-assocplot.R", "test-axis.POSIXct.R", "test-axTicks.R",
+                  "test-barplot.R", "test-boxplot.matrix.R", "test-boxplot.R",
+                  "test-bxp.R", "test-cdplot.R", "test-plot.R")
+if ("graphics-pkg-core" %in% tests || "all" %in% tests) {
+    testfiles <- c(testfiles, graphics.pkg.core)
+} 
 if ("graphics-pkg" %in% tests || "all" %in% tests) { 
-    testfiles <- c(# Core C-level entry points
-                   "test-abline.R", "test-arrows.R", "test-axis.R", 
-                   "test-box.R", "test-clip.R", "test-contour.R", 
-                   "test-image.R", "test-layout.R", "test-mtext.R", 
-                   "test-palette.R", "test-par.R", "test-path.R", 
-                   "test-plot.window.R", "test-polygon.R",
-                   "test-rect.R", "test-raster.R", "test-segments.R",
-                   "test-text.R", "test-title.R", "test-xspline.R",
-                   # Higher-level plot functions
-                   "test-assocplot.R", "test-axis.POSIXct.R", "test-axTicks.R",
-                   "test-barplot.R", "test-boxplot.matrix.R", "test-boxplot.R",
-                   "test-bxp.R", "test-plot.R")
-    for (i in testfiles) {
-        file.copy(system.file("test-scripts", i, package="gridGraphics"), ".")  
-    }
+    testfiles <- c(testfiles, graphics.pkg.core, graphics.pkg)
+}
+
+# Copy over the full set of selected test files (which will then be run)
+for (i in unique(testfiles)) {
+    file.copy(system.file("test-scripts", i, package="gridGraphics"), ".")  
 }
 
 
