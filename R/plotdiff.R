@@ -47,7 +47,7 @@ fungen <- function() {
                        width=width, height=height, compress=FALSE),
                png=png(paste0(label, "-grid.png"),
                        width=width*100, height=height*100))
-        dlReplay(dl)
+        grid.echo(dl)
         dev.off()
         if (dev != "png") {
             options <- paste0("-density ", density, "x", density)

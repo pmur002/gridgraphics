@@ -33,11 +33,11 @@ dlDispatch <- function(x) {
 }
 
 # TODO:  allow reproduction within a 'grid' viewport (rather than whole page) ?
-dlReplay <- function(x = NULL) {
+grid.echo <- function(x = NULL) {
     UseMethod("dlReplay")
 }
 
-dlReplay.default <- function(x = NULL) {
+grid.echo <- function(x = NULL) {
     if (!is.null(x)) {
         stop("Invalid graphics display list")
     }
@@ -47,7 +47,7 @@ dlReplay.default <- function(x = NULL) {
     dlReplay(recordPlot())
 }
 
-dlReplay.recordedplot <- function(x = NULL) {
+grid.echo <- function(x = NULL) {
     init(x)
     if (is.null(x[[1]][[2]])) {
         stop("No graphics to replay")
@@ -55,3 +55,8 @@ dlReplay.recordedplot <- function(x = NULL) {
     lapply(x[[1]], dlDispatch)
     shutdown()
 }
+
+echoGrob <- function(x = NULL) {
+    stop("I hope to write this one day!")
+}
+

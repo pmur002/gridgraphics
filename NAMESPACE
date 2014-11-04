@@ -1,7 +1,7 @@
 
 import("grid")
 
-export("dlReplay")
+export("grid.echo")
 export("setPrefix")
 
 # For test code in ./tests/
@@ -9,5 +9,5 @@ export("plotdiffInit")
 export("plotdiff")
 export("plotdiffResult")
 
-S3method("dlReplay", "default")
-S3method("dlReplay", "recordedplot")
+S3method("grid.echo", "default")
+S3method("grid.echo", "recordedplot")
