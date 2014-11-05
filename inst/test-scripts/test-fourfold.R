@@ -30,7 +30,7 @@ fourfold3 <- function() {
 }
 
 plotdiff(expression(fourfold1()), "fourfold-1")
-plotdiff(expression(fourfold1()), "fourfold-2")
-plotdiff(expression(fourfold1()), "fourfold-3")
+plotdiff(expression(fourfold2()), "fourfold-2")
+plotdiff(expression(fourfold3()), "fourfold-3")
 
 plotdiffResult()
