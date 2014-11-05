@@ -26,7 +26,7 @@ graphics.pkg.core <- c("test-abline.R", "test-arrows.R", "test-axis.R",
 graphics.pkg <- c("test-assocplot.R", "test-axis.POSIXct.R", "test-axTicks.R",
                   "test-barplot.R", "test-boxplot.matrix.R", "test-boxplot.R",
                   "test-bxp.R", "test-cdplot.R", "test-coplot.R", 
-                  "test-curve.R", "test-dotchart.R",
+                  "test-curve.R", "test-dotchart.R", "test-fourfold.R",
                   "test-plot.R")
 if ("graphics-pkg-core" %in% tests || "all" %in% tests) {
     testfiles <- c(testfiles, graphics.pkg.core)
