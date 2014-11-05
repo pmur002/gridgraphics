@@ -18,8 +18,12 @@ init <- function(dl) {
     replayPlot(dlStub)
     # Go back to device we will draw onto
     dev.set(playDev())
+    initInnerAlpha()
+    initFigureAlpha()
     initPlotIndex()
+    initPlotAlpha()
     initWindowIndex()
+    initWindowAlpha()
     initClip()
 }
 
@@ -73,6 +77,45 @@ initWindowIndex <- wif$init
 incrementWindowIndex <- wif$increment
 windowIndex <- wif$get
 
+alphaIndexFuns <- function() {
+    index <- 0
+    init <- function() {
+        index <<- 0
+    }
+    increment <- function() {
+        index <<- index + 1
+    }
+    get <- function() {
+        if (index == 0) {
+            ""
+        } else {
+            paste(rep(LETTERS[(index - 1) %% 26 + 1], (index - 1) %/% 26 + 1),
+                  collapse="")
+        }
+    }
+    list(init=init, increment=increment, get=get)
+}
+
+iiaf <- alphaIndexFuns()
+initInnerAlpha <- iiaf$init
+incrementInnerAlpha <- iiaf$increment
+innerAlpha <- iiaf$get
+
+fiaf <- alphaIndexFuns()
+initFigureAlpha <- fiaf$init
+incrementFigureAlpha <- fiaf$increment
+figureAlpha <- fiaf$get
+
+piaf <- alphaIndexFuns()
+initPlotAlpha <- piaf$init
+incrementPlotAlpha <- piaf$increment
+plotAlpha <- piaf$get
+
+wiaf <- alphaIndexFuns()
+initWindowAlpha <- wiaf$init
+incrementWindowAlpha <- wiaf$increment
+windowAlpha <- wiaf$get
+
 prefixFuns <- function() {
     prefix <- "graphics"
     get <- function() {
@@ -105,22 +148,26 @@ grobname <- function(label, unique=FALSE) {
 
 vpname <- function(type, clip=FALSE) {
     switch(type,
-           root=,
-           inner=paste(prefix(), type, sep="-"),
-           figure=,
-           plot={
+           root=paste(prefix(), type, sep="-"),
+           inner=paste(prefix(), paste0(type, innerAlpha()), sep="-"),
+           figure={
                if (clip) {
-                   paste(prefix(), type, plotIndex(), "clip", sep="-")
-               } else {
-                   paste(prefix(), type, plotIndex(), sep="-")
-               }
-           },
-           window={
-               if (clip) {
-                   paste(prefix(), type, plotIndex(), windowIndex(),
+                   paste(prefix(), type, paste0(plotIndex(), figureAlpha()),
                          "clip", sep="-")
                } else {
-                   paste(prefix(), type, plotIndex(), windowIndex(), sep="-")
+                   paste(prefix(), type, paste0(plotIndex(), figureAlpha()),
+                         sep="-")
                }
-           })
+           },
+           plot={
+               if (clip) {
+                   paste(prefix(), type, paste0(plotIndex(), plotAlpha()),
+                         "clip", sep="-")
+               } else {
+                   paste(prefix(), type, paste0(plotIndex(), plotAlpha()),
+                         sep="-")
+               }
+           },
+           window=paste(prefix(), type, plotIndex(),
+                         paste0(windowIndex(), windowAlpha()), sep="-"))
 }

@@ -11,6 +11,7 @@ C_plot_new <- function(x) {
     dev.set(playDev())
     incrementPlotIndex()
     initWindowIndex()
+    initWindowAlpha()
     initClip()
     nvp <- 0
     if (page) {
@@ -24,25 +25,32 @@ C_plot_new <- function(x) {
         }
         pushViewport(viewport(# gp=gparFromPar(par[gparParNames]),
                               name=vpname("root")))
-        nvp <- nvp + 1
-        omi <- par$omi
-        innervp <- viewport(x=unit(omi[2], "inches"),
-                            y=unit(omi[1], "inches"),
-                            width=unit(1, "npc") -
-                                  unit(omi[2], "inches") -
-                                  unit(omi[4], "inches"),
-                            height=unit(1, "npc") -
-                                   unit(omi[1], "inches") -
-                                   unit(omi[3], "inches"),
-                            just=c("left", "bottom"),
-                            name=vpname("inner"))
-        pushViewport(innervp)
-        nvp <- nvp + 1
+        upViewport()
+        setUpInner(par)
     } else {
-        nvp <- downViewport(vpPath(vpname("root"), vpname("inner")))
+        setUpFigure(par)
     }
-    # TODO: Need to number plot viewports
-    #       (in case there are more than one on page)
+}
+
+setUpInner <- function(par) {
+    omi <- par$omi
+    innervp <- viewport(x=unit(omi[2], "inches"),
+                        y=unit(omi[1], "inches"),
+                        width=unit(1, "npc") -
+                        unit(omi[2], "inches") -
+                        unit(omi[4], "inches"),
+                        height=unit(1, "npc") -
+                        unit(omi[1], "inches") -
+                        unit(omi[3], "inches"),
+                        just=c("left", "bottom"),
+                        name=vpname("inner"))
+    downViewport(vpname("root"), strict=TRUE)
+    pushViewport(innervp)
+    upViewport(2)
+    setUpFigure(par)
+}
+
+setUpFigure <- function(par) {
     fig <- par$fig
     figurevp <- viewport(x=unit(fig[1], "npc"),
                          y=unit(fig[3], "npc"),
@@ -56,7 +64,16 @@ C_plot_new <- function(x) {
                              height=unit(fig[4] - fig[3], "npc"),
                              just=c("left", "bottom"),
                              clip=TRUE,
-                             name=vpname("figure", clip=TRUE))
+                             name=vpname("figure", clip=TRUE))    
+    downViewport(vpPath(vpname("root"), vpname("inner")), strict=TRUE)
+    pushViewport(figurevp)
+    upViewport()
+    pushViewport(figurevpclip)
+    upViewport(3)
+    setUpPlot(par)
+}
+
+setUpPlot <- function(par) {
     plt <- par$plt
     plotvp <- viewport(x=unit(plt[1], "npc"),
                        y=unit(plt[3], "npc"),
@@ -71,21 +88,14 @@ C_plot_new <- function(x) {
                            just=c("left", "bottom"),
                            clip=TRUE,
                            name=vpname("plot", clip=TRUE))
-    # Default windowvp;  will be overridden by a plot.window() call
-    windowvp <- viewport(name=vpname("window"))
-    windowvpclip <- viewport(clip=TRUE, name=vpname("window", clip=TRUE))     
-    pushViewport(figurevp)
+    downViewport(vpPath(vpname("root"), vpname("inner"), vpname("figure")),
+                 strict=TRUE)
     pushViewport(plotvp)
-    pushViewport(windowvp)
-    upViewport(2)
+    upViewport(1)
     pushViewport(plotvpclip)
-    pushViewport(windowvpclip)
-    upViewport(3)
-    pushViewport(figurevpclip)
+    upViewport(2)
+    downViewport(vpname("figure", clip=TRUE), strict=TRUE)
     pushViewport(plotvp)
-    pushViewport(windowvp)
-    upViewport(3)
-    if (nvp > 0)
-        upViewport(nvp)
+    upViewport(4)
+    setUpUsr(par$usr)
 }
-

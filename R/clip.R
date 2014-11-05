@@ -31,7 +31,7 @@ gotovp <- function(xpd, end="window") {
     } else {
         figure <- vpname("figure")
         plot <- vpname("plot", clip=TRUE)
-        window <- vpname("window", clip=TRUE)
+        window <- vpname("window")
     }
     path <- switch(end,
                    window=vpPath(root, inner, figure, plot, window),

@@ -34,20 +34,20 @@ dlDispatch <- function(x) {
 
 # TODO:  allow reproduction within a 'grid' viewport (rather than whole page) ?
 grid.echo <- function(x = NULL) {
-    UseMethod("dlReplay")
+    UseMethod("grid.echo")
 }
 
-grid.echo <- function(x = NULL) {
+grid.echo.default <- function(x = NULL) {
     if (!is.null(x)) {
         stop("Invalid graphics display list")
     }
     if (is.null(dev.list())) {
         stop("No graphics device")
     }
-    dlReplay(recordPlot())
+    grid.echo(recordPlot())
 }
 
-grid.echo <- function(x = NULL) {
+grid.echo.recordedplot <- function(x = NULL) {
     init(x)
     if (is.null(x[[1]][[2]])) {
         stop("No graphics to replay")

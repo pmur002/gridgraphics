@@ -90,14 +90,14 @@ ComputePAdjValue <- function(padj, side, las) {
 }
 
 ComputeAtValue <- function(at, adj, side, las) {
-    if (is.finite(at)) {
+    if (any(is.finite(at))) {
         unit(at, "native")
     } else {
 	# If the text is parallel to the axis, use "adj" for "at"
 	# Otherwise, centre the text
 	unit(switch(las + 1,
 	            # parallel to axis 
-                    at <- adj,
+                    adj,
                     # horizontal 
                     switch(side, adj, 0.5, adj, 0.5),
                     # perpendicular to axis

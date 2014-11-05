@@ -4,10 +4,24 @@ C_par <- function(x) {
     # Mimic call on off-screen device (so get the right answer when
     # query off-screen device in drawing functions)
     do.call("par", x[-1])
+    par <- par()
     dev.set(playDev())
-    # IF we have reset par(usr), we need a new "window" viewport
-    if ("usr" %in% names(x[-1][[1]]))
-        setUpUsr(x[-1][[1]]$usr)
+    parnames <- names(x[-1][[1]])
+    # Only remake viewports for highest-level change in par()
+    if (any(c("oma", "omd", "omi") %in% parnames)) {
+        incrementInnerAlpha()
+        setUpInner(par)
+    } else if (any(c("fig", "fin", "mai", "mar") %in% parnames)) {
+        incrementFigureAlpha()
+        setUpFigure(par)
+    } else if (any(c("mex", "pin", "plt") %in% parnames)) {
+        incrementPlotAlpha()
+        setUpPlot(par)
+    } else if (any(c("usr", "xlog", "ylog") %in% parnames)) {
+        # IF we have reset par(usr), we need a new "window" viewport
+        incrementWindowAlpha()
+        setUpUsr(par$usr)
+    }
 }
 
 gparParNames <- c("font", "family", "bg", "fg", "col", "lheight",
