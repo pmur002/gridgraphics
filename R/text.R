@@ -40,3 +40,4 @@ just <- function(adj, par) {
     }
     c(adjx, adjy)
 }
+
