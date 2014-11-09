@@ -30,7 +30,10 @@ init <- function(dl) {
 shutdown <- function() {
     # Close the off-screen graphics device
     dev.set(recordDev())
-    invisible(dev.off())
+    dev.off()
+    # Make sure we go back to the device we are replaying onto
+    dev.set(playDev())
+    invisible()
 }
 
 initClip <- function() {
