@@ -4,6 +4,8 @@
 #        col.ticks, hadj, padj, ...)
 C_axis <- function(x) {
     dev.set(recordDev())
+    # Blank out x$cex because we want par$cex to be par$cexbase
+    x$cex <- NULL
     par <- currentPar(x[-(1:16)])
     dev.set(playDev())
     # TODO:  write a more complex grid.axis() that can handle
