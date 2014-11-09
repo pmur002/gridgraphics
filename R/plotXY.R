@@ -1,36 +1,49 @@
 
-points <- function(x, y, pch, lty, col, bg, cex, lwd,
+points <- function(x, y, pch, col, bg, cex, lwd,
                    cin) {
     grid.points(x, y, default.units="native",
                 #  GSTR_0  dpptr(dd)->scale * dd->dev->cra[1] * 0.5 * dd->dev->ipr[1] * gpptr(dd)->cex
                 size=unit(cin[2]*0.5*cex, "in"), pch=pch,
-                gp=gpar(lty=lty, col=col, fill=bg, lwd=lwd, cex=cex),
+                gp=gpar(lty="solid", col=col, fill=bg, lwd=lwd, cex=cex),
                 name=grobname("points"))
 }
 
-lines <- function(x, y, lty, col, lwd) {
+lines <- function(x, y, lty, col, lwd, par) {
     grid.lines(x, y, default.units="native",
-               gp=gpar(lty=lty, col=col, lwd=lwd),
+               gp=gpar(lty=lty, col=col, lwd=lwd,
+                   lineend=par$lend, linemitre=par$lmitre, linejoin=par$ljoin),
                name=grobname("lines"))
 }
 
-step <- function(x, y, lty, col, lwd) {
+step <- function(x, y, lty, col, lwd, par) {
     n <- length(x)
     grid.lines(rep(x, each=2)[-1],
                rep(y, each=2, length.out=2*n - 1),
                default.units="native",
-               gp=gpar(lty=lty, col=col, lwd=lwd),
+               gp=gpar(lty=lty, col=col, lwd=lwd,
+                   lineend=par$lend, linemitre=par$lmitre, linejoin=par$ljoin),
                name=grobname("step"))
 }
 
-bar <- function(x, y, lty, col, lwd, ylog, usr) {
-    if (ylog) {
-        root <- usr[3]
+Step <- function(x, y, lty, col, lwd, par) {
+    n <- length(x)
+    grid.lines(rep(x, each=2, length.out=2*n - 1),
+               rep(y, each=2)[-1],
+               default.units="native",
+               gp=gpar(lty=lty, col=col, lwd=lwd,
+                   lineend=par$lend, linemitre=par$lmitre, linejoin=par$ljoin),
+               name=grobname("Step"))
+}
+
+bar <- function(x, y, lty, col, lwd, par) {
+    if (par$ylog) {
+        root <- par$usr[3]
     } else {
         root <- 0
     }
     grid.segments(x, root, x, y, default.units="native",
-                  gp=gpar(lty=lty, col=col, lwd=lwd),
+                  gp=gpar(lty=lty, col=col, lwd=lwd,
+                      lineend=par$lend, linemitre=par$lmitre, linejoin=par$ljoin),
                   name=grobname("spike"))
 }
 
@@ -50,7 +63,8 @@ brokenlines <- function(x, y, lty, col, lwd, par) {
     ey <- yy[-1] - f*dy
     grid.segments(sx, sy, ex, ey, 
                   default.units="in",
-                  gp=gpar(lty=lty, col=col, lwd=lwd),
+                  gp=gpar(lty=lty, col=col, lwd=lwd,
+                      lineend=par$lend, linemitre=par$lmitre, linejoin=par$ljoin),
                   name=grobname("brokenline"))
 }
 
@@ -72,14 +86,16 @@ C_plotXY <- function(x) {
     cex <- FixupCex(x[[8]]*par$cex, 1)
     lwd <- FixupLwd(x[[9]], par$lwd)
     switch(type,
-           p=points(xx, yy, pch, lty, col, bg, cex, lwd, par$cin),
-           l=lines(xx, yy, lty, col, lwd),
-           s=step(xx, yy, lty, col, lwd),
-           h=bar(xx, yy, lty, col, lwd, par$ylog, par$usr),
-           o={ lines(xx, yy, lty, col, lwd);
-               points(xx, yy, pch, lty, col, bg, cex, lwd, par$cin) },
+           p=points(xx, yy, pch, col, bg, cex, lwd, par$cin),
+           l=lines(xx, yy, lty, col, lwd, par),
+           s=step(xx, yy, lty, col, lwd, par),
+           S=Step(xx, yy, lty, col, lwd, par),
+           h=bar(xx, yy, lty, col, lwd, par),
+           c=brokenlines(xx, yy, lty, col, lwd, par),
+           o={ lines(xx, yy, lty, col, lwd, par);
+               points(xx, yy, pch, col, bg, cex, lwd, par$cin) },
            b={ brokenlines(xx, yy, lty, col, lwd, par);
-               points(xx, yy, pch, lty, col, bg, cex, lwd, par$cin) })
+               points(xx, yy, pch, col, bg, cex, lwd, par$cin) })
     upViewport(depth)
 }
 
