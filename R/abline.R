@@ -25,13 +25,9 @@ C_abline <- function(x) {
         if (untf && (par$xlog || par$ylog)) {
             # TODO: draw a curve instead of straight line
         } else {
-            if (par$xlog) {
-                xx <- log10(xx)
-            }
+            # If 'xlog' then par$usr is already "logged"
+            # ditto for 'ylog'
             yy <- a + b*xx
-            if (par$ylog) {
-                yy <- 10^yy
-            }
         }
         # TODO: this will have to be smarter to handle drawing outside
         #       the plot region

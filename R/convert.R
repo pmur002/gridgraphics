@@ -2,7 +2,7 @@
 # Handle log axes
 
 tx <- function(x, par) {
-    if (par$xlog) {
+    if (par$xlog && !is.null(x)) {
         log10(x)
     } else {
         x
@@ -10,7 +10,7 @@ tx <- function(x, par) {
 }
 
 ty <- function(x, par) {
-    if (par$ylog) {
+    if (par$ylog && !is.null(x)) {
         log10(x)
     } else {
         x

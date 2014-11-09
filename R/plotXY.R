@@ -4,7 +4,7 @@ points <- function(x, y, pch, lty, col, bg, cex, lwd,
     grid.points(x, y, default.units="native",
                 #  GSTR_0  dpptr(dd)->scale * dd->dev->cra[1] * 0.5 * dd->dev->ipr[1] * gpptr(dd)->cex
                 size=unit(cin[2]*0.5*cex, "in"), pch=pch,
-                gp=gpar(lty=lty, col=col, fill=bg, lwd=lwd),
+                gp=gpar(lty=lty, col=col, fill=bg, lwd=lwd, cex=cex),
                 name=grobname("points"))
 }
 
@@ -41,7 +41,8 @@ brokenlines <- function(x, y, lty, col, lwd, par) {
     dx <- diff(xx)
     dy <- diff(yy)
     hypot <- sqrt(dx^2 + dy^2)
-    f <- d/hypot
+    # If not enough room, setting to NA will mean no segment drawn
+    f <- ifelse(d < 0.5*hypot, d/hypot, NA)
     n <- length(x)
     sx <- xx[-n] + f*dx
     sy <- yy[-n] + f*dy
@@ -75,6 +76,8 @@ C_plotXY <- function(x) {
            l=lines(xx, yy, lty, col, lwd),
            s=step(xx, yy, lty, col, lwd),
            h=bar(xx, yy, lty, col, lwd, par$ylog, par$usr),
+           o={ lines(xx, yy, lty, col, lwd);
+               points(xx, yy, pch, lty, col, bg, cex, lwd, par$cin) },
            b={ brokenlines(xx, yy, lty, col, lwd, par);
                points(xx, yy, pch, lty, col, bg, cex, lwd, par$cin) })
     upViewport(depth)
