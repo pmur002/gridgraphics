@@ -43,7 +43,8 @@ bar <- function(x, y, lty, col, lwd, par) {
     }
     grid.segments(x, root, x, y, default.units="native",
                   gp=gpar(lty=lty, col=col, lwd=lwd,
-                      lineend=par$lend, linemitre=par$lmitre, linejoin=par$ljoin),
+                      lineend=par$lend, linemitre=par$lmitre,
+                      linejoin=par$ljoin),
                   name=grobname("spike"))
 }
 
@@ -64,7 +65,8 @@ brokenlines <- function(x, y, lty, col, lwd, par) {
     grid.segments(sx, sy, ex, ey, 
                   default.units="in",
                   gp=gpar(lty=lty, col=col, lwd=lwd,
-                      lineend=par$lend, linemitre=par$lmitre, linejoin=par$ljoin),
+                      lineend=par$lend, linemitre=par$lmitre,
+                      linejoin=par$ljoin),
                   name=grobname("brokenline"))
 }
 

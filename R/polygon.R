@@ -16,7 +16,9 @@ C_polygon <- function(x) {
     breaks <- which(is.na(xx) | is.na(yy))
     if (length(breaks) == 0) { # Only one polygon
         grid.polygon(xx, yy, default.units="native",
-                     gp=gpar(col=border, fill=col, lty=lty, lwd=par$lwd),
+                     gp=gpar(col=border, fill=col, lty=lty, lwd=par$lwd,
+                         lineend=par$lend, linemitre=par$lmitre,
+                         linejoin=par$ljoin),
                      name=grobname("polygon"))
     } else {
         nb <- length(breaks)
@@ -25,7 +27,9 @@ C_polygon <- function(x) {
                      length(xx) - breaks[nb])
         grid.polygon(xx[-breaks], yy[-breaks], default.units="native",
                      id.lengths=lengths,
-                     gp=gpar(col=border, fill=col, lty=lty, lwd=par$lwd),
+                     gp=gpar(col=border, fill=col, lty=lty, lwd=par$lwd,
+                         lineend=par$lend, linemitre=par$lmitre,
+                         linejoin=par$ljoin),
                      name=grobname("polygon"))
     }
     upViewport(depth)

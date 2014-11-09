@@ -16,7 +16,9 @@ C_path <- function(x) {
     lty <- ifelse(is.na(lty), par$lty, lty)
     grid.path(xx, yy, default="native",
               id.lengths=lengths, rule=rule,
-              gp=gpar(col=border, fill=col, lty=lty),
+              gp=gpar(col=border, fill=col, lty=lty, lwd=par$lwd,
+                  lineend=par$lend, linemitre=par$lmitre,
+                  linejoin=par$ljoin),
               name=grobname("path"))
     upViewport(depth)    
 }

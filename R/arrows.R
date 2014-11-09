@@ -17,7 +17,9 @@ C_arrows <- function(x) {
     lty <- FixupLty(x[[10]], par$lty)
     lwd <- FixupLwd(x[[11]], par$lwd)
     grid.segments(x0, y0, x1, y1, default.units="native",
-                  gp=gpar(col=col, lty=lty, lwd=lwd, lineend=par$lend),
+                  gp=gpar(col=col, lty=lty, lwd=lwd,
+                      lineend=par$lend, linemitre=par$lmitre,
+                      linejoin=par$ljoin),
                   arrow=arrow(angle=angle, length=unit(length, "in"),
                       ends=switch(code, "first", "last", "both")),
                   name=grobname("arrows"))

@@ -26,7 +26,9 @@ C_contour <- function(x) {
         for (i in 1:length(clines)) {
             c <- clines[[i]]
             grid.lines(c$x, c$y, default.units="native",
-                       gp=gpar(col=col, lty=lty, lwd=lwd),
+                       gp=gpar(col=col, lty=lty, lwd=lwd,
+                           lineend=par$lend, linemitre=par$lmitre,
+                           linejoin=par$ljoin),
                        name=paste(grobname("contour"), i, sep="-"))
         }
     }

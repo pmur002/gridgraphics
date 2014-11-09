@@ -84,7 +84,9 @@ C_axis <- function(x) {
                               axis_base,
                               unit(max(ticks), "native"),
                               axis_base,
-                              gp=gpar(col=col, lwd=lwd, lty=lty),
+                              gp=gpar(col=col, lwd=lwd, lty=lty,
+                                  lineend=par$lend, linemitre=par$lmitre,
+                                  linejoin=par$ljoin),
                               name=grobname("bottom-axis-line"))
             }
             if (lwd.ticks > 0) {
@@ -92,7 +94,9 @@ C_axis <- function(x) {
                               axis_base,
                               unit(ticks, "native"),
                               axis_base + tickLength,
-                              gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty),
+                              gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty,
+                                  lineend=par$lend, linemitre=par$lmitre,
+                                  linejoin=par$ljoin),
                               name=grobname("bottom-axis-ticks"))
             }
         }
@@ -126,7 +130,9 @@ C_axis <- function(x) {
                               unit(min(ticks), "native"),
                               axis_base,
                               unit(max(ticks), "native"),
-                              gp=gpar(col=col, lwd=lwd, lty=lty),
+                              gp=gpar(col=col, lwd=lwd, lty=lty,
+                                  lineend=par$lend, linemitre=par$lmitre,
+                                  linejoin=par$ljoin),
                               name=grobname("left-axis-line"))
             }
             if (lwd.ticks > 0) {            
@@ -134,7 +140,9 @@ C_axis <- function(x) {
                               unit(ticks, "native"),
                               axis_base + tickLength,
                               unit(ticks, "native"),
-                              gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty),
+                              gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty,
+                                  lineend=par$lend, linemitre=par$lmitre,
+                                  linejoin=par$ljoin),
                               name=grobname("left-axis-ticks"))
             }
         }
@@ -165,7 +173,9 @@ C_axis <- function(x) {
                               axis_base,
                               unit(max(ticks), "native"),
                               axis_base,
-                              gp=gpar(col=col, lwd=lwd, lty=lty),
+                              gp=gpar(col=col, lwd=lwd, lty=lty,
+                                  lineend=par$lend, linemitre=par$lmitre,
+                                  linejoin=par$ljoin),
                               name=grobname("top-axis-line"))
             }
             if (lwd.ticks > 0) {
@@ -173,7 +183,9 @@ C_axis <- function(x) {
                               axis_base,
                               unit(ticks, "native"),
                               axis_base - tickLength,
-                              gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty),
+                              gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty,
+                                  lineend=par$lend, linemitre=par$lmitre,
+                                  linejoin=par$ljoin),
                               name=grobname("top-axis-ticks"))
             }
         }
@@ -206,7 +218,9 @@ C_axis <- function(x) {
                               unit(min(ticks), "native"),
                               axis_base,
                               unit(max(ticks), "native"),
-                              gp=gpar(col=col, lwd=lwd, lty=lty),
+                              gp=gpar(col=col, lwd=lwd, lty=lty,
+                                  lineend=par$lend, linemitre=par$lmitre,
+                                  linejoin=par$ljoin),
                               name=grobname("right-axis-line"))
             }
             if (lwd.ticks > 0) {
@@ -214,7 +228,9 @@ C_axis <- function(x) {
                               unit(ticks, "native"),
                               axis_base - tickLength,
                               unit(ticks, "native"),
-                              gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty),
+                              gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty,
+                                  lineend=par$lend, linemitre=par$lmitre,
+                                  linejoin=par$ljoin),
                               name=grobname("right-axis-ticks"))
             }
         }

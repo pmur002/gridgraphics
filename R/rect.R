@@ -20,7 +20,9 @@ C_rect <- function(x) {
     #        (so that it works in 'log' coordinates?)
     grid.rect(xleft, ybottom, xright - xleft, ytop - ybottom,
               default.units="native", just=c("left", "bottom"),
-              gp=gpar(col=border, fill=col, lty=lty, lwd=lwd),
+              gp=gpar(col=border, fill=col, lty=lty, lwd=lwd,
+                  lineend=par$lend, linemitre=par$lmitre,
+                  linejoin=par$ljoin),
               name=grobname("rect"))
     upViewport(depth)
 }

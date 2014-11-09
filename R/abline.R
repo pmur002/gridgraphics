@@ -32,17 +32,23 @@ C_abline <- function(x) {
         # TODO: this will have to be smarter to handle drawing outside
         #       the plot region
         grid.lines(xx, yy, default.units="native",
-                   gp=gpar(col=col, lty=lty, lwd=lwd),
+                   gp=gpar(col=col, lty=lty, lwd=lwd,
+                       lineend=par$lend, linemitre=par$lmitre,
+                       linejoin=par$ljoin),
                    name=grobname("abline-ab"))
     }
     if (!is.null(h)) {
         grid.segments(0, unit(h, "native"), 1, unit(h, "native"),
-                      gp=gpar(col=col, lty=lty, lwd=lwd),
+                      gp=gpar(col=col, lty=lty, lwd=lwd,
+                          lineend=par$lend, linemitre=par$lmitre,
+                          linejoin=par$ljoin),
                       name=grobname("abline-h"))
     }
     if (!is.null(v)) {
         grid.segments(unit(v, "native"), 0, unit(v, "native"), 1, 
-                      gp=gpar(col=col, lty=lty, lwd=lwd),
+                      gp=gpar(col=col, lty=lty, lwd=lwd,
+                          lineend=par$lend, linemitre=par$lmitre,
+                          linejoin=par$ljoin),
                       name=grobname("abline-v"))
     }
     upViewport(depth)

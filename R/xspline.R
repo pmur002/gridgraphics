@@ -18,7 +18,9 @@ C_xspline <- function(x) {
     if (draw) {
         grid.xspline(xx, yy, default.units="native",
                      shape=s, open=open, repEnds=repEnds,
-                     gp=gpar(col=border, fill=col),
+                     gp=gpar(col=border, fill=col, lwd=par$lwd, lty=par$lty,
+                         lineend=par$lend, linemitre=par$lmitre,
+                         linejoin=par$ljoin),
                      name=grobname("xspline"))
         result <- NULL
     }
