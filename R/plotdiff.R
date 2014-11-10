@@ -64,7 +64,8 @@ fungen <- function() {
         }
         # Check for multiple-page PDF
         # If found, only compare the last page
-        pngFiles <- list.files(pattern=paste0(label, "-[0-9]+-graphics.png"))
+        pngFiles <- list.files(pattern=paste0("^", label,
+                                   "-[0-9]+-graphics.png"))
         numPNG <- length(pngFiles)
         if (numPNG > 1) {
             file.rename(pngFiles[numPNG], pngFiles[1])
