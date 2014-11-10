@@ -57,18 +57,26 @@ fungen <- function() {
                 options <- c(options, "+antialias")
             system2("convert",
                     c(options,
-                      paste0(label, c("-graphics.pdf", "-graphics.png"))))
+                      paste0(label, c("-graphics.pdf", "-%d-graphics.png"))))
             system2("convert",
                     c(options,
-                      paste0(label, c("-grid.pdf", "-grid.png"))))
+                      paste0(label, c("-grid.pdf", "-%d-grid.png"))))
         }
-        result <- plotcompare(label)
+        # Check for multiple-page PDF
+        # If found, only compare the last page
+        pngFiles <- list.files(pattern=paste0(label, "-[0-9]+-graphics.png"))
+        numPNG <- length(pngFiles)
+        if (numPNG > 1) {
+            file.rename(pngFiles[numPNG], pngFiles[1])
+        }
+        pngLabel <- paste0(label, "-0")
+        result <- plotcompare(pngLabel)
         if (result != "0") {
             diffs <<- c(diffs,
                         paste0(result,
                                if (result == 1) " difference "
                                else " differences ",
-                               "detected (", label, "-diff.png)"))
+                               "detected (", pngLabel, "-diff.png)"))
         }
     }
 
