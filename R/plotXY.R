@@ -1,10 +1,10 @@
 
-points <- function(x, y, pch, col, bg, cex, lwd,
-                   cin) {
+points <- function(x, y, pch, col, bg, cex, lwd, par) {
     grid.points(x, y, default.units="native",
                 #  GSTR_0  dpptr(dd)->scale * dd->dev->cra[1] * 0.5 * dd->dev->ipr[1] * gpptr(dd)->cex
-                size=unit(cin[2]*0.5*cex, "in"), pch=pch,
-                gp=gpar(lty="solid", col=col, fill=bg, lwd=lwd, cex=cex),
+                size=unit(par$cin[2]*0.5*cex, "in"), pch=pch,
+                gp=gpar(lty="solid", col=col, fill=bg, lwd=lwd, cex=cex,
+                    fontface=par$font),
                 name=grobname("points"))
 }
 
@@ -88,16 +88,16 @@ C_plotXY <- function(x) {
     cex <- FixupCex(x[[8]]*par$cex, 1)
     lwd <- FixupLwd(x[[9]], par$lwd)
     switch(type,
-           p=points(xx, yy, pch, col, bg, cex, lwd, par$cin),
+           p=points(xx, yy, pch, col, bg, cex, lwd, par),
            l=lines(xx, yy, lty, col, lwd, par),
            s=step(xx, yy, lty, col, lwd, par),
            S=Step(xx, yy, lty, col, lwd, par),
            h=bar(xx, yy, lty, col, lwd, par),
            c=brokenlines(xx, yy, lty, col, lwd, par),
            o={ lines(xx, yy, lty, col, lwd, par);
-               points(xx, yy, pch, col, bg, cex, lwd, par$cin) },
+               points(xx, yy, pch, col, bg, cex, lwd, par) },
            b={ brokenlines(xx, yy, lty, col, lwd, par);
-               points(xx, yy, pch, col, bg, cex, lwd, par$cin) })
+               points(xx, yy, pch, col, bg, cex, lwd, par) })
     upViewport(depth)
 }
 
