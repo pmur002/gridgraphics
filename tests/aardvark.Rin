@@ -33,8 +33,7 @@ graphics.pkg <- c("test-assocplot.R", "test-axis.POSIXct.R", "test-axTicks.R",
                   "test-panel.smooth.R", "test-pie.R", "test-plot.data.frame.R",
                   "test-plot.default.R", "test-plot.design.R", 
                   "test-plot.factor.R", "test-plot.formula.R",
-                  "test-plot.histogram.R",
-                  "test-plot.R")
+                  "test-plot.histogram.R", "test-plot.R", "test-plot.table.R")
 if ("graphics-pkg-core" %in% tests || "all" %in% tests) {
     testfiles <- c(testfiles, graphics.pkg.core)
 } 
