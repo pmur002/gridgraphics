@@ -24,17 +24,23 @@ gotovp <- function(xpd, end="window") {
         figure <- vpname("figure")
         plot <- vpname("plot")
         window <- vpname("window")
+        windowplot <- vpname("windowplot")
     } else if (xpd) {
         figure <- vpname("figure", clip=TRUE)
         plot <- vpname("plot")
         window <- vpname("window")
+        windowplot <- vpname("windowplot")
     } else {
         figure <- vpname("figure")
         plot <- vpname("plot", clip=TRUE)
         window <- vpname("window")
+        windowplot <- vpname("windowplot", clip=TRUE)
     }
+    # NOTE that the "window" vp goes via a separate "window" "plot" vp
+    #      so that box() can go to one "plot" vp and text() et al can
+    #      go to a different "plot" vp (e.g., following a par(mar))
     path <- switch(end,
-                   window=vpPath(root, inner, figure, plot, window),
+                   window=vpPath(root, inner, figure, windowplot, window),
                    plot=vpPath(root, inner, figure, plot),
                    figure=vpPath(root, inner, figure),
                    inner=vpPath(root, inner),

@@ -57,27 +57,33 @@ fungen <- function() {
                 options <- c(options, "+antialias")
             system2("convert",
                     c(options,
-                      paste0(label, c("-graphics.pdf", "-%d-graphics.png"))))
+                      paste0(label, c("-graphics.pdf", "-graphics.png"))))
             system2("convert",
                     c(options,
-                      paste0(label, c("-grid.pdf", "-%d-grid.png"))))
+                      paste0(label, c("-grid.pdf", "-grid.png"))))
         }
         # Check for multiple-page PDF
         # If found, only compare the last page
         pngFiles <- list.files(pattern=paste0("^", label,
-                                   "-[0-9]+-graphics.png"))
+                                   "-graphics-[0-9]+.png"))
         numPNG <- length(pngFiles)
-        if (numPNG > 1) {
-            file.rename(pngFiles[numPNG], pngFiles[1])
+        if (numPNG > 0) {
+            warning(paste0("Only comparing final page (of ", numPNG, " pages)"))
+            file.rename(pngFiles[numPNG],
+                        gsub("-[0-9]+.png", ".png", pngFiles[1]))
+            gridFiles <- list.files(pattern=paste0("^", label,
+                                        "-grid-[0-9]+.png"))
+            file.rename(gridFiles[numPNG],
+                        gsub("-[0-9]+.png", ".png", gridFiles[1]))
         }
         pngLabel <- paste0(label, "-0")
-        result <- plotcompare(pngLabel)
+        result <- plotcompare(label)
         if (result != "0") {
             diffs <<- c(diffs,
                         paste0(result,
                                if (result == 1) " difference "
                                else " differences ",
-                               "detected (", pngLabel, "-diff.png)"))
+                               "detected (", label, "-diff.png)"))
         }
     }
 

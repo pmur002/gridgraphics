@@ -9,9 +9,12 @@ C_plot_new <- function(x) {
     par <- par()
     # playDev
     dev.set(playDev())
+    initFigureAlpha()
     incrementPlotIndex()
+    initPlotAlpha()
     initWindowIndex()
     initWindowAlpha()
+    initWindowPlotAlpha()
     initClip()
     nvp <- 0
     if (page) {

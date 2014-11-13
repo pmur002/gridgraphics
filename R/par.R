@@ -11,15 +11,17 @@ C_par <- function(x) {
     if (any(c("oma", "omd", "omi") %in% parnames)) {
         incrementInnerAlpha()
         setUpInner(par)
-    } else if (any(c("fig", "fin", "mai", "mar") %in% parnames)) {
+    } else if (any(c("fig", "fin") %in% parnames)) {
         incrementFigureAlpha()
         setUpFigure(par)
-    } else if (any(c("mex", "pin", "plt") %in% parnames)) {
+    } else if (any(c("mex", "mai", "mar", "pin", "plt") %in% parnames)) {
         incrementPlotAlpha()
         setUpPlot(par)
     } else if (any(c("usr", "xlog", "ylog") %in% parnames)) {
         # IF we have reset par(usr), we need a new "window" viewport
         incrementWindowAlpha()
+        # Align windowPlotAlpha with plotAlpha
+        setWindowPlotAlpha(plotAlpha())
         setUpUsr(par$usr)
     }
 }

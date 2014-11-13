@@ -25,6 +25,8 @@ C_plot_window <- function(x) {
     usr <- par("usr")
     dev.set(playDev())
     incrementWindowIndex()
+    # Align windowPlotAlpha with plotAlpha
+    setWindowPlotAlpha(plotAlpha())
     setUpUsr(usr)
 }
 

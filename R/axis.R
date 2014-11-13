@@ -80,9 +80,11 @@ C_axis <- function(x) {
             # for log transforms
             ticks <- tx(ticks, par)
             if (lwd > 0) {
-                grid.segments(unit(min(ticks), "native"),
+                grid.segments(unit(min(par$usr[2], max(par$usr[1], min(ticks))),
+                                   "native"),
                               axis_base,
-                              unit(max(ticks), "native"),
+                              unit(min(par$usr[2], max(par$usr[1], max(ticks))),
+                                   "native"),
                               axis_base,
                               gp=gpar(col=col, lwd=lwd, lty=lty,
                                   lineend=par$lend, linemitre=par$lmitre,
@@ -127,9 +129,11 @@ C_axis <- function(x) {
             ticks <- ty(ticks, par)
             if (lwd > 0) {
                 grid.segments(axis_base,
-                              unit(min(ticks), "native"),
+                              unit(min(par$usr[4], max(par$usr[3], min(ticks))),
+                                   "native"),
                               axis_base,
-                              unit(max(ticks), "native"),
+                              unit(min(par$usr[4], max(par$usr[3], max(ticks))),
+                                   "native"),
                               gp=gpar(col=col, lwd=lwd, lty=lty,
                                   lineend=par$lend, linemitre=par$lmitre,
                                   linejoin=par$ljoin),
@@ -169,9 +173,11 @@ C_axis <- function(x) {
         if (doticks) {
             ticks <- tx(ticks, par)
             if (lwd > 0) {
-                grid.segments(unit(min(ticks), "native"),
+                grid.segments(unit(min(par$usr[2], max(par$usr[1], min(ticks))),
+                                   "native"),
                               axis_base,
-                              unit(max(ticks), "native"),
+                              unit(min(par$usr[2], max(par$usr[1], max(ticks))),
+                                   "native"),
                               axis_base,
                               gp=gpar(col=col, lwd=lwd, lty=lty,
                                   lineend=par$lend, linemitre=par$lmitre,
@@ -215,9 +221,11 @@ C_axis <- function(x) {
             ticks <- ty(ticks, par)
             if (lwd > 0) {
                 grid.segments(axis_base,
-                              unit(min(ticks), "native"),
+                              unit(min(par$usr[4], max(par$usr[3], min(ticks))),
+                                   "native"),
                               axis_base,
-                              unit(max(ticks), "native"),
+                              unit(min(par$usr[4], max(par$usr[3], max(ticks))),
+                                   "native"),
                               gp=gpar(col=col, lwd=lwd, lty=lty,
                                   lineend=par$lend, linemitre=par$lmitre,
                                   linejoin=par$ljoin),

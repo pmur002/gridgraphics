@@ -22,6 +22,7 @@ dlDispatch <- function(x) {
            C_path = C_path(x[[2]]),
            C_raster = C_raster(x[[2]]),
            C_identify = C_identify(x[[2]]),
+           C_symbols = C_symbols(x[[2]]),
            # These only partially supported
            C_contour = C_contour(x[[2]]),
            # These unsupported

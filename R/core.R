@@ -24,6 +24,7 @@ init <- function(dl) {
     initPlotAlpha()
     initWindowIndex()
     initWindowAlpha()
+    initWindowPlotAlpha()
     initClip()
 }
 
@@ -96,7 +97,16 @@ alphaIndexFuns <- function() {
                   collapse="")
         }
     }
-    list(init=init, increment=increment, get=get)
+    set <- function(x) {
+        if (x == "") {
+            index <<- 0
+        } else {
+            n <- nchar(x)
+            chars <- rev(strsplit(x, "")[[1]])
+            index <<- sum(sapply(chars, function(y) which(LETTERS == y)))
+        }
+    }
+    list(init=init, increment=increment, get=get, set=set)
 }
 
 iiaf <- alphaIndexFuns()
@@ -118,6 +128,11 @@ wiaf <- alphaIndexFuns()
 initWindowAlpha <- wiaf$init
 incrementWindowAlpha <- wiaf$increment
 windowAlpha <- wiaf$get
+
+wpiaf <- alphaIndexFuns()
+initWindowPlotAlpha <- wpiaf$init
+windowPlotAlpha <- wpiaf$get
+setWindowPlotAlpha <- wpiaf$set
 
 prefixFuns <- function() {
     prefix <- "graphics"
@@ -172,5 +187,18 @@ vpname <- function(type, clip=FALSE) {
                }
            },
            window=paste(prefix(), type, plotIndex(),
-                         paste0(windowIndex(), windowAlpha()), sep="-"))
+                         paste0(windowIndex(), windowAlpha()), sep="-"),
+           # NOTE that the "window" "plot" vp uses a potentially different
+           #      alpha than the "plot" vp (see clip.R for why)
+           windowplot={
+               if (clip) {
+                   paste(prefix(), "plot",
+                         paste0(plotIndex(), windowPlotAlpha()),
+                         "clip", sep="-")
+               } else {
+                   paste(prefix(), "plot",
+                         paste0(plotIndex(), windowPlotAlpha()),
+                         sep="-")
+               }
+           })
 }
