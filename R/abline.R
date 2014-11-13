@@ -1,8 +1,6 @@
 
 # C_abline(a, b, h, v, untf, col, lty, lwd, ...)
 C_abline <- function(x) {
-    # TODO: handle 'a'
-    # TODO: handle 'b'
     # TODO: handle 'untf'
     dev.set(recordDev())
     par <- currentPar(x[-(1:9)])

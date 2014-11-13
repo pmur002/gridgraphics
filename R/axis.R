@@ -8,12 +8,8 @@ C_axis <- function(x) {
     x$cex <- NULL
     par <- currentPar(x[-(1:16)])
     dev.set(playDev())
-    # TODO:  write a more complex grid.axis() that can handle
-    #        'tick', 'line', 'pos', 'outer'
+    # TODO:  handle 'outer'
     depth <- gotovp(NA)
-    # TODO: use axTicks() and/or axisTicks() to get axis tick locations
-    #       when at=NULL, plus formatC() to format those locations for
-    #       the tick labels
     side <- x[[2]]
     if (is.null(x[[3]])) {
         ticks <- defaultTicks(side, par)
