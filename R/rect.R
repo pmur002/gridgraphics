@@ -16,8 +16,6 @@ C_rect <- function(x) {
     lty <- ifelse(is.na(lty), par$lty, lty)
     lwd <- FixupLwd(x[[9]], par$lwd)
     lwd <- ifelse(is.na(lwd), par$lwd, lwd)
-    # TODO:  convert from "native" BEFORE determining width?
-    #        (so that it works in 'log' coordinates?)
     grid.rect(xleft, ybottom, xright - xleft, ytop - ybottom,
               default.units="native", just=c("left", "bottom"),
               gp=gpar(col=border, fill=col, lty=lty, lwd=lwd,

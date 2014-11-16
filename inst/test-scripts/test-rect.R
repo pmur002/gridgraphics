@@ -35,7 +35,13 @@ rect2 <- function() {
            density = c(NA, NA, 10, 30), angle = c(NA, NA, 30, -30))
 }
 
+rect3 <- function() {
+    plot(1:10, log="x")
+    rect(2, 2, 6, 6)
+}
+
 plotdiff(expression(rect1()), "rect-1")
 plotdiff(expression(rect2()), "rect-2")
+plotdiff(expression(rect3()), "rect-3")
 
 plotdiffResult()
