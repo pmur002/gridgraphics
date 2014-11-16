@@ -1,11 +1,6 @@
 
 # C_title(main, sub, xlab, ylab, line, outer, ...)
 C_title <- function(x) {
-    # TODO: Handle 'sub'
-    # TODO: Handle 'line' argument
-    # TODO: Query par() for default 'line'
-    # TODO: Take other par() settings into account (e.g., 'las', 'adj', ...)
-    # TODO: Handle annotation-specific pars like cex.main
     dev.set(recordDev())
     par <- currentPar(x[-(1:7)])
     dev.set(playDev())

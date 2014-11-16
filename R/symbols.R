@@ -17,7 +17,6 @@ C_symbols <- function(x) {
     }
     bg <- FixupCol(x[[7]], NA, par$bg)
     fg <- FixupCol(x[[8]], NA, par$bg)
-    # TODO: support types 3, 4, and 6
     if (type == 1) { # circles
         prange <- range(p, na.rm=TRUE)
         if (inches > 0) {

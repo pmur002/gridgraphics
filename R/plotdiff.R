@@ -2,8 +2,6 @@
 # Code used by test files
 
 plotcompare <- function(label) {
-    # TODO: Some sort of test to tell whether ImageMagick's 'compare'
-    #       is available
     diffname <- paste0(label, "-diff.png")
     if (file.exists(diffname))
         stop("This comparison already exists")
