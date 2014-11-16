@@ -68,7 +68,7 @@ C_title <- function(x) {
                mex=par$mex, cin=par$cin, cex=subArg$pars$cex,
                linecex=par$mex*par$cex,
                font=subArg$pars$font, col=subArg$pars$col,
-               lheight=par$lheight, label="sub")
+               lheight=par$lheight, yLineBias=par$ylbias, label="sub")
     }
     if (!is.null(xlab)) {
         cex <- if (is.null(xlabArg$pars$cex)) {
@@ -80,7 +80,7 @@ C_title <- function(x) {
                mex=par$mex, cin=par$cin, cex=xlabArg$pars$cex,
                linecex=par$mex*par$cex,
                font=xlabArg$pars$font, col=xlabArg$pars$col,
-               lheight=par$lheight, 
+               lheight=par$lheight, yLineBias=par$ylbias,
                label="xlab")
     }
     if (!is.null(ylab)) {
@@ -93,7 +93,7 @@ C_title <- function(x) {
                mex=par$mex, cin=par$cin, cex=ylabArg$pars$cex,
                linecex=par$mex*par$cex,
                font=ylabArg$pars$font, col=ylabArg$pars$col,
-               lheight=par$lheight, 
+               lheight=par$lheight, yLineBias=par$ylbias,
                label="ylab")
     }
     upViewport(depth)

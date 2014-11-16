@@ -112,7 +112,7 @@ C_axis <- function(x) {
                    mex=par$mex, cin=par$cin, 
                    cex=par$cex.axis*par$cex, linecex=par$mex*par$cex,
                    font=par$font.axis, col=par$col.axis, lheight=par$lheight,
-                   allowOverlap=FALSE,
+                   yLineBias=par$ylbias, allowOverlap=FALSE,
                    label="bottom-axis-labels")
         }
     } else if (side == 2 && par$yaxt != "n") {
@@ -157,7 +157,7 @@ C_axis <- function(x) {
                    mex=par$mex, cin=par$cin,
                    cex=par$cex.axis*par$cex, linecex=par$mex*par$cex,
                    font=par$font.axis, col=par$col.axis, lheight=par$lheight,
-                   allowOverlap=FALSE,
+                   yLineBias=par$ylbias, allowOverlap=FALSE,
                    label="left-axis-labels")
         }
     } else if (side == 3 && par$xaxt != "n") {
@@ -204,7 +204,7 @@ C_axis <- function(x) {
                    mex=par$mex, cin=par$cin, 
                    cex=par$cex.axis*par$cex, linecex=par$mex*par$cex,
                    font=par$font.axis, col=par$col.axis, lheight=par$lheight,
-                   allowOverlap=FALSE,
+                   yLineBias=par$ylbias, allowOverlap=FALSE,
                    label="top-axis-labels")
         }
     } else if (side == 4 && par$yaxt != "n") {
@@ -251,7 +251,7 @@ C_axis <- function(x) {
                    mex=par$mex, cin=par$cin,
                    cex=par$cex.axis*par$cex, linecex=par$mex*par$cex,
                    font=par$font.axis, col=par$col.axis, lheight=par$lheight,
-                   allowOverlap=FALSE,
+                   yLineBias=par$ylbias, allowOverlap=FALSE,
                    label="right-axis-labels")
         }
     } 

@@ -36,7 +36,7 @@ C_mtext <- function(x) {
     GMtext(text, side, line, outer, at,
            las=par$las, xadj=adj, yadj=padj,
            mex=par$mex, cin=par$cin, cex=cex, linecex=par$cex,
-           font=font, col=col, lheight=par$lheight,
+           font=font, col=col, lheight=par$lheight, par$ylbias,
            label=grobname(name))
     upViewport(depth)
 }
@@ -112,20 +112,18 @@ ComputeAtValue <- function(at, adj, side, las) {
 # (so that those fiddly adjustments are not reproduced all over the place)
 
 # NOTE that 'mgp' is in 'mex' units
-# NOTE the 'yLineBias' "fudge factor" of 0.2 (taken from PDF/PS/X11 values)
-# TODO:  use par$ylbias instead of explicit 0.2 !!!
 # NOTE we use par("cin") rather than 'grid' "lines"
 # NOTE that 'linecex' attempts to capture the fact that line height is based
 #      on 'mex'*'cexbase' NOT 'cex'*'cexbase'
 
 GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
-                   mex, cin, cex, linecex, font, col, lheight,
+                   mex, cin, cex, linecex, font, col, lheight, yLineBias,
                    allowOverlap=TRUE, label) {
     if (side == 1) {
         if (las == 2 || las == 3) {
             angle <- 90
         } else {
-            line <- line + 1/mex*(1 - 0.2)
+            line <- line + 1/mex*(1 - yLineBias)
             angle <- 0
         }
         x <- at
@@ -134,7 +132,7 @@ GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
         if(las == 1 || las == 2) {
 	    angle <- 0
 	} else {
-	    line <- line + 1/mex*0.2
+	    line <- line + 1/mex*yLineBias
 	    angle <- 90
 	}
         x <- unit(-line*cin[2]*linecex, "in")
@@ -144,7 +142,7 @@ GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
 	    angle <- 90
 	}
 	else {
-	    line <- line + 1/mex*0.2
+	    line <- line + 1/mex*yLineBias
 	    angle <- 0
 	}
         x <- at
@@ -154,7 +152,7 @@ GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
 	    angle <- 0
 	}
 	else {
-	    line <- line + 1/mex*(1 - 0.2)
+	    line <- line + 1/mex*(1 - yLineBias)
 	    angle <- 90
 	}
         x <- unit(1, "npc") + unit(line*cin[2]*linecex, "in")
