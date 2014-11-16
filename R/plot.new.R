@@ -1,6 +1,4 @@
 
-# TODO:  support 'bg' on plot.new()
-
 C_plot_new <- function(x) {
     # recordDev
     dev.set(recordDev())
