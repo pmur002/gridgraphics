@@ -24,8 +24,15 @@ palette2 <- function() {
     points(xy, col = 8, pch = 16, cex = 1.5)
 }
 
+palette3 <- function() {
+    palette(rainbow(10))
+    plot(1:10, pch=16, col=1:10, cex=3)
+    palette(heat.colors(10))
+    points(10:1, pch=16, col=1:10, cex=3)
+}
+
 plotdiff(expression(palette1()), "palette-1")
-# pdf() does not seem to like this image!
 plotdiff(expression(palette2()), "palette-2")
+plotdiff(expression(palette3()), "palette-3")
 
 plotdiffResult()

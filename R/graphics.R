@@ -3,6 +3,7 @@ dlDispatch <- function(x) {
     switch(x[[2]][[1]]$name,
            C_abline = C_abline(x[[2]]),
            C_plot_new = C_plot_new(x[[2]]),
+           palette = C_palette(x[[2]]),
            palette2 = C_palette2(x[[2]]),
            C_plot_window = C_plot_window(x[[2]]),
            C_plotXY = C_plotXY(x[[2]]),
