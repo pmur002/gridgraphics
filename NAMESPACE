@@ -11,3 +11,5 @@ export("plotdiffResult")
 
 S3method("grid.echo", "default")
 S3method("grid.echo", "recordedplot")
+S3method("grid.echo", "expression")
+S3method("grid.echo", "call")

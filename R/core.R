@@ -1,15 +1,19 @@
 
 .gridGraphicsEnv <- new.env()
 
-init <- function(dl) {
+init <- function(dl, width=NULL, height=NULL) {
     if (dev.cur() == 1) {
         dev.new()
     }
     # The graphics device we will draw onto
     assign("pd", dev.cur(), .gridGraphicsEnv)
     din <- par("din")
+    if (is.null(width))
+        width <- din[1]
+    if (is.null(height))
+        height <- din[2]
     # An off-screen graphics device 
-    pdf(NULL, width=din[1], height=din[2])
+    pdf(NULL, width=width, height=height)
     assign("rd", dev.cur(), .gridGraphicsEnv)
     # NULL out the saved display list then replay it in order
     # to restore basic graphics settings (like device background)

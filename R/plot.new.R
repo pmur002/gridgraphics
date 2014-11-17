@@ -16,7 +16,8 @@ C_plot_new <- function(x) {
     initClip()
     nvp <- 0
     if (page) {
-        grid.newpage()
+        if (get("newpage", .gridGraphicsEnv))
+            grid.newpage()
         # If there is a non-transparent par(bg) in effect, we need
         # to draw an opaque background rect
         if (par$bg != "transparent") {

@@ -36,22 +36,30 @@ dlDispatch <- function(x) {
 }
 
 # TODO:  allow reproduction within a 'grid' viewport (rather than whole page) ?
-grid.echo <- function(x = NULL) {
+grid.echo <- function(x = NULL, newpage=TRUE) {
     UseMethod("grid.echo")
 }
 
-grid.echo.default <- function(x = NULL) {
+grid.echo.default <- function(x = NULL, newpage=TRUE) {
     if (!is.null(x)) {
         stop("Invalid graphics display list")
     }
     if (is.null(dev.list())) {
         stop("No graphics device")
     }
-    grid.echo(recordPlot())
+    grid.echo(recordPlot(), newpage)
 }
 
-grid.echo.recordedplot <- function(x = NULL) {
-    init(x)
+grid.echo.recordedplot <- function(x = NULL, newpage=TRUE) {
+    assign("newpage", newpage, .gridGraphicsEnv)
+    if (newpage) {
+        width <- NULL
+        height <- NULL
+    } else {
+        width <- convertWidth(unit(1, "npc"), "in", valueOnly=TRUE)
+        height <- convertHeight(unit(1, "npc"), "in", valueOnly=TRUE)
+    }
+    init(x, width, height)
     if (is.null(x[[1]][[2]])) {
         stop("No graphics to replay")
     }
@@ -59,6 +67,26 @@ grid.echo.recordedplot <- function(x = NULL) {
     shutdown()
 }
 
+grid.echo.expression <- function(x = NULL, newpage=TRUE) {
+    if (newpage) {
+        width <- NULL
+        height <- NULL
+    } else {
+        width <- convertWidth(unit(1, "npc"), "in", valueOnly=TRUE)
+        height <- convertHeight(unit(1, "npc"), "in", valueOnly=TRUE)
+    }
+    cd <- dev.cur()
+    pdf(NULL, width=width, height=height)
+    dev.control("enable")
+    eval(x)
+    dl <- recordPlot()
+    dev.off()
+    dev.set(cd)
+    grid.echo(dl, newpage)
+}
+
+grid.echo.call <- grid.echo.expression
+    
 echoGrob <- function(x = NULL) {
     stop("I hope to write this one day!")
 }
