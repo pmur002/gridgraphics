@@ -32,11 +32,22 @@ abline3 <- function() {
     abline(a = coef(mC), b = 0, col = "blue")
 }
 
+# Test 'untf' and log scales
+abline4 <- function() {
+    par(mfrow=c(2, 2), mar=c(5, 4, 2, 2))
+    plot(1:10)
+    abline(1, 1)
+    plot(1:10, log="x")
+    abline(1, 1, untf=TRUE)
+    plot(1:10, log="y")
+    abline(1, 1, untf=TRUE)
+    plot(1:10, log="xy")
+    abline(1, 1, untf=TRUE)
+}
+
 plotdiff(expression(abline1()), "abline-1")
 plotdiff(expression(abline2()), "abline-2")
 plotdiff(expression(abline3()), "abline-3")
-# plotdiff(expression(abline1()), "abline-1", antialias=FALSE)
-# plotdiff(expression(abline2()), "abline-2", density=50, antialias=FALSE)
-# plotdiff(expression(abline3()), "abline-3", density=40, antialias=FALSE)
+plotdiff(expression(abline4()), "abline-4")
 
 plotdiffResult()
