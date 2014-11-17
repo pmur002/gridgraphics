@@ -27,8 +27,18 @@ axis3 <- function() {
     axis(1, xaxp = c(2, 9, 7))
 }
 
+# Test axis drawn in outer margin
+axis4 <- function() {
+    par(omi=rep(.5, 4))
+    plot(1:10)
+    box("inner", lty="dashed")
+    axis(1, outer=TRUE)
+    axis(2, outer=TRUE)
+}
+
 plotdiff(expression(axis1()), "axis-1")
 plotdiff(expression(axis2()), "axis-2")
 plotdiff(expression(axis3()), "axis-3")
+plotdiff(expression(axis4()), "axis-4")
 
 plotdiffResult()

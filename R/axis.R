@@ -8,7 +8,6 @@ C_axis <- function(x) {
     x$cex <- NULL
     par <- currentPar(x[-(1:16)])
     dev.set(playDev())
-    # TODO:  handle 'outer'
     depth <- gotovp(NA)
     side <- x[[2]]
     if (is.null(x[[3]])) {
@@ -30,7 +29,7 @@ C_axis <- function(x) {
     } 
     if (is.finite(pos))
         lineoff <- 0
-
+    outer <- x[[8]]
     font <- FixupFont(x[[9]], NA)
     lty <- FixupLty(x[[10]], 0)
     lwd <- FixupLwd(x[[11]], 1)
@@ -64,10 +63,14 @@ C_axis <- function(x) {
     } else {
         tickLength <- unit(par$cin[2]*par$tcl*par$cex, "in")
     }
+    returnvp <- NULL
     if (side == 1 && par$xaxt != "n") {
         if (is.finite(pos)) {
             axis_base <- unit(pos, "native")
         } else {
+            if (outer) {
+                returnvp <- pushTempViewport(side)
+            } 
             axis_base <- unit(0, "npc") - unit(line*par$cin[2]*par$cex, "in")
         }
         if (doticks) {
@@ -119,6 +122,9 @@ C_axis <- function(x) {
         if (is.finite(pos)) {
             axis_base <- unit(pos, "native")
         } else {
+            if (outer) {
+                returnvp <- pushTempViewport(side)
+            } 
             axis_base <- unit(0, "npc") - unit(line*par$cin[2]*par$cex, "in")
         }
         if (doticks) {
@@ -164,6 +170,9 @@ C_axis <- function(x) {
         if (is.finite(pos)) {
             axis_base <- unit(pos, "native")
         } else {
+            if (outer) {
+                returnvp <- pushTempViewport(side)
+            } 
             axis_base <- unit(1, "npc") + unit(line*par$cin[2]*par$cex, "in")
         }
         if (doticks) {
@@ -211,6 +220,9 @@ C_axis <- function(x) {
         if (is.finite(pos)) {
             axis_base <- unit(pos, "native")
         } else {
+            if (outer) {
+                returnvp <- pushTempViewport(side)
+            } 
             axis_base <- unit(1, "npc") + unit(line*par$cin[2]*par$cex, "in")
         }
         if (doticks) {
@@ -254,7 +266,12 @@ C_axis <- function(x) {
                    yLineBias=par$ylbias, allowOverlap=FALSE,
                    label="right-axis-labels")
         }
-    } 
+    }
+    # Undo any temporary "outer" viewport
+    if (!is.null(returnvp)) {
+        upViewport()
+        downViewport(returnvp)
+    }
     upViewport(depth)
 }
 
@@ -303,4 +320,26 @@ computePAdj <- function(padj, side, las) {
                        switch(side, 0.5, 0, 0.5, 0))
     }
     padj
+}
+
+pushTempViewport <- function(side) {
+    cvp <- current.viewport()
+    xscale <- cvp$xscale
+    yscale <- cvp$yscale
+    name <- cvp$name
+    returnvp <- upViewport(2)
+    if (side == 1 || side == 3) {
+        pushViewport(viewport(x=grobX(rectGrob(vp=returnvp), "west"),
+                              width=grobWidth(rectGrob(vp=returnvp)),
+                              just="left",
+                              xscale=xscale,
+                              name=paste0(name, "-outer-axis")))
+    } else { # side == 2 || side == 4
+        pushViewport(viewport(y=grobY(rectGrob(vp=returnvp), "south"),
+                              height=grobHeight(rectGrob(vp=returnvp)),
+                              just="bottom",
+                              yscale=yscale,
+                              name=paste0(name, "-outer-axis")))        
+    }
+    returnvp
 }
