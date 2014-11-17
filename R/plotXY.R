@@ -1,4 +1,35 @@
 
+# C_plotXY(xy, type, pch, lty, col, bg, cex, lwd, ...)
+C_plotXY <- function(x) {
+    dev.set(recordDev())
+    par <- currentPar(x[-(1:9)])
+    dev.set(playDev())
+    depth <- gotovp(par$xpd)
+    xx <- tx(x[[2]]$x, par)
+    yy <- ty(x[[2]]$y, par)
+    type <- x[[3]]
+    pch <- FixupPch(x[[4]], par$pch)
+    lty <- FixupLty(x[[5]], par$lty)
+    col <- FixupCol(x[[6]], 0, par$bg)
+    bg <- FixupCol(x[[7]], NA, par$bg)
+    # NOTE: cex multiplied by "base" cex
+    cex <- FixupCex(x[[8]]*par$cex, 1)
+    lwd <- FixupLwd(x[[9]], par$lwd)
+    switch(type,
+           n={ }, # do nothing
+           p=points(xx, yy, pch, col, bg, cex, lwd, par),
+           l=lines(xx, yy, lty, col, lwd, par),
+           s=step(xx, yy, lty, col, lwd, par),
+           S=Step(xx, yy, lty, col, lwd, par),
+           h=bar(xx, yy, lty, col, lwd, par),
+           c=brokenlines(xx, yy, lty, col, lwd, par),
+           o={ lines(xx, yy, lty, col, lwd, par);
+               points(xx, yy, pch, col, bg, cex, lwd, par) },
+           b={ brokenlines(xx, yy, lty, col, lwd, par);
+               points(xx, yy, pch, col, bg, cex, lwd, par) })
+    upViewport(depth)
+}
+
 points <- function(x, y, pch, col, bg, cex, lwd, par) {
     grid.points(x, y, default.units="native",
                 #  GSTR_0  dpptr(dd)->scale * dd->dev->cra[1] * 0.5 * dd->dev->ipr[1] * gpptr(dd)->cex
@@ -68,36 +99,5 @@ brokenlines <- function(x, y, lty, col, lwd, par) {
                       lineend=par$lend, linemitre=par$lmitre,
                       linejoin=par$ljoin),
                   name=grobname("brokenline"))
-}
-
-# C_plotXY(xy, type, pch, lty, col, bg, cex, lwd, ...)
-C_plotXY <- function(x) {
-    dev.set(recordDev())
-    par <- currentPar(x[-(1:9)])
-    dev.set(playDev())
-    # TODO:  handle all 'type's
-    depth <- gotovp(par$xpd)
-    xx <- tx(x[[2]]$x, par)
-    yy <- ty(x[[2]]$y, par)
-    type <- x[[3]]
-    pch <- FixupPch(x[[4]], par$pch)
-    lty <- FixupLty(x[[5]], par$lty)
-    col <- FixupCol(x[[6]], 0, par$bg)
-    bg <- FixupCol(x[[7]], NA, par$bg)
-    # NOTE: cex multiplied by "base" cex
-    cex <- FixupCex(x[[8]]*par$cex, 1)
-    lwd <- FixupLwd(x[[9]], par$lwd)
-    switch(type,
-           p=points(xx, yy, pch, col, bg, cex, lwd, par),
-           l=lines(xx, yy, lty, col, lwd, par),
-           s=step(xx, yy, lty, col, lwd, par),
-           S=Step(xx, yy, lty, col, lwd, par),
-           h=bar(xx, yy, lty, col, lwd, par),
-           c=brokenlines(xx, yy, lty, col, lwd, par),
-           o={ lines(xx, yy, lty, col, lwd, par);
-               points(xx, yy, pch, col, bg, cex, lwd, par) },
-           b={ brokenlines(xx, yy, lty, col, lwd, par);
-               points(xx, yy, pch, col, bg, cex, lwd, par) })
-    upViewport(depth)
 }
 
