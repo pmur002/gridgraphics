@@ -9,7 +9,7 @@ Echo \pkg{graphics} output using \pkg{grid} graphics
   to an identical scene drawn with the \pkg{grid} package.
 }
 \usage{
-grid.echo(x = NULL, newpage = TRUE)
+grid.echo(x = NULL, newpage = TRUE, prefix = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -20,6 +20,10 @@ grid.echo(x = NULL, newpage = TRUE)
   \item{newpage}{
     A logical value indicating whether to start a new page.  If
     \code{FALSE}, echoing occurs in the current \pkg{grid} viewport.
+  }
+  \item{prefix}{
+    A character value used as a prefix for all grob and viewport names.
+    The default prefix is \code{"graphics"}.
   }
 }
 \details{

@@ -36,22 +36,24 @@ dlDispatch <- function(x) {
 }
 
 # TODO:  allow reproduction within a 'grid' viewport (rather than whole page) ?
-grid.echo <- function(x = NULL, newpage=TRUE) {
+grid.echo <- function(x = NULL, newpage=TRUE, prefix=NULL) {
     UseMethod("grid.echo")
 }
 
-grid.echo.default <- function(x = NULL, newpage=TRUE) {
+grid.echo.default <- function(x = NULL, newpage=TRUE, prefix=NULL) {
     if (!is.null(x)) {
         stop("Invalid graphics display list")
     }
     if (is.null(dev.list())) {
         stop("No graphics device")
     }
-    grid.echo(recordPlot(), newpage)
+    grid.echo(recordPlot(), newpage, prefix)
 }
 
-grid.echo.recordedplot <- function(x = NULL, newpage=TRUE) {
+grid.echo.recordedplot <- function(x = NULL, newpage=TRUE, prefix=NULL) {
     assign("newpage", newpage, .gridGraphicsEnv)
+    if (!is.null(prefix))
+        setPrefix(prefix)
     if (newpage) {
         width <- NULL
         height <- NULL
@@ -67,7 +69,7 @@ grid.echo.recordedplot <- function(x = NULL, newpage=TRUE) {
     shutdown()
 }
 
-grid.echo.expression <- function(x = NULL, newpage=TRUE) {
+grid.echo.expression <- function(x = NULL, newpage=TRUE, prefix=NULL) {
     if (newpage) {
         width <- NULL
         height <- NULL
@@ -82,7 +84,7 @@ grid.echo.expression <- function(x = NULL, newpage=TRUE) {
     dl <- recordPlot()
     dev.off()
     dev.set(cd)
-    grid.echo(dl, newpage)
+    grid.echo(dl, newpage, prefix)
 }
 
 grid.echo.call <- grid.echo.expression

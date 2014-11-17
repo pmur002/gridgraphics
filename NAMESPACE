@@ -2,7 +2,6 @@
 import("grid")
 
 export("grid.echo")
-export("setPrefix")
 
 # For test code in ./tests/
 export("plotdiffInit")
