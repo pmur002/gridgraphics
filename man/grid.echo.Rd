@@ -26,24 +26,12 @@ grid.echo(x = NULL, newpage = TRUE, prefix = NULL)
     The default prefix is \code{"graphics"}.
   }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\references{
-%% ~put references to the literature/web site here ~
+  This function is called for its side-effect of drawing on the
+  current graphics device.
 }
 \author{
 Paul Murrell
-}
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
 \dontrun{

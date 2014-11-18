@@ -5,4 +5,5 @@ Authors@R: person("Paul", "Murrell", role = c("cre", "aut"),
                   email = "paul@stat.auckland.ac.nz")
 Description: Redraw base graphics as grid graphics
 Depends: grid
-License: GPL
+SystemRequirements: ImageMagick (for testing)
+License: file LICENSE
