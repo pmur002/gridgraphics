@@ -4,9 +4,6 @@ C_title <- function(x) {
     dev.set(recordDev())
     par <- currentPar(x[-(1:7)])
     dev.set(playDev())
-    # TODO: there is an 'asp' = ipr[2]/ipr[2] adjustment missing in the
-    #       x= calculation below (where ipr = cra/cin ?)
-    #       (i.e., we are assuming square pixels, asp == 1)
     mainArg <- GetTextArg(x[[2]],
                           par$cex.main*par$cex,
                           par$col.main, par$font.main, par$bg)

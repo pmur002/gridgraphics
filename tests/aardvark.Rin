@@ -45,6 +45,11 @@ if ("graphics-pkg" %in% tests || "all" %in% tests) {
     testfiles <- c(testfiles, graphics.pkg.core, graphics.pkg)
 }
 
+# Miscellaneous tests
+if ("all" %in% tests) {
+   testfiles <- "test-missing.R"
+}
+
 # Copy over the full set of selected test files (which will then be run)
 for (i in unique(testfiles)) {
     file.copy(system.file("test-scripts", i, package="gridGraphics"), ".")  
