@@ -123,4 +123,3 @@ FixupFont <- function(font, dflt) {
     }
 }
 
-

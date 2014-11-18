@@ -29,8 +29,24 @@ text2 <- function() {
          "Jetz no chli züritüütsch: (noch ein bißchen Zürcher deutsch)")
 }
 
+# Test 'family'
+text3 <- function() {
+    plot(1:3, type="n")
+    families <- c("sans", "serif", "mono")
+    for (i in 1:3)
+        text(i, i, "test", family=families[i])
+}
+
+# Test 'vfont'
+text4 <- function() {
+    plot(1, type="n")
+    text(1, 1, "test", vfont=c("serif", "plain"))
+}
+
 plotdiff(expression(text1()), "text-1")
 plotdiff(expression(text2()), "text-2")
+plotdiff(expression(text3()), "text-3")
+plotdiff(expression(text4()), "text-4")
 
 plotdiffResult()
 

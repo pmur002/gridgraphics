@@ -54,7 +54,7 @@ C_title <- function(x) {
                     unit(vpos*par$cex*par$cin[2], "in"),
                   vjust=adjy,
                   gp=gpar(cex=mainArg$pars$cex,
-                          fontface=mainArg$pars$font,
+                          fontface=mainArg$pars$font, fontfamily=par$family,
                           col=mainArg$pars$col, lineheight=par$lheight),
                   name=grobname("main"))
     }
@@ -66,8 +66,8 @@ C_title <- function(x) {
         }
         GMtext(sub, 1, line=par$mgp[1] + 1, at=0.5, las=0, xadj=0.5, yadj=0,
                mex=par$mex, cin=par$cin, cex=subArg$pars$cex,
-               linecex=par$mex*par$cex,
-               font=subArg$pars$font, col=subArg$pars$col,
+               linecex=par$mex*par$cex, font=subArg$pars$font,
+               family=par$family, col=subArg$pars$col,
                lheight=par$lheight, yLineBias=par$ylbias, label="sub")
     }
     if (!is.null(xlab)) {
@@ -78,8 +78,8 @@ C_title <- function(x) {
         }
         GMtext(xlab, 1, line=par$mgp[1], at=0.5, las=0, xadj=0.5, yadj=0, 
                mex=par$mex, cin=par$cin, cex=xlabArg$pars$cex,
-               linecex=par$mex*par$cex,
-               font=xlabArg$pars$font, col=xlabArg$pars$col,
+               linecex=par$mex*par$cex, font=xlabArg$pars$font,
+               family=par$family, col=xlabArg$pars$col,
                lheight=par$lheight, yLineBias=par$ylbias,
                label="xlab")
     }
@@ -91,8 +91,8 @@ C_title <- function(x) {
         }
         GMtext(ylab, 2, line=par$mgp[1], at=0.5, las=0, xadj=0.5, yadj=0,
                mex=par$mex, cin=par$cin, cex=ylabArg$pars$cex,
-               linecex=par$mex*par$cex,
-               font=ylabArg$pars$font, col=ylabArg$pars$col,
+               linecex=par$mex*par$cex, font=ylabArg$pars$font,
+               family=par$family, col=ylabArg$pars$col,
                lheight=par$lheight, yLineBias=par$ylbias,
                label="ylab")
     }

@@ -25,7 +25,7 @@ C_identify <- function(x) {
             grid.text(label, xxx, yyy, default.units="native",
                       hjust=xadj, vjust=yadj,
                       gp=gpar(cex=par$cex, col=par$col, fontface=par$font,
-                          lineheight=par$lheight))
+                          fontfamily=par$family, lineheight=par$lheight))
         }
     }
     upViewport(depth)

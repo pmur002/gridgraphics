@@ -36,7 +36,8 @@ C_mtext <- function(x) {
     GMtext(text, side, line, outer, at,
            las=par$las, xadj=adj, yadj=padj,
            mex=par$mex, cin=par$cin, cex=cex, linecex=par$cex,
-           font=font, col=col, lheight=par$lheight, par$ylbias,
+           font=font, family=par$family,
+           col=col, lheight=par$lheight, par$ylbias,
            label=grobname(name))
     upViewport(depth)
 }
@@ -117,7 +118,8 @@ ComputeAtValue <- function(at, adj, side, las) {
 #      on 'mex'*'cexbase' NOT 'cex'*'cexbase'
 
 GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
-                   mex, cin, cex, linecex, font, col, lheight, yLineBias,
+                   mex, cin, cex, linecex, font, family,
+                   col, lheight, yLineBias,
                    allowOverlap=TRUE, label) {
     if (side == 1) {
         if (las == 2 || las == 3) {
@@ -161,7 +163,8 @@ GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
         stop("Invalid 'side'")
     }
     grid.text(str, x, y, hjust=xadj, vjust=yadj, rot=angle,
-              gp=gpar(cex=cex, fontface=font, col=col, lineheight=lheight),
+              gp=gpar(cex=cex, fontface=font, fontfamily=family,
+                  col=col, lineheight=lheight),
               check.overlap=!allowOverlap,
               name=grobname(label))
 }

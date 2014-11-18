@@ -33,15 +33,23 @@ C_text <- function(x) {
         adjy[pos == 1] <- 1 - (0.5 - 0.3333) 
         adjy[pos == 3] <- 0
     }
+    vfont <- x[[7]]
     cex <- FixupCex(x[[8]]*par$cex, 1)
     cex <- ifelse(is.na(cex), par$cex, cex)
     col <- FixupCol(x[[9]], NA, par$bg)
     col <- ifelse(is.na(col), par$col, col)
     font <- FixupFont(x[[10]], NA)
     font <- ifelse(is.na(font), par$font, font)
+    family <- par$family
+    if (!is.null(vfont) && !is.language(labels)) {
+        # Override 'font' and 'family'
+        font <- vfont[2]
+        family <- mapVfont(vfont[1])
+    }
     grid.text(labels, xx, yy, default.units="native",
               hjust=adjx, vjust=adjy, rot=par$srt,
-              gp=gpar(cex=cex, col=col, fontface=font, lineheight=par$lheight),
+              gp=gpar(cex=cex, col=col, fontface=font, fontfamily=family,
+                  lineheight=par$lheight),
               name=grobname("text"))
     upViewport(depth)
 }
@@ -62,3 +70,14 @@ just <- function(adj, par) {
     c(adjx, adjy)
 }
 
+mapVfont <- function(vfont) {
+    switch(vfont,
+           "serif"="HersheySerif",
+           "sans serif"="HersheySans",
+           "script"="HersheyScript",
+           "gothic english"="HersheyGothicEnglish",
+           "gothic german"="HersheyGothicGerman",
+           "gothic italian"="HersheyGothicItalian",
+           "serif symbol"="HersheySymbol",
+           "sans serif symbol"="HersheySansSymbol")
+}
