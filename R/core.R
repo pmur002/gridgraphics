@@ -30,6 +30,9 @@ init <- function(dl, width=NULL, height=NULL) {
     initWindowAlpha()
     initWindowPlotAlpha()
     initClip()
+    # Remove any grobname indices
+    rm(list=ls(env=.gridGraphicsEnv, pattern=".gridGraphicsIndex$"),
+       envir=.gridGraphicsEnv)
 }
 
 shutdown <- function() {
@@ -157,14 +160,15 @@ grobname <- function(label, unique=FALSE) {
     if (unique) {
         paste(prefix(), label, sep="-")
     } else {
-        indexName <- paste0(label, "Index")
+        stub <- paste(prefix(), "plot", plotIndex(), label, sep="-")
+        indexName <- paste0(stub, ".gridGraphicsIndex")
         if (exists(indexName, .gridGraphicsEnv)) {
             index <- get(indexName, .gridGraphicsEnv)
         } else {
             index <- 1
         }
         assign(indexName, index + 1, .gridGraphicsEnv)
-        paste(prefix(), "plot", plotIndex(), label, index, sep="-")
+        paste(stub, index, sep="-")
     }
 }
 
