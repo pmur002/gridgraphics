@@ -69,7 +69,7 @@ grid.echo.recordedplot <- function(x = NULL, newpage=TRUE, prefix=NULL) {
     shutdown()
 }
 
-grid.echo.expression <- function(x = NULL, newpage=TRUE, prefix=NULL) {
+grid.echo.function <- function(x = NULL, newpage=TRUE, prefix=NULL) {
     if (newpage) {
         width <- NULL
         height <- NULL
@@ -80,15 +80,13 @@ grid.echo.expression <- function(x = NULL, newpage=TRUE, prefix=NULL) {
     cd <- dev.cur()
     pdf(NULL, width=width, height=height)
     dev.control("enable")
-    eval(x)
+    x()
     dl <- recordPlot()
     dev.off()
     dev.set(cd)
     grid.echo(dl, newpage, prefix)
 }
 
-grid.echo.call <- grid.echo.expression
-    
 echoGrob <- function(x = NULL) {
     stop("I hope to write this one day!")
 }
