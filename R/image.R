@@ -24,6 +24,7 @@ C_image <- function(x) {
     grid.rect(xxx, yyy, www, hhh,
               default.units="native",
               just=c("left", "bottom"),
-              gp=gpar(col=NA, fill=col[zzz]))
+              gp=gpar(col=NA, fill=col[zzz]),
+              name=grobname("image-rect"))
     upViewport(depth)    
 }
