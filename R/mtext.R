@@ -38,7 +38,7 @@ C_mtext <- function(x) {
            mex=par$mex, cin=par$cin, cex=cex, linecex=par$cex,
            font=font, family=par$family,
            col=col, lheight=par$lheight, par$ylbias,
-           label=grobname(name))
+           label=name)
     upViewport(depth)
 }
 
