@@ -31,7 +31,7 @@ init <- function(dl, width=NULL, height=NULL) {
     initWindowPlotAlpha()
     initClip()
     # Remove any grobname indices
-    rm(list=ls(env=.gridGraphicsEnv, pattern=".gridGraphicsIndex$"),
+    rm(list=ls(envir=.gridGraphicsEnv, pattern=".gridGraphicsIndex$"),
        envir=.gridGraphicsEnv)
 }
 
