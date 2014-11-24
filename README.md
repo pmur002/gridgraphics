@@ -1,4 +1,4 @@
 gridgraphics
 ============
 
-Redraw base graphics as grid graphics
+Redraw base graphics using grid graphics
