@@ -52,8 +52,11 @@ grid.echo.default <- function(x = NULL, newpage=TRUE, prefix=NULL) {
 
 grid.echo.recordedplot <- function(x = NULL, newpage=TRUE, prefix=NULL) {
     assign("newpage", newpage, .gridGraphicsEnv)
-    if (!is.null(prefix))
+    if (!is.null(prefix)) {
+        op <- prefix()
         setPrefix(prefix)
+        on.exit(setPrefix(op))
+    }
     if (newpage) {
         width <- NULL
         height <- NULL
