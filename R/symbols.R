@@ -52,7 +52,7 @@ C_symbols <- function(x) {
                   gp=gpar(col=fg, fill=bg, lty=par$lty, lwd=par$lwd,
                       lineend=par$lend, linemitre=par$lmitre,
                       linejoin=par$ljoin),
-                  name=grobname("symbols-thermo-box")) 
+                  name=grobname("symbols-rect")) 
     } else if (type == 4) { # stars
         prange <- range(p, na.rm=TRUE)
         nc <- ncol(p)
