@@ -30,7 +30,7 @@ C_mtext <- function(x) {
         depth <- gotovp(NA, "window")
         # depth <- gotovp(if (is.na(par$xpd)) NA else TRUE, "window")
     }
-    name <- paste0("mtext-side", side)
+    name <- paste0("mtext-", switch(side, "bottom", "left", "top", "right"))
     if (outer)
         name <- paste(name, "outer", sep="-")
     GMtext(text, side, line, outer, at,
