@@ -6,4 +6,4 @@ Authors@R: person("Paul", "Murrell", role = c("cre", "aut"),
 Description: Redraw base graphics as grid graphics
 Depends: grid, graphics
 SystemRequirements: ImageMagick (for testing)
-License: file LICENSE
+License: GPL (>= 2)
