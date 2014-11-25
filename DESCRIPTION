@@ -1,10 +1,15 @@
 Package: gridGraphics
-Title: Redraw base graphics using grid graphics
-Version: 0.1
+Title: Redraw Base Graphics Using grid Graphics
+Version: 0.1-1
 Authors@R: person("Paul", "Murrell", role = c("cre", "aut"),
                   email = "paul@stat.auckland.ac.nz")
-Description: Redraw base graphics using grid graphics
+Description: Functions to convert a page of plots drawn with the 
+  graphics package into identical output drawn with the grid package.
+  The result looks like the original graphics-based plot, but consists
+  of grid grobs and viewports that can then be manipulated with 
+  grid functions (e.g., edit grobs and revisit viewports).
 Depends: grid, graphics
 Suggests: KernSmooth
 SystemRequirements: ImageMagick (for testing)
 License: GPL (>= 2)
+URL: https://github.com/pmur002/gridgraphics
