@@ -29,6 +29,7 @@ fungen <- function() {
     # of tolerance for infinitessimal differences (?)
     pd <- function(expr, label, dev="pdf",
                    antialias=TRUE, density=100, width=7, height=7) {
+        Windows <- .Platform$OS.type == "windows"
         suffix <- switch(dev, pdf=".pdf", png=".png",
                          stop("I do not like your choice of device"))
         switch(dev,
@@ -47,41 +48,45 @@ fungen <- function() {
                        width=width*100, height=height*100))
         grid.echo(dl)
         dev.off()
-        if (dev != "png") {
-            options <- paste0("-density ", density, "x", density)
-            # 'antialias' must be off to get reliable comparison of
-            # images that include adjacent polygon fills
-            if (!antialias)
-                options <- c(options, "+antialias")
-            system2("convert",
-                    c(options,
-                      paste0(label, c("-graphics.pdf", "-graphics.png"))))
-            system2("convert",
-                    c(options,
-                      paste0(label, c("-grid.pdf", "-grid.png"))))
-        }
-        # Check for multiple-page PDF
-        # If found, only compare the last page
-        pngFiles <- list.files(pattern=paste0("^", label,
-                                   "-graphics-[0-9]+.png"))
-        numPNG <- length(pngFiles)
-        if (numPNG > 0) {
-            warning(paste0("Only comparing final page (of ", numPNG, " pages)"))
-            file.rename(pngFiles[numPNG],
-                        gsub("-[0-9]+.png", ".png", pngFiles[1]))
-            gridFiles <- list.files(pattern=paste0("^", label,
-                                        "-grid-[0-9]+.png"))
-            file.rename(gridFiles[numPNG],
-                        gsub("-[0-9]+.png", ".png", gridFiles[1]))
-        }
-        pngLabel <- paste0(label, "-0")
-        result <- plotcompare(label)
-        if (result != "0") {
-            diffs <<- c(diffs,
-                        paste0(result,
-                               if (result == 1) " difference "
-                               else " differences ",
-                               "detected (", label, "-diff.png)"))
+        # Only convert and compare on Linux
+        if (!Windows) {
+            if (dev != "png") {
+                options <- paste0("-density ", density, "x", density)
+                # 'antialias' must be off to get reliable comparison of
+                # images that include adjacent polygon fills
+                if (!antialias)
+                    options <- c(options, "+antialias")
+                system2("convert",
+                        c(options,
+                          paste0(label, c("-graphics.pdf", "-graphics.png"))))
+                system2("convert",
+                        c(options,
+                          paste0(label, c("-grid.pdf", "-grid.png"))))
+            }
+            # Check for multiple-page PDF
+            # If found, only compare the last page
+            pngFiles <- list.files(pattern=paste0("^", label,
+                                       "-graphics-[0-9]+.png"))
+            numPNG <- length(pngFiles)
+            if (numPNG > 0) {
+                warning(paste0("Only comparing final page (of ",
+                               numPNG, " pages)"))
+                file.rename(pngFiles[numPNG],
+                            gsub("-[0-9]+.png", ".png", pngFiles[1]))
+                gridFiles <- list.files(pattern=paste0("^", label,
+                                            "-grid-[0-9]+.png"))
+                file.rename(gridFiles[numPNG],
+                            gsub("-[0-9]+.png", ".png", gridFiles[1]))
+            }
+            pngLabel <- paste0(label, "-0")
+            result <- plotcompare(label)
+            if (result != "0") {
+                diffs <<- c(diffs,
+                            paste0(result,
+                                   if (result == 1) " difference "
+                                   else " differences ",
+                                   "detected (", label, "-diff.png)"))
+            }
         }
     }
 

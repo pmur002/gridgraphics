@@ -1,9 +1,10 @@
 Package: gridGraphics
-Title: Redraw base graphics as grid graphics
+Title: Redraw base graphics using grid graphics
 Version: 0.1
 Authors@R: person("Paul", "Murrell", role = c("cre", "aut"),
                   email = "paul@stat.auckland.ac.nz")
-Description: Redraw base graphics as grid graphics
+Description: Redraw base graphics using grid graphics
 Depends: grid, graphics
+Suggests: KernSmooth
 SystemRequirements: ImageMagick (for testing)
 License: GPL (>= 2)

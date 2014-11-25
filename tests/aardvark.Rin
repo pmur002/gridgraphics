@@ -47,7 +47,7 @@ if ("graphics-pkg" %in% tests || "all" %in% tests) {
 
 # Miscellaneous tests
 if ("all" %in% tests) {
-   testfiles <- "test-missing.R"
+   testfiles <- c(testfiles, "test-missing.R")
 }
 
 # Copy over the full set of selected test files (which will then be run)

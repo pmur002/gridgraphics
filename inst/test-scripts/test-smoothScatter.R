@@ -1,6 +1,8 @@
 
 library(gridGraphics)
 
+library(KernSmooth)
+
 ## A largish data set
 set.seed(1)
 n <- 10000
