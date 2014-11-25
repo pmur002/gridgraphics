@@ -14,8 +14,8 @@ grid.echo(x = NULL, newpage = TRUE, prefix = NULL)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{
-    Either \code{NULL}, a recorded plot, or an expression (or call) to
-    echo.  If \code{NULL}, the current scene is echoed.
+    Either \code{NULL}, a recorded plot, or a function.
+    If \code{NULL}, the current graphics device is echoed.
   }
   \item{newpage}{
     A logical value indicating whether to start a new page.  If
@@ -25,6 +25,13 @@ grid.echo(x = NULL, newpage = TRUE, prefix = NULL)
     A character value used as a prefix for all grob and viewport names.
     The default prefix is \code{"graphics"}.
   }
+}
+\details{
+  If the first argument is a function, it must be a function with zero
+  arguments.  If the function needs access to non-global data,
+  use a closure.
+  The function should not call functions that create or destroy graphics
+  devices, or change the current graphics device.
 }
 \value{
   This function is called for its side-effect of drawing on the

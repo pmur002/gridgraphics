@@ -1,6 +1,6 @@
 Package: gridGraphics
 Title: Redraw Base Graphics Using grid Graphics
-Version: 0.1-1
+Version: 0.1-2
 Authors@R: person("Paul", "Murrell", role = c("cre", "aut"),
                   email = "paul@stat.auckland.ac.nz")
 Description: Functions to convert a page of plots drawn with the 
