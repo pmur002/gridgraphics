@@ -19,6 +19,11 @@ plotcompare <- function(label) {
 fungen <- function() {
     
     diffs <- NULL
+    paths <- Sys.which(c("convert", "compare"))
+    haveIM <- all(grepl("(convert|compare)$", paths))
+    version <- getRversion()
+    haveRecentR <- version >= "3.2.0"
+    haveWarned <- FALSE
 
     pdInit <- function() {
         diffs <<- NULL
@@ -29,6 +34,7 @@ fungen <- function() {
     # of tolerance for infinitessimal differences (?)
     pd <- function(expr, label, dev="pdf",
                    antialias=TRUE, density=100, width=7, height=7) {
+        # Check for existence of 'convert' and 'compare' tools
         Windows <- .Platform$OS.type == "windows"
         suffix <- switch(dev, pdf=".pdf", png=".png",
                          stop("I do not like your choice of device"))
@@ -48,8 +54,8 @@ fungen <- function() {
                        width=width*100, height=height*100))
         grid.echo(dl)
         dev.off()
-        # Only convert and compare on Linux
-        if (!Windows) {
+        # Only convert and compare if have the tools
+        if (haveIM && haveRecentR) {
             if (dev != "png") {
                 options <- paste0("-density ", density, "x", density)
                 # 'antialias' must be off to get reliable comparison of
@@ -86,6 +92,11 @@ fungen <- function() {
                                    if (result == 1) " difference "
                                    else " differences ",
                                    "detected (", label, "-diff.png)"))
+            }
+        } else{
+            if (!haveWarned) {
+                warning("Unable to test output for differences")
+                haveWarned <<- TRUE
             }
         }
     }
