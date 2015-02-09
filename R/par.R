@@ -53,6 +53,9 @@ gparFromPar <- function(x) {
 }
 
 currentPar <- function(inlinePars) {
+    # Drop any inlinePars that are NULL
+    # (should never set a par to NULL ?)
+    inlinePars <- inlinePars[!sapply(inlinePars, is.null)]
     if (length(inlinePars)) {
         opar <- par(inlinePars)
     }

@@ -2,6 +2,14 @@
 \title{NEWS file for the gridGraphics package}
 \encoding{UTF-8}
 
+\section{Changes in version 0.1-3}{
+  \itemize{
+    \item Added defence against code sending in NULL values in \code{par()}
+    settings (e.g., \pkg{sp} does this with the \code{xpd} setting).
+    These \code{par()} settings are ignored (to match internal
+    \pkg{graphics} C code behaviour).
+  }
+}
 \section{Changes in version 0.1-2}{
   \itemize{
     \item Fixed documentation of first argument in \code{grid.echo()}
