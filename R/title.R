@@ -99,7 +99,7 @@ C_title <- function(x) {
 GetTextArg <- function(x, cex, col, font, bg) {
     # Text may be specified as list(text, col=, cex=, font=)
     pars <- list(cex=cex, col=col, font=font)
-    if (is.null(x)) {
+    if (is.null(x) || is.na(x)) {
         txt <- NULL
     } else if (is.language(x) || is.character(x)) {
         txt <- x

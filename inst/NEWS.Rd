@@ -2,6 +2,12 @@
 \title{NEWS file for the gridGraphics package}
 \encoding{UTF-8}
 
+\section{Changes in version 0.1-4}{
+  \itemize{
+    \item Added defence against \code{NA} text values in call to
+    \code{title()}.
+  }
+}
 \section{Changes in version 0.1-3}{
   \itemize{
     \item Added defence against code sending in NULL values in \code{par()}
