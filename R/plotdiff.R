@@ -5,11 +5,18 @@ plotcompare <- function(label) {
     diffname <- paste0(label, "-diff.png")
     if (file.exists(diffname))
         stop("This comparison already exists")
-    result <- system2("compare",
-                      c("-metric AE",
-                        paste0(label,
-                               c("-graphics.png", "-grid.png", "-diff.png"))),
-                      stdout=TRUE, stderr=TRUE)
+    result <-
+    if(.Platform$OS.type == "windows") {
+        shell(paste("compare", "-metric AE",
+                    paste0(label, c("-graphics.png", "-grid.png", "-diff.png"),
+                           collapse=" ")),
+              ignore.stdout=TRUE, ignore.stderr=TRUE)
+    } else {
+        system2("compare",
+                c("-metric AE",
+                  paste0(label, c("-graphics.png", "-grid.png", "-diff.png"))),
+                stdout=TRUE, stderr=TRUE)
+    }
     if (result == "0") {
         file.remove(diffname)
     }
@@ -17,10 +24,15 @@ plotcompare <- function(label) {
 }
 
 fungen <- function() {
-    
+
     diffs <- NULL
-    paths <- Sys.which(c("convert", "compare"))
-    haveIM <- all(grepl("(convert|compare)$", paths))
+    Windows <- .Platform$OS.type == "windows"
+    haveIM <-
+    if(Windows) {
+        grepl("ImageMagick", shell("convert --version", intern=TRUE, ignore.stderr=TRUE)[1])
+    } else {
+        grepl("ImageMagick", system("convert --version", intern=TRUE, ignore.stderr=TRUE)[1])
+    }
     version <- getRversion()
     haveRecentR <- version >= "3.2.0"
     haveWarned <- FALSE
@@ -28,14 +40,12 @@ fungen <- function() {
     pdInit <- function() {
         diffs <<- NULL
     }
-    
+
     # Generate PDF because that is where 'gridGraphics' will mimic best
     # Convert to PNG for compare because that will provide a little bit
     # of tolerance for infinitessimal differences (?)
     pd <- function(expr, label, dev="pdf",
                    antialias=TRUE, density=100, width=7, height=7) {
-        # Check for existence of 'convert' and 'compare' tools
-        Windows <- .Platform$OS.type == "windows"
         suffix <- switch(dev, pdf=".pdf", png=".png",
                          stop("I do not like your choice of device"))
         switch(dev,
@@ -62,12 +72,21 @@ fungen <- function() {
                 # images that include adjacent polygon fills
                 if (!antialias)
                     options <- c(options, "+antialias")
+                if(Windows) {
+                shell(paste("convert", options,
+                            paste0(label, c("-graphics.pdf", "-graphics.png"),
+                                   collapse=" ")))
+                shell(paste("convert", options,
+                            paste0(label, c("-grid.pdf", "-grid.png"),
+                                   collapse=" ")))
+                } else {
                 system2("convert",
                         c(options,
                           paste0(label, c("-graphics.pdf", "-graphics.png"))))
                 system2("convert",
                         c(options,
                           paste0(label, c("-grid.pdf", "-grid.png"))))
+                }
             }
             # Check for multiple-page PDF
             # If found, only compare the last page
