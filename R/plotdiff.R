@@ -29,9 +29,11 @@ fungen <- function() {
     Windows <- .Platform$OS.type == "windows"
     haveIM <-
     if(Windows) {
-        grepl("ImageMagick", shell("convert --version", intern=TRUE, ignore.stderr=TRUE)[1])
+        grepl("ImageMagick", shell("convert --version",
+                                   intern=TRUE, ignore.stderr=TRUE)[1])
     } else {
-        grepl("ImageMagick", system("convert --version", intern=TRUE, ignore.stderr=TRUE)[1])
+        grepl("ImageMagick", system("convert --version",
+                                    intern=TRUE, ignore.stderr=TRUE)[1])
     }
     version <- getRversion()
     haveRecentR <- version >= "3.2.0"
@@ -73,19 +75,21 @@ fungen <- function() {
                 if (!antialias)
                     options <- c(options, "+antialias")
                 if(Windows) {
-                shell(paste("convert", options,
-                            paste0(label, c("-graphics.pdf", "-graphics.png"),
-                                   collapse=" ")))
-                shell(paste("convert", options,
-                            paste0(label, c("-grid.pdf", "-grid.png"),
-                                   collapse=" ")))
+                    shell(paste("convert", options,
+                                paste0(label, c("-graphics.pdf",
+                                                "-graphics.png"),
+                                       collapse=" ")))
+                    shell(paste("convert", options,
+                                paste0(label, c("-grid.pdf", "-grid.png"),
+                                       collapse=" ")))
                 } else {
-                system2("convert",
-                        c(options,
-                          paste0(label, c("-graphics.pdf", "-graphics.png"))))
-                system2("convert",
-                        c(options,
-                          paste0(label, c("-grid.pdf", "-grid.png"))))
+                    system2("convert",
+                            c(options,
+                              paste0(label, c("-graphics.pdf",
+                                              "-graphics.png"))))
+                    system2("convert",
+                            c(options,
+                              paste0(label, c("-grid.pdf", "-grid.png"))))
                 }
             }
             # Check for multiple-page PDF

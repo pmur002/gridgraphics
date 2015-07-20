@@ -2,6 +2,12 @@
 \title{NEWS file for the gridGraphics package}
 \encoding{UTF-8}
 
+\section{Changes in version 0.1-5}{
+  \itemize{
+    \item More robust Windows support for \code{plot.diff()} and
+    \code{plot.compare()} (patch by Josh O'Brien).
+  }
+}
 \section{Changes in version 0.1-4}{
   \itemize{
     \item Added defence against \code{NA} text values in call to
