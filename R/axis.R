@@ -19,7 +19,8 @@ C_axis <- function(x) {
     doticks <- x[[5]]
     if (is.na(doticks))
         doticks <- TRUE
-    line <- x[[6]]
+    # [1] to guard against 'line' vector of length > 1
+    line <- x[[6]][1]
     pos <- x[[7]]
     # Not sure on the logic of the following, just emulating C code
     lineoff <- 0
@@ -73,11 +74,13 @@ C_axis <- function(x) {
             } 
             axis_base <- unit(0, "npc") - unit(line*par$cin[2]*par$cex, "in")
         }
+        # Now that have generated tick labels from tick locations
+        # (if necessary), can transform tick locations (if necessary)
+        # for log transforms
+        ticks <- tx(ticks, par)
+        # Clip ticks (and labels) to plot boundaries
+        ticksub <- ticks >= par$usr[1] & ticks <= par$usr[2]
         if (doticks) {
-            # Now that have generated tick labels from tick locations
-            # (if necessary), can transform tick locations (if necessary)
-            # for log transforms
-            ticks <- tx(ticks, par)
             if (lwd > 0) {
                 grid.segments(unit(min(par$usr[2], max(par$usr[1], min(ticks))),
                                    "native"),
@@ -91,9 +94,9 @@ C_axis <- function(x) {
                               name=grobname("bottom-axis-line"))
             }
             if (lwd.ticks > 0) {
-                grid.segments(unit(ticks, "native"),
+                grid.segments(unit(ticks[ticksub], "native"),
                               axis_base,
-                              unit(ticks, "native"),
+                              unit(ticks[ticksub], "native"),
                               axis_base + tickLength,
                               gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty,
                                   lineend=par$lend, linemitre=par$lmitre,
@@ -108,8 +111,8 @@ C_axis <- function(x) {
             labLine <- - (convertY(axis_base, "in", valueOnly=TRUE)/
                           (par$cin[2]*par$cex)) +
                        par$mgp[2] - lineoff
-            GMtext(labels, 1, line=labLine,
-                   at=unit(ticks, "native"), las=par$las, 
+            GMtext(labels[ticksub], 1, line=labLine,
+                   at=unit(ticks[ticksub], "native"), las=par$las, 
                    xadj=computeXAdj(hadj, side, par$las),
                    yadj=computePAdj(padj, side, par$las),
                    mex=par$mex, cin=par$cin, 
@@ -128,8 +131,9 @@ C_axis <- function(x) {
             } 
             axis_base <- unit(0, "npc") - unit(line*par$cin[2]*par$cex, "in")
         }
+        ticks <- ty(ticks, par)
+        ticksub <- ticks >= par$usr[3] & ticks <= par$usr[4]
         if (doticks) {
-            ticks <- ty(ticks, par)
             if (lwd > 0) {
                 grid.segments(axis_base,
                               unit(min(par$usr[4], max(par$usr[3], min(ticks))),
@@ -144,9 +148,9 @@ C_axis <- function(x) {
             }
             if (lwd.ticks > 0) {            
                 grid.segments(axis_base,
-                              unit(ticks, "native"),
+                              unit(ticks[ticksub], "native"),
                               axis_base + tickLength,
-                              unit(ticks, "native"),
+                              unit(ticks[ticksub], "native"),
                               gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty,
                                   lineend=par$lend, linemitre=par$lmitre,
                                   linejoin=par$ljoin),
@@ -157,8 +161,8 @@ C_axis <- function(x) {
             labLine <- - (convertX(axis_base, "in", valueOnly=TRUE)/
                           (par$cin[2]*par$cex)) +
                        par$mgp[2] - lineoff
-            GMtext(labels, 2, line=labLine,
-                   at=unit(ticks, "native"), las=par$las,
+            GMtext(labels[ticksub], 2, line=labLine,
+                   at=unit(ticks[ticksub], "native"), las=par$las,
                    xadj=computeXAdj(hadj, side, par$las),
                    yadj=computePAdj(padj, side, par$las),
                    mex=par$mex, cin=par$cin,
@@ -177,8 +181,9 @@ C_axis <- function(x) {
             } 
             axis_base <- unit(1, "npc") + unit(line*par$cin[2]*par$cex, "in")
         }
+        ticks <- tx(ticks, par)
+        ticksub <- ticks >= par$usr[1] & ticks <= par$usr[2]
         if (doticks) {
-            ticks <- tx(ticks, par)
             if (lwd > 0) {
                 grid.segments(unit(min(par$usr[2], max(par$usr[1], min(ticks))),
                                    "native"),
@@ -192,9 +197,9 @@ C_axis <- function(x) {
                               name=grobname("top-axis-line"))
             }
             if (lwd.ticks > 0) {
-                grid.segments(unit(ticks, "native"),
+                grid.segments(unit(ticks[ticksub], "native"),
                               axis_base,
-                              unit(ticks, "native"),
+                              unit(ticks[ticksub], "native"),
                               axis_base - tickLength,
                               gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty,
                                   lineend=par$lend, linemitre=par$lmitre,
@@ -208,8 +213,8 @@ C_axis <- function(x) {
                        par$mgp[2] - lineoff -
                        (convertY(unit(1, "npc"), "in", valueOnly=TRUE)/
                         (par$cin[2]*par$cex))
-            GMtext(labels, 3, line=labLine,
-                   at=unit(ticks, "native"), las=par$las, 
+            GMtext(labels[ticksub], 3, line=labLine,
+                   at=unit(ticks[ticksub], "native"), las=par$las, 
                    xadj=computeXAdj(hadj, side, par$las),
                    yadj=computePAdj(padj, side, par$las),
                    mex=par$mex, cin=par$cin, 
@@ -228,8 +233,9 @@ C_axis <- function(x) {
             } 
             axis_base <- unit(1, "npc") + unit(line*par$cin[2]*par$cex, "in")
         }
+        ticks <- ty(ticks, par)
+        ticksub <- ticks >= par$usr[3] & ticks <= par$usr[4]
         if (doticks) {
-            ticks <- ty(ticks, par)
             if (lwd > 0) {
                 grid.segments(axis_base,
                               unit(min(par$usr[4], max(par$usr[3], min(ticks))),
@@ -244,9 +250,9 @@ C_axis <- function(x) {
             }
             if (lwd.ticks > 0) {
                 grid.segments(axis_base,
-                              unit(ticks, "native"),
+                              unit(ticks[ticksub], "native"),
                               axis_base - tickLength,
-                              unit(ticks, "native"),
+                              unit(ticks[ticksub], "native"),
                               gp=gpar(col=col.ticks, lwd=lwd.ticks, lty=lty,
                                   lineend=par$lend, linemitre=par$lmitre,
                                   linejoin=par$ljoin),
@@ -259,8 +265,8 @@ C_axis <- function(x) {
                        par$mgp[2] - lineoff -
                        (convertX(unit(1, "npc"), "in", valueOnly=TRUE)/
                         (par$cin[2]*par$cex))
-            GMtext(labels, 4, line=labLine,
-                   at=unit(ticks, "native"), las=par$las,
+            GMtext(labels[ticksub], 4, line=labLine,
+                   at=unit(ticks[ticksub], "native"), las=par$las,
                    xadj=computeXAdj(hadj, side, par$las),
                    yadj=computePAdj(padj, side, par$las),
                    mex=par$mex, cin=par$cin,

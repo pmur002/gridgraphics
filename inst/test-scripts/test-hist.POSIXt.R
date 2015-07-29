@@ -6,8 +6,8 @@ hist.POSIXt1 <- function() {
 }
 
 hist.POSIXt2 <- function() {
-    hist(.leap.seconds,
-         seq(ISOdate(1970, 1, 1), ISOdate(2015, 1, 1), "5 years"))
+    hist(.leap.seconds[.leap.seconds < ISOdate(2020, 1, 1)],
+         seq(ISOdate(1970, 1, 1), ISOdate(2020, 1, 1), "5 years"))
 }
 
 hist.POSIXt3 <- function() {

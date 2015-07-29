@@ -6,6 +6,17 @@
   \itemize{
     \item More robust Windows support for \code{plot.diff()} and
     \code{plot.compare()} (patch by Josh O'Brien).
+    \item Added defence against \code{axis(line=)} specification
+    of length greater than 1 (reported by Jimmy Oh).
+    \item Added explicit handling of \code{C_layout()},
+    though handling does nothing (reported by Jimmy Oh).
+    \item Fixed drawing of ticks for \code{axis(at=)} when
+    \code{at} exceeds range of axis scale.  The ticks outside
+    the axis scale range are now correctly clipped
+    (reported by Jimmy Oh).
+    \item Future-proofed test script for \code{hist.POSIXt()}
+    (so that the addition of new leap seconds does not generate errors
+    about \code{breaks} not spanning the range of the data).
   }
 }
 \section{Changes in version 0.1-4}{

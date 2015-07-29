@@ -32,6 +32,10 @@ dlDispatch <- function(x) {
            # These are ignored
            C_strWidth = NULL,
            C_strHeight = NULL,
+           # Only affects next plot.new() that starts a new page
+           # (so not relevant to current page)
+           # (BUT may be on display list, e.g., as wrap-up of plot function)
+           C_layout = NULL, 
            warning("unsupported operation on the graphics display list"))
 }
 
