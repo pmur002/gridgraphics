@@ -34,7 +34,7 @@ plotdiffResult(warn = FALSE)
     converting from PDF to PNG.
   }
   \item{density}{
-    A numeric value indicating the resolution (dpi) to use when 
+    A numeric value indicating the resolution (dpi) to use when
     converting from PDF to PNG.
   }
   \item{width, height}{
@@ -74,10 +74,6 @@ plotdiffResult(warn = FALSE)
   In the case of \code{plotdiffResult()}, a print out of the accumulated
   messages, plus possibly either an error or warning.
 }
-\section{Note}{
-  The \code{plotdiff()} function only produces PDF files on Windows;
-  it neither converts nor compares the PDFs.
-  }
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 \author{
 Paul Murrell
