@@ -1,4 +1,10 @@
 
+importFrom("grDevices",
+           "contourLines", "dev.control", "dev.cur",
+           "dev.list", "dev.new", "dev.off", "dev.set", "palette",
+           "pdf", "png", "recordPlot", "replayPlot")
+importFrom("graphics",
+           "axTicks", "par", "plot.new")
 import("grid")
 
 export("grid.echo")

@@ -9,6 +9,7 @@ Description: Functions to convert a page of plots drawn with the
   of grid grobs and viewports that can then be manipulated with 
   grid functions (e.g., edit grobs and revisit viewports).
 Depends: grid, graphics
+Imports: grDevices
 Suggests: KernSmooth
 SystemRequirements: ImageMagick (for testing)
 License: GPL (>= 2)
