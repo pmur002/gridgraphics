@@ -4,8 +4,8 @@
 
 \section{Changes in version 0.1-5}{
   \itemize{
-    \item More robust Windows support for \code{plot.diff()} and
-    \code{plot.compare()} (patch by Josh O'Brien).
+    \item More robust Windows support for \code{plotdiff()} and
+    \code{plotcompare()} (patch by Josh O'Brien).
     \item Added defence against \code{axis(line=)} specification
     of length greater than 1 (reported by Jimmy Oh).
     \item Added explicit handling of \code{C_layout()},
