@@ -46,14 +46,15 @@ Paul Murrell
 plot(1)
 grid.echo()
 
-# Echo drawing expression
-grid.echo(quote(plot(1:10)))
+# Echo result of call to a plotting function
+plotfun <- function() plot(1:10)
+grid.echo(plotfun)
 
-# Echo drawing expression into current viewport
+# Echo result of a plotting function (anonymous) into current viewport
 grid.newpage()
 pushViewport(viewport(x=0, width=.5, just="left"))
 grid.rect(gp=gpar(col=NA, fill="grey"))
-grid.echo(quote(plot(1:10)), newpage=FALSE)
+grid.echo(function() plot(1:10), newpage=FALSE)
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
