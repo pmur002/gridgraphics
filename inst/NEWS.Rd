@@ -4,6 +4,8 @@
 
 \section{Changes in version 0.1-5}{
   \itemize{
+    \item Fixed examples for \code{grid.echo()}
+    (patch by Josh O'Brien).
     \item More robust Windows support for \code{plotdiff()} and
     \code{plotcompare()} (patch by Josh O'Brien).
     \item Added defence against \code{axis(line=)} specification
