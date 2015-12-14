@@ -70,7 +70,7 @@ grid.echo.recordedplot <- function(x = NULL, newpage=TRUE, prefix=NULL) {
     }
     init(x, width, height)
     if (is.null(x[[1]][[2]])) {
-        stop("No graphics to replay")
+        warning("No graphics to replay")
     }
     lapply(x[[1]], dlDispatch)
     shutdown()

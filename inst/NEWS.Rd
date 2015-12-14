@@ -4,6 +4,8 @@
 
 \section{Changes in version 0.1-5}{
   \itemize{
+    \item Changed stop() to warning() when call grid.echo() with
+    empty \dQuote{recordedplot} (suggested by Jonathon Godfrey).
     \item Fixed examples for \code{grid.echo()}
     (patch by Josh O'Brien).
     \item More robust Windows support for \code{plotdiff()} and
