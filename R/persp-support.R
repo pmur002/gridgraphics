@@ -182,20 +182,21 @@ dPolygon = function(plot){
     col = plot$col
         
 
-    ## the total number of polygon that we need to draw
-    s = length(x)
-    total = length(z) - s - 1
+    ## the total number of polygon that we need to draw	
+	nx = length(x)
+	ny = length(y)
+    total = nx * ny
 
     ## set the temp value for x,y,z prepare for subsetting
-    xTmp = rep(x, s)
-    yTmp = rep(y,each = s)
+    xTmp = rep(x, length(y))
+    yTmp = rep(y,each = nx)
     zTmp = as.numeric(z)
     
     ## the drawing order is along x-axis, and then along y-axis
     ## then create a vector like a 4Xn matrix, 
     ## i.e the first column contain all the first points for every polygons
     ## the second column contain all the second points for every polygons and so on 
-    pBreak = c(1:total, 1 + 1:total, 1 + s + 1:total, s + 1:total)
+    pBreak = c(1:total, 1 + 1:total, 1 + nx + 1:total, nx + 1:total)
     xBreak = xTmp[pBreak]
     yBreak = yTmp[pBreak]
     zBreak = zTmp[pBreak]
@@ -214,7 +215,7 @@ dPolygon = function(plot){
     ## sequence for 'problem's polygons index, e.g
     ## along x-axis, there are n-1 polygons, n is the number of points in x direction
     ## we don't want to draw the nth polygon, hence we deleted those polygon
-    dp = rep((4 * seq(s,total,s)), each = 4) - (3:0)
+    dp = rep((4 * seq(nx,total,nx)), each = 4) - (3:0)
 
     ## final subsetting
     xCoor = xBreak[c(plot.index)][-dp]
@@ -273,7 +274,7 @@ DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ncol = length(col), ltheta
         cols = shadedCol[polygonOrder]
 
     } else {
-        cols = rep_len(plot$col, length(polygons[,1]))
+        cols = rep_len(plot$col, length(polygons[,1]))[polygonOrder]
     }
 
     grid.polygon(polygons[,1], polygons[,2], id = polygon.id,

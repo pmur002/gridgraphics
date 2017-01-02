@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#setwd('H:/Documents/mproject/MasterProject-master')\nsetwd('C:/Users/yeamin/Desktop/mproject/MasterProject/standalone/') ##at uni\nsetwd('C:/Users/yeamin/Desktop/master/MasterProject/MasterProject/standalone/') ## at home\n##################################################################################\n\n\n## quick example\nsource('loading.R')\ntrans = testPersp(col = 1:10, border = 'NA', shade = 0.9, box = FALSE, scale = FALSE)\nechoTest(trans)\n\n## lty/lwd\ntrans = testPersp(lty = 5, lwd = 2)\nechoTest(trans)\n\n## col.lab/cex.lab/col.axis\ntrans = testPersp(col.lab = 'red', cex.lab = 1.5, col.axis = 'green', ticktype = 'detail')\nechoTest(trans)\n\n\ntrans = testPersp(col = 'orange', border = 'NA', shade =0.2, box = FALSE, scale = FALSE)\nechoTest(trans)\n\n\ntrans = testPersp(col = 1:10, border = 'white', box = FALSE, scale = FALSE)\nechoTest(trans)\n\n\n\n## main example\nx = seq(-10,10,length = 60)\ny = seq(-10,10,length = 60)\nf <- function(x, y) { r <- sqrt(x^2+y^2); 10 * sin(r)/r }\nz <- outer(x, y, f)\nz[is.na(z)] <- 1\n\nsource('loading.R')\npar(mar = c(2,2,2,2))\ntrans = persp(x, y, z, theta = 20, xlim = c(-5,5),\n              phi = 20, expand = 0.32, scale = 0.99,  \n              col = 'White', box = TRUE, border = 'orange',col.axis = 'red', ticktype = 'detail',\n              col.lab = 'red')\nplot = recordPlot()\nplotInfo = perInit(plot, trans, newpage = TRUE)\nper(plot = plotInfo)",
+    "created" : 1481180199040.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "24448811",
+    "id" : "F2B217BF",
+    "lastKnownWriteTime" : 1481180440,
+    "last_content_update" : 1481180440014,
+    "path" : "C:/Users/yeamin/Desktop/master/MasterProject/MasterProject/standalone/persp-temp-test.R",
+    "project_path" : null,
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

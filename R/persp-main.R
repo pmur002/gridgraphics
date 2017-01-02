@@ -51,7 +51,7 @@ perInit = function ( plot, trans, newpage = FALSE, dbox = TRUE ) {
 ## only simple function call and few calculation are been done on this function
 C_persp = function(plot = NULL, ...)
 {
-    plot = perInit(plot, trans = trans)
+    plot = perInit(plot, trans = trans, newpage = TRUE)
     #information extraction
     trans = plot$trans
     xr = plot$xr; yr = plot$yr; zr = plot$zr
@@ -96,6 +96,6 @@ C_persp = function(plot = NULL, ...)
                 col = plot$col, length(plot$col),                   ## cols
                 ltheta = ltheta, lphi = lphi, Shade = shade, Light = Light) 
 
-    PerspBox(1, xr, yr, zr, EdgeDone, trans, 'dotted', lwd)
+    EdgeDone = PerspBox(1, xr, yr, zr, EdgeDone, trans, 'dotted', lwd)
 
 }
