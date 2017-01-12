@@ -147,7 +147,6 @@ PerspBox = function(front = 1, x, y, z, EdgeDone, VT, lty, lwd = lwd )
         
         nearby = (d[1]*e[2] - d[2]*e[1]) < 0
         
-        depth = gotovp(TRUE)
         ## draw the face line by line rather than polygon
         if ((front && nearby) || (!front && !nearby)) {
             if (!EdgeDone[Edge[f, 1]]){
@@ -175,7 +174,6 @@ PerspBox = function(front = 1, x, y, z, EdgeDone, VT, lty, lwd = lwd )
                 EdgeDone[Edge[f, 4]] = EdgeDone[Edge[f, 4]] + 1
                 }
         }
-        upViewport(depth)
     }
     EdgeDone
 }
@@ -498,7 +496,6 @@ PerspAxis = function(x, y, z, axis, axisType,
     v3 = v3/v3[4]
     
     ## grid set up
-    depth = gotovp(TRUE)
     
     ## label at center of each axes
     srt = labelAngle(v1[1], v1[2], v2[1], v2[2])
@@ -508,7 +505,6 @@ PerspAxis = function(x, y, z, axis, axisType,
           default.units = "native", #vp = 'clipoff',
           gp = gpar(col = col.lab, lwd = lwd, cex = cex.lab)
           )
-    upViewport(depth)
     
     ## tickType is not working.. when = '2'
     switch(tickType,
@@ -517,12 +513,10 @@ PerspAxis = function(x, y, z, axis, axisType,
                     ends = "last", type = "open")  
 	## drawing the tick..
     
-    depth = gotovp(TRUE)
     grid.lines(x = c(v1[1], v2[1]), y = c(v1[2], v2[2]),
           default.units = "native", arrow = arrow, #vp = 'clipoff',
           gp = gpar(col = 1, lwd = lwd , lty = lty )
           )
-    upViewport(depth)
        },
     ## '2' seems working
     '2' = {
@@ -566,23 +560,19 @@ PerspAxis = function(x, y, z, axis, axisType,
             v3 = v3/v3[4]
             
             ## Draw tick line
-            depth = gotovp(TRUE)
             grid.lines(x = c(v1[1], v2[1]), y = c(v1[2], v2[2]),
                 default.units = "native", ##vp = 'clipoff',
                 gp = gpar(col = col.axis, lwd = lwd, lty = lty)
                 )
-            upViewport(depth)
 
             ## Draw tick label
             lab = at[i]
             #text(v3[1], v3[2], label, 0.5, srt = srt)
-            depth = gotovp(TRUE)
             grid.text(label = lab, x = v3[1], y = v3[2],
                   just = "centre",
                   default.units = "native", #vp = 'clipoff',
                   gp = gpar(col = col.axis, adj = 1, pos = 0.5, cex = 1)
                   )
-            upViewport(depth)
             }
         }
     )

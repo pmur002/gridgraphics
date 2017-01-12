@@ -1,9 +1,6 @@
 ## initialize and create a viewport prepare for drawing
 perInit = function ( plot, trans, newpage = FALSE, dbox = TRUE ) {
-
-
-    info <<- plot
-
+    info = plot
     out = list(x = info[[2]], y = info[[3]], z = info[[4]],
                 xr = info[[5]], yr = info[[6]], zr = info[[7]],
                 col = info[[14]], border = info[[15]], dbox = info[[19]],
@@ -36,31 +33,17 @@ perInit = function ( plot, trans, newpage = FALSE, dbox = TRUE ) {
 
     if(out$newpage == TRUE)
         grid.newpage()
-
     out
-}
-
-C_persp = function(plot)
-{
-
-    dev.set(recordDev())
-    par <- currentPar(x[-(1:9)])
-    dev.set(playDev())
-    depth = gotovp(TRUE)
-    upViewport()
-    
-    pars <<- par
-    
 }
 
 
 ## actual drawing by passing the plot into the function
 ## calculation are done from the function of the 'method.r' file
 ## only simple function call and few calculation are been done on this function
-C_persps = function(plot = NULL, ...)
+C_persp = function(plot = NULL, ...)
 {
     dev.set(recordDev())
-    par <- currentPar(NULL)
+    par = currentPar(NULL)
     dev.set(playDev())
     
     plot = perInit(plot, trans = trans, newpage = FALSE)
@@ -68,14 +51,14 @@ C_persps = function(plot = NULL, ...)
     trans = plot$trans
     xr = plot$xr; yr = plot$yr; zr = plot$zr
     xlab = plot$xlab; ylab = plot$ylab; zlab = plot$zlab
-    col.axis = plot$col.axis; col.lab = plot$col.lab; cex.lab = plot$cex.lab   
+    col.axis = plot$col.axis; col.lab = plot$col.lab; cex.lab = plot$cex.lab
     nTicks = plot$nTicks; tickType = plot$tickType
     expand = plot$expand ;scale = plot$scale
     ltheta = plot$ltheta; lphi = plot$lphi
     main = plot$main; axes = plot$axes
     dbox = plot$dbox; shade = plot$shade
         
-    border = plot$border[1]; 
+    border = plot$border[1];
     if(is.null(plot$lwd)) lwd = 1 else lwd = plot$lwd
     if(is.null(plot$lty)) lty = 1 else lty = plot$lty
     if(any(!(is.numeric(xr) & is.numeric(yr) & is.numeric(zr)))) stop("invalid limits")
@@ -84,33 +67,39 @@ C_persps = function(plot = NULL, ...)
     xs = LimitCheck(xr)[1]
     ys = LimitCheck(yr)[1]
     zs = LimitCheck(zr)[1]
-    if(!scale) xs = ys = zs = max(xs, ys, zs)  
-    if(is.finite(ltheta) && is.finite(lphi) && is.finite(shade)) 
+    if(!scale) xs = ys = zs = max(xs, ys, zs)
+    if(is.finite(ltheta) && is.finite(lphi) && is.finite(shade))
         DoLighting = TRUE else DoLighting = FALSE
     if (DoLighting) Light = SetUpLight(ltheta, lphi)
     
     if (dbox == TRUE) {
         EdgeDone = rep(0, 12)
         if(axes == TRUE){
+            depth = gotovp(TRUE)
             PerspAxes(xr, yr, zr, ##x, y, z
                     xlab, ylab, zlab, ## xlab, xenc, ylab, yenc, zlab, zenc
                     nTicks, tickType, trans, ## nTicks, tickType, VT
-                    lwd, lty, col.axis, col.lab, cex.lab) } ## lwd, lty, col.axis, col.lab, cex.lab
+                    lwd, lty, col.axis, col.lab, cex.lab) ## lwd, lty, col.axis, col.lab, cex.lab
+            upViewport(depth)} 
     } else {
         EdgeDone = rep(1, 12)
         xr = yr = zr = c(0,0)
     }
     ## draw the behind face first
     ## return the EdgeDone inorder to not drawing the same Edege two times.
-    #EdgeDone = PerspBox(0, xr, yr, zr, EdgeDone, trans, 1, lwd)
-    depth = gotovp(TRUE)    
+    depth = gotovp(TRUE)
+    EdgeDone = PerspBox(0, xr, yr, zr, EdgeDone, trans, 1, lwd)
+    upViewport(depth)
+    
+    depth = gotovp(TRUE)
     DrawFacets(plot = plot, z = plot$z, x = plot$x, y = plot$y,     ## basic
                 xs = 1/xs, ys = 1/ys, zs = expand/zs,               ## Light
                 col = plot$col, length(plot$col),                   ## cols
-                ltheta = ltheta, lphi = lphi, Shade = shade, Light = Light) 
+                ltheta = ltheta, lphi = lphi, Shade = shade, Light = Light)
     upViewport(depth)
 
-
-    #EdgeDone = PerspBox(1, xr, yr, zr, EdgeDone, trans, 'dotted', lwd)
+    depth = gotovp(TRUE)
+    EdgeDone = PerspBox(1, xr, yr, zr, EdgeDone, trans, 'dotted', lwd)
+    upViewport(depth)
 
 }
