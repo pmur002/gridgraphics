@@ -1,20 +1,9 @@
 ## initialize and create a viewport prepare for drawing
 perInit = function ( plot, trans, newpage = FALSE, dbox = TRUE ) {
-    ##[[1]] is the all the grapical information that transfer into grid
-    ##[[3]] is the persp call information
-    ##[[2]] is the plot details eg: x, y, z, xlim, ylim, zlim, col ...
-    info = plot
-    ## create a list that store all information from the persp
-    ## then pass the information to per for drawing.
-    ## x is [[2]]; y is [[3]]; z is [[4]]
-    ## xr is [[5]]; yr is [[6]]; zr is [[7]]
-    ## col is [[14]]; border is [[15]]; box is [[19]]
-    ## axes is [[20]], nTicks is [[21]]
-    ## tickType is [[22]]
-    ## xlab/ylab/zlab = [[23]]/[[24]]/[[25]]
-	## main is in plot[[1]][[4]][[2]][[2]]
-    ## shade is 0.8, ltheta/lphi = [[16]]/[[17]]
-    ## expand is [[13]], scale is [[12]]
+
+
+    info <<- plot
+
     out = list(x = info[[2]], y = info[[3]], z = info[[4]],
                 xr = info[[5]], yr = info[[6]], zr = info[[7]],
                 col = info[[14]], border = info[[15]], dbox = info[[19]],
@@ -28,30 +17,53 @@ perInit = function ( plot, trans, newpage = FALSE, dbox = TRUE ) {
                 expand = info[[13]], scale = info[[12]]
 				#main = plot[[1]][[4]][[2]][[2]]
                 )
+
+    ##[[1]] is the all the grapical information that transfer into grid
+    ##[[3]] is the persp call information
+    ##[[2]] is the plot details eg: x, y, z, xlim, ylim, zlim, col ...
+    
+    ## create a list that store all information from the persp
+    ## then pass the information to per for drawing.
+    ## x is [[2]]; y is [[3]]; z is [[4]]
+    ## xr is [[5]]; yr is [[6]]; zr is [[7]]
+    ## col is [[14]]; border is [[15]]; box is [[19]]
+    ## axes is [[20]], nTicks is [[21]]
+    ## tickType is [[22]]
+    ## xlab/ylab/zlab = [[23]]/[[24]]/[[25]]
+	## main is in plot[[1]][[4]][[2]][[2]]
+    ## shade is 0.8, ltheta/lphi = [[16]]/[[17]]
+    ## expand is [[13]], scale is [[12]]
+
     if(out$newpage == TRUE)
         grid.newpage()
 
-    ## clip is on when drawing polygons shade
-    vp = plotViewport(out$mar, xscale = out$lim[1:2], yscale = out$lim[3:4],name = 'clipon',
-                    clip = 'on')
-    pushViewport(vp)
-    upViewport()
-    
-    ## clip is off when drawing text/label/tickmarks..
-    vp = plotViewport(out$mar, xscale = out$lim[1:2], yscale = out$lim[3:4],name = 'clipoff',
-                    clip = 'off')
-    pushViewport(vp)
-    upViewport()
-    
     out
 }
+
+C_persp = function(plot)
+{
+
+    dev.set(recordDev())
+    par <- currentPar(x[-(1:9)])
+    dev.set(playDev())
+    depth = gotovp(TRUE)
+    upViewport()
+    
+    pars <<- par
+    
+}
+
 
 ## actual drawing by passing the plot into the function
 ## calculation are done from the function of the 'method.r' file
 ## only simple function call and few calculation are been done on this function
-C_persp = function(plot = NULL, ...)
+C_persps = function(plot = NULL, ...)
 {
-    plot = perInit(plot, trans = trans, newpage = TRUE)
+    dev.set(recordDev())
+    par <- currentPar(NULL)
+    dev.set(playDev())
+    
+    plot = perInit(plot, trans = trans, newpage = FALSE)
     #information extraction
     trans = plot$trans
     xr = plot$xr; yr = plot$yr; zr = plot$zr
@@ -90,12 +102,15 @@ C_persp = function(plot = NULL, ...)
     }
     ## draw the behind face first
     ## return the EdgeDone inorder to not drawing the same Edege two times.
-    EdgeDone = PerspBox(0, xr, yr, zr, EdgeDone, trans, 1, lwd)
+    #EdgeDone = PerspBox(0, xr, yr, zr, EdgeDone, trans, 1, lwd)
+    depth = gotovp(TRUE)    
     DrawFacets(plot = plot, z = plot$z, x = plot$x, y = plot$y,     ## basic
                 xs = 1/xs, ys = 1/ys, zs = expand/zs,               ## Light
                 col = plot$col, length(plot$col),                   ## cols
                 ltheta = ltheta, lphi = lphi, Shade = shade, Light = Light) 
+    upViewport(depth)
 
-    EdgeDone = PerspBox(1, xr, yr, zr, EdgeDone, trans, 'dotted', lwd)
+
+    #EdgeDone = PerspBox(1, xr, yr, zr, EdgeDone, trans, 'dotted', lwd)
 
 }

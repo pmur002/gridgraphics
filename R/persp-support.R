@@ -78,7 +78,7 @@ shadeCol = function ( z, x, y, xs, ys, zs, col, ncol = length(col), ltheta, lphi
         nv = 0
         i = (indx[k]) %% nx1 
         j = (indx[k]) %/% nx1
-       icol = (i + j * nx1) %% ncol + 1
+        icol = (i + j * nx1) %% ncol + 1
 
         u[1] = xs * (x[i+1+1] - x[i+1])
 	    u[2] = ys * (y[j+1] - y[j+1+1])
@@ -147,29 +147,35 @@ PerspBox = function(front = 1, x, y, z, EdgeDone, VT, lty, lwd = lwd )
         
         nearby = (d[1]*e[2] - d[2]*e[1]) < 0
         
+        depth = gotovp(TRUE)
         ## draw the face line by line rather than polygon
         if ((front && nearby) || (!front && !nearby)) {
             if (!EdgeDone[Edge[f, 1]]){
                 grid.lines(c(v0[1], v1[1]), c(v0[2], v1[2]), default.units = 'native',
-                    gp = gpar(lty = lty, lwd = lwd), vp = 'clipon')
+                    gp = gpar(lty = lty, lwd = lwd) #vp = 'clipon'
+                    )
                 EdgeDone[Edge[f, 1]] = EdgeDone[Edge[f, 1]] + 1
                 }
             if (!EdgeDone[Edge[f, 2]]){
                 grid.lines(c(v1[1], v2[1]), c(v1[2], v2[2]), default.units = 'native',
-                    gp = gpar(lty = lty, lwd = lwd), vp = 'clipon')
+                    gp = gpar(lty = lty, lwd = lwd) #vp = 'clipon'
+                    )
                 EdgeDone[Edge[f, 2]] = EdgeDone[Edge[f, 2]] + 1
                 }
             if (!EdgeDone[Edge[f, 3]]){
                 grid.lines(c(v2[1], v3[1]), c(v2[2], v3[2]), default.units = 'native',
-                    gp = gpar(lty = lty, lwd = lwd), vp = 'clipon')
+                    gp = gpar(lty = lty, lwd = lwd) #vp = 'clipon'
+                    )
                 EdgeDone[Edge[f, 3]] = EdgeDone[Edge[f, 3]] + 1
                 }
             if (!EdgeDone[Edge[f, 4]]){
                 grid.lines(c(v3[1], v0[1]), c(v3[2], v0[2]), default.units = 'native',
-                    gp = gpar(lty = lty, lwd = lwd), vp = 'clipon')
+                    gp = gpar(lty = lty, lwd = lwd) #vp = 'clipon'
+                    )
                 EdgeDone[Edge[f, 4]] = EdgeDone[Edge[f, 4]] + 1
                 }
         }
+        upViewport(depth)
     }
     EdgeDone
 }
@@ -258,6 +264,7 @@ dPolygon = function(plot){
 
 DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ncol = length(col), ltheta, lphi, Shade, Light)
 {
+
     pout = dPolygon(plot)
     xyCoor = pout$xyCoor
     pMax = pout$pMax; colRep = pout$colRep
@@ -276,10 +283,15 @@ DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ncol = length(col), ltheta
     } else {
         cols = rep_len(plot$col, length(polygons[,1]))[polygonOrder]
     }
-
+    
+    
+    xrange <<- range(polygons[,1], na.rm = TRUE)
+    yrange <<- range(polygons[,2])
+    
     grid.polygon(polygons[,1], polygons[,2], id = polygon.id,
-                    default.units = 'native', vp = 'clipon',
+                    default.units = 'native',
                     gp = gpar(col = plot$border, fill = cols, lty = plot$lty, lwd = plot$lwd))
+
 
 }
 ## method for check wheater the axes is front or behind.
@@ -484,26 +496,33 @@ PerspAxis = function(x, y, z, axis, axisType,
     v1 = v1/v1[4]
     v2 = v2/v2[4]
     v3 = v3/v3[4]
-
+    
+    ## grid set up
+    depth = gotovp(TRUE)
+    
     ## label at center of each axes
     srt = labelAngle(v1[1], v1[2], v2[1], v2[2])
     #text(v3[1], v3[2], label, 0.5, srt = srt)
     grid.text(label = label, x = v3[1], y = v3[2],
           just = "centre", rot = srt,
-          default.units = "native", vp = 'clipoff',
+          default.units = "native", #vp = 'clipoff',
           gp = gpar(col = col.lab, lwd = lwd, cex = cex.lab)
           )
-
+    upViewport(depth)
+    
     ## tickType is not working.. when = '2'
     switch(tickType,
     '1' = {
     arrow = arrow(angle = 10, length = unit(0.1, "in"),
                     ends = "last", type = "open")  
 	## drawing the tick..
+    
+    depth = gotovp(TRUE)
     grid.lines(x = c(v1[1], v2[1]), y = c(v1[2], v2[2]),
-          default.units = "native", arrow = arrow, vp = 'clipoff',
+          default.units = "native", arrow = arrow, #vp = 'clipoff',
           gp = gpar(col = 1, lwd = lwd , lty = lty )
           )
+    upViewport(depth)
        },
     ## '2' seems working
     '2' = {
@@ -547,19 +566,23 @@ PerspAxis = function(x, y, z, axis, axisType,
             v3 = v3/v3[4]
             
             ## Draw tick line
+            depth = gotovp(TRUE)
             grid.lines(x = c(v1[1], v2[1]), y = c(v1[2], v2[2]),
-                default.units = "native", vp = 'clipoff',
+                default.units = "native", ##vp = 'clipoff',
                 gp = gpar(col = col.axis, lwd = lwd, lty = lty)
                 )
+            upViewport(depth)
 
             ## Draw tick label
             lab = at[i]
             #text(v3[1], v3[2], label, 0.5, srt = srt)
+            depth = gotovp(TRUE)
             grid.text(label = lab, x = v3[1], y = v3[2],
                   just = "centre",
-                  default.units = "native", vp = 'clipoff',
+                  default.units = "native", #vp = 'clipoff',
                   gp = gpar(col = col.axis, adj = 1, pos = 0.5, cex = 1)
                   )
+            upViewport(depth)
             }
         }
     )
@@ -607,6 +630,7 @@ PerspAxes = function(x, y, z,
     } else
         warning("Axis orientation not calculated")
     ## drawing x and y axes
+    
     PerspAxis(x, y, z, xAxis, '1', nTicks, tickType, xlab, VT, lwd = lwd, lty = lty, col.axis = col.axis, col.lab = col.lab, cex.lab = cex.lab)
     PerspAxis(x, y, z, yAxis, '2', nTicks, tickType, ylab, VT, lwd = lwd, lty = lty, col.axis = col.axis, col.lab = col.lab, cex.lab = cex.lab)
 
