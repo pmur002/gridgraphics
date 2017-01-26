@@ -1,24 +1,9 @@
 ## initialize and create a viewport prepare for drawing
 perInit = function ( plot, trans, newpage = FALSE, dbox = TRUE ) {
     info = plot
-    out = list(x = info[[2]], y = info[[3]], z = info[[4]],
-                xr = info[[5]], yr = info[[6]], zr = info[[7]],
-                col = info[[14]], border = info[[15]], dbox = info[[19]],
-                lim = par('usr'), mar = par('mar'), newpage = newpage, 
-                axes = info[[20]], nTicks = info[[21]], tickType = info[[22]],
-                trans = trans, xlab = info[[23]], ylab = info[[24]], zlab = info[[25]],
-				## parameters in 'par' that need added to per
-                lwd = info$lwd, lty = info$lty, col.axis = info$col.axis,
-				col.lab = info$col.lab, cex.lab = info$cex.lab, 
-                shade = info[[18]], ltheta = info[[16]], lphi = info[[17]],
-                expand = info[[13]], scale = info[[12]]
-				#main = plot[[1]][[4]][[2]][[2]]
-                )
-
-    ##[[1]] is the all the grapical information that transfer into grid
-    ##[[3]] is the persp call information
-    ##[[2]] is the plot details eg: x, y, z, xlim, ylim, zlim, col ...
-    
+    ## [[1]] is the all the grapical information that transfer into grid
+    ## [[3]] is the persp call information
+    ## [[2]] is the plot details eg: x, y, z, xlim, ylim, zlim, col ...
     ## create a list that store all information from the persp
     ## then pass the information to per for drawing.
     ## x is [[2]]; y is [[3]]; z is [[4]]
@@ -30,7 +15,32 @@ perInit = function ( plot, trans, newpage = FALSE, dbox = TRUE ) {
 	## main is in plot[[1]][[4]][[2]][[2]]
     ## shade is 0.8, ltheta/lphi = [[16]]/[[17]]
     ## expand is [[13]], scale is [[12]]
+    out = list(x = info[[2]], y = info[[3]], z = info[[4]],
+                xr = info[[5]], yr = info[[6]], zr = info[[7]],
+                col = info[[14]], border = info[[15]], dbox = info[[19]],
+                newpage = newpage, 
+                axes = info[[20]], nTicks = info[[21]], tickType = info[[22]],
+                trans = trans, xlab = info[[23]], ylab = info[[24]], zlab = info[[25]],
+				## parameters in 'par' that need added to per
+                lwd = info$lwd, lty = info$lty, col.axis = info$col.axis,
+				col.lab = info$col.lab, cex.lab = info$cex.lab, 
+                shade = info[[18]], ltheta = info[[16]], lphi = info[[17]],
+                expand = info[[13]], scale = info[[12]]
+				#main = plot[[1]][[4]][[2]][[2]]
+                )
 
+    ## clip is on when drawing polygons shade
+    #vp = plotViewport(out$mar, xscale = out$lim[1:2], yscale = out$lim[3:4],name = 'clipon',
+    #                clip = 'on')
+    #pushViewport(vp)
+    #upViewport()
+    
+    ## clip is off when drawing text/label/tickmarks..
+    #vp = plotViewport(out$mar, xscale = out$lim[1:2], yscale = out$lim[3:4],name = 'clipoff',
+    #                clip = 'off')
+    #pushViewport(vp)
+    #upViewport()
+    
     if(out$newpage == TRUE)
         grid.newpage()
     out
@@ -72,34 +82,47 @@ C_persp = function(plot = NULL, ...)
         DoLighting = TRUE else DoLighting = FALSE
     if (DoLighting) Light = SetUpLight(ltheta, lphi)
     
+    lim = PerspWindow(xr, yr, zr, trans, 'r')
+    vp = plotViewport(xscale = lim[1:2], yscale = lim[3:4])
+    
     if (dbox == TRUE) {
         EdgeDone = rep(0, 12)
         if(axes == TRUE){
             depth = gotovp(TRUE)
+            pushViewport(vp)
             PerspAxes(xr, yr, zr, ##x, y, z
                     xlab, ylab, zlab, ## xlab, xenc, ylab, yenc, zlab, zenc
                     nTicks, tickType, trans, ## nTicks, tickType, VT
                     lwd, lty, col.axis, col.lab, cex.lab) ## lwd, lty, col.axis, col.lab, cex.lab
+            upViewport()
             upViewport(depth)} 
     } else {
         EdgeDone = rep(1, 12)
         xr = yr = zr = c(0,0)
     }
+    
+    
     ## draw the behind face first
     ## return the EdgeDone inorder to not drawing the same Edege two times.
     depth = gotovp(TRUE)
+    pushViewport(vp)
     EdgeDone = PerspBox(0, xr, yr, zr, EdgeDone, trans, 1, lwd)
+    upViewport()
     upViewport(depth)
     
     depth = gotovp(TRUE)
+    pushViewport(vp)
     DrawFacets(plot = plot, z = plot$z, x = plot$x, y = plot$y,     ## basic
                 xs = 1/xs, ys = 1/ys, zs = expand/zs,               ## Light
                 col = plot$col, length(plot$col),                   ## cols
                 ltheta = ltheta, lphi = lphi, Shade = shade, Light = Light)
+    upViewport()
     upViewport(depth)
 
     depth = gotovp(TRUE)
+    pushViewport(vp)
     EdgeDone = PerspBox(1, xr, yr, zr, EdgeDone, trans, 'dotted', lwd)
+    upViewport()
     upViewport(depth)
 
 }
