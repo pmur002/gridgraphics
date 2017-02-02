@@ -643,39 +643,38 @@ PerspAxes = function(x, y, z,
 
 PerspWindow = function(xlim, ylim, zlim, VT, style)
 {
-      xmax = xmin = ymax = ymin = u = 0
-      u[4] = 1
-      for (i in 1:2) {
-            u[1] = xlim[i]
-            for (j in 1:2) {
-                u[2] = ylim[j]
-                for (k in 1:2) {
-                    u[3] = zlim[k]
-                    v = TransVector(u, VT)
-                    xx = v[1] / v[4]
-                    yy = v[2] / v[4]
-                    if (xx > xmax) xmax = xx
-                    if (xx < xmin) xmin = xx
-                    if (yy > ymax) ymax = yy
-                    if (yy < ymin) ymin = yy
-              }
-            }
-      }
-      pin1 = convertX(unit(1.0, 'npc'), 'inches', valueOnly = TRUE)
-      pin2 = convertY(unit(1.0, 'npc'), 'inches', valueOnly = TRUE)
-      xdelta = abs(xmax - xmin)
-      ydelta = abs(ymax - ymin)
-      xscale = pin1 / xdelta
-      yscale = pin2 / ydelta
-      scale = ifelse(xscale < yscale, xscale, yscale)
-      print(xscale < yscale)
-      xadd = .5 * (pin1 / scale - xdelta);
-      yadd = .5 * (pin2 / scale - ydelta);
-      ## GScale in C
-      xrange = GScale(xmin - xadd, xmax + xadd, style)
-      yrange = GScale(ymin - yadd, ymax + yadd, style)
-      outs <<- c(xrange, yrange)
-     c(xrange, yrange)
+    xmax = xmin = ymax = ymin = u = 0
+    u[4] = 1
+    for (i in 1:2) {
+        u[1] = xlim[i]
+        for (j in 1:2) {
+            u[2] = ylim[j]
+            for (k in 1:2) {
+                u[3] = zlim[k]
+                v = TransVector(u, VT)
+                xx = v[1] / v[4]
+                yy = v[2] / v[4]
+                if (xx > xmax) xmax = xx
+                if (xx < xmin) xmin = xx
+                if (yy > ymax) ymax = yy
+                if (yy < ymin) ymin = yy
+          }
+        }
+    }
+    pin1 = convertX(unit(1.0, 'npc'), 'inches', valueOnly = TRUE)
+    pin2 = convertY(unit(1.0, 'npc'), 'inches', valueOnly = TRUE)
+    xdelta = abs(xmax - xmin)
+    ydelta = abs(ymax - ymin)
+    xscale = pin1 / xdelta
+    yscale = pin2 / ydelta
+    scale = if(xscale < yscale) xscale else yscale
+    xadd = .5 * (pin1 / scale - xdelta);
+    yadd = .5 * (pin2 / scale - ydelta);
+    ## GScale in C
+    xrange = GScale(xmin - xadd, xmax + xadd, style)
+    yrange = GScale(ymin - yadd, ymax + yadd, style)
+    outs <<- c(xrange, yrange)
+    c(xrange, yrange)
   
 }
 
