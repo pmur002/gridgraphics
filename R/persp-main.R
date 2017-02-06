@@ -19,6 +19,7 @@ perInit = function ( plot, trans, newpage = FALSE, dbox = TRUE ) {
                 xr = info[[5]], yr = info[[6]], zr = info[[7]],
                 col = info[[14]], border = info[[15]], dbox = info[[19]],
                 newpage = newpage, 
+                phi = info[[9]], theta = info[[8]], r = info[[10]], d = info[[11]],
                 axes = info[[20]], nTicks = info[[21]], tickType = info[[22]],
                 trans = trans, xlab = info[[23]], ylab = info[[24]], zlab = info[[25]],
 				## parameters in 'par' that need added to per
@@ -55,6 +56,7 @@ C_persp = function(plot = NULL, ...)
     dev.set(recordDev())
     par = currentPar(NULL)
     dev.set(playDev())
+    xc = yc = zc = xs = ys = zs = 0
     
     plot = perInit(plot, trans = trans, newpage = FALSE)
     #information extraction
@@ -67,6 +69,7 @@ C_persp = function(plot = NULL, ...)
     ltheta = plot$ltheta; lphi = plot$lphi
     main = plot$main; axes = plot$axes
     dbox = plot$dbox; shade = plot$shade
+    r = plot$r; d = plot$d; phi = plot$phi; theta = plot$theta
         
     border = plot$border[1];
     if(is.null(plot$lwd)) lwd = 1 else lwd = plot$lwd
@@ -77,11 +80,18 @@ C_persp = function(plot = NULL, ...)
     xs = LimitCheck(xr)[1]
     ys = LimitCheck(yr)[1]
     zs = LimitCheck(zr)[1]
+    xc = LimitCheck(xr)[2]
+    yc = LimitCheck(yr)[2]
+    zc = LimitCheck(zr)[2]
+    
+    print(xc)
+    
     if(!scale) xs = ys = zs = max(xs, ys, zs)
     if(is.finite(ltheta) && is.finite(lphi) && is.finite(shade))
         DoLighting = TRUE else DoLighting = FALSE
     if (DoLighting) Light = SetUpLight(ltheta, lphi)
     
+    # create a viewport inside a 'viewport'
     lim = PerspWindow(xr, yr, zr, trans, 'r')
     vp = plotViewport(xscale = lim[1:2], yscale = lim[3:4])
     
@@ -101,6 +111,17 @@ C_persp = function(plot = NULL, ...)
         xr = yr = zr = c(0,0)
     }
     
+    ## calculation for trans
+    VT = diag(1, 4)
+    translate = VT %*% Translate(-xc, -yc, -zc)
+    Scale = translate %*% Scale(1/xs, 1/ys, expand/zs)
+    xrotate = Scale %*% XRotate(-90.0)
+    yrotate = xrotate %*% YRotate(-theta)
+    xrotate = yrotate %*% XRotate(phi)
+    translate = xrotate %*% Translate(0.0, 0.0, -r - d)
+    transs = translate %*% Perspective(d)
+    
+    print(transs)
     
     ## draw the behind face first
     ## return the EdgeDone inorder to not drawing the same Edege two times.

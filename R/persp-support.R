@@ -1,6 +1,7 @@
 ####Shade function
 #####################################################################
 LimitCheck = function ( lim ) {
+    ## not finished yet...
     s = 0.5 * abs(lim[2] - lim[1])
     c = 0.5 * (lim[2] + lim[1])
     c(s, c)
@@ -42,6 +43,33 @@ ZRotate = function ( angle ) {
     TT[1, 2] = s;
     TT
 }
+
+Translate = function(x, y, z)
+{
+    TT = diag(1,4)
+    TT[4, 1] = x;
+    TT[4, 2] = y;
+    TT[4, 3] = z;
+    TT
+
+}
+
+Scale = function(x, y, z)
+{
+    TT = diag(1,4)    
+    TT[1, 1] = x
+    TT[2, 2] = y
+    TT[3, 3] = z
+    TT
+}
+
+Perspective = function(d)
+{
+    TT = diag(1,4)
+    TT[3, 4] = -1 / d
+    TT
+}
+
         
 SetUpLight = function ( theta, phi ) {
     u = c(0, -1, 0, 1)
@@ -257,6 +285,7 @@ dPolygon = function(plot){
     pout = list(xyCoor = xyCoor, pMax = pMax, colRep = colRep, polygonOrder = a)
     pout
 }
+
 
 
 
