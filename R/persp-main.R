@@ -29,18 +29,6 @@ perInit = function ( plot, trans, newpage = FALSE, dbox = TRUE ) {
                 expand = info[[13]], scale = info[[12]]
 				#main = plot[[1]][[4]][[2]][[2]]
                 )
-
-    ## clip is on when drawing polygons shade
-    #vp = plotViewport(out$mar, xscale = out$lim[1:2], yscale = out$lim[3:4],name = 'clipon',
-    #                clip = 'on')
-    #pushViewport(vp)
-    #upViewport()
-    
-    ## clip is off when drawing text/label/tickmarks..
-    #vp = plotViewport(out$mar, xscale = out$lim[1:2], yscale = out$lim[3:4],name = 'clipoff',
-    #                clip = 'off')
-    #pushViewport(vp)
-    #upViewport()
     
     if(out$newpage == TRUE)
         grid.newpage()
@@ -84,16 +72,26 @@ C_persp = function(plot = NULL, ...)
     yc = LimitCheck(yr)[2]
     zc = LimitCheck(zr)[2]
     
-    print(xc)
-    
     if(!scale) xs = ys = zs = max(xs, ys, zs)
     if(is.finite(ltheta) && is.finite(lphi) && is.finite(shade))
-        DoLighting = TRUE else DoLighting = FALSE
+    DoLighting = TRUE else DoLighting = FALSE
     if (DoLighting) Light = SetUpLight(ltheta, lphi)
     
+    VT = diag(1, 4); print(VT)
+    VT = VT %*% Translate(-xc, -yc, -zc); print(VT)
+    VT = VT %*% Scale(1/xs, 1/ys, expand/zs); print(VT)
+    VT = VT %*% XRotate(-90.0); print(VT)
+    VT = VT %*% YRotate(-theta); print(VT)
+    VT = VT %*% XRotate(phi); print(VT)
+    VT = VT %*% Translate(0.0, 0.0, -r - d); print(VT)
+    trans = VT %*% Perspective(d)
+    
     # create a viewport inside a 'viewport'
-    lim = PerspWindow(xr, yr, zr, trans, 'r')
-    vp = plotViewport(xscale = lim[1:2], yscale = lim[3:4])
+    depth = gotovp(TRUE)
+    lim = PerspWindow(xr, yr, zr, trans, 's')
+    vp = viewport(0.5, 0.5, 1, 1, default.units = 'native',
+                    xscale = lim[1:2], yscale = lim[3:4])
+    upViewport(depth)
     
     if (dbox == TRUE) {
         EdgeDone = rep(0, 12)
@@ -110,18 +108,6 @@ C_persp = function(plot = NULL, ...)
         EdgeDone = rep(1, 12)
         xr = yr = zr = c(0,0)
     }
-    
-    ## calculation for trans
-    VT = diag(1, 4)
-    translate = VT %*% Translate(-xc, -yc, -zc)
-    Scale = translate %*% Scale(1/xs, 1/ys, expand/zs)
-    xrotate = Scale %*% XRotate(-90.0)
-    yrotate = xrotate %*% YRotate(-theta)
-    xrotate = yrotate %*% XRotate(phi)
-    translate = xrotate %*% Translate(0.0, 0.0, -r - d)
-    transs = translate %*% Perspective(d)
-    
-    print(transs)
     
     ## draw the behind face first
     ## return the EdgeDone inorder to not drawing the same Edege two times.

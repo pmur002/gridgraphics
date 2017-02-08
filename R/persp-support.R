@@ -26,7 +26,7 @@ YRotate = function ( angle ) {
     c = cos(rad)
     s = sin(rad)
     TT[1, 1] = c;
-    TT[3, 0] = s;
+    TT[3, 1] = s;
     TT[3, 3] = c;
     TT[1, 3] = -s;
     TT
@@ -47,9 +47,9 @@ ZRotate = function ( angle ) {
 Translate = function(x, y, z)
 {
     TT = diag(1,4)
-    TT[4, 1] = x;
-    TT[4, 2] = y;
-    TT[4, 3] = z;
+    TT[4, 1] = x
+    TT[4, 2] = y
+    TT[4, 3] = z
     TT
 
 }
@@ -316,7 +316,7 @@ DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ncol = length(col), ltheta
     yrange <<- range(polygons[,2])
     
     grid.polygon(polygons[,1], polygons[,2], id = polygon.id,
-                    default.units = 'native',
+                    default.units = 'native', 
                     gp = gpar(col = plot$border, fill = cols, lty = plot$lty, lwd = plot$lwd))
 
 
