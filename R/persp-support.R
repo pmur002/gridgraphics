@@ -206,7 +206,7 @@ PerspBox = function(front = 1, x, y, z, EdgeDone, VT, lty, lwd = lwd )
     EdgeDone
 }
 
-dPolygon = function(plot){
+dPolygon = function(plot, trans){
 
     x = plot$x; y = plot$y; z = plot$z
     xr = plot$xr; yr = plot$yr; zr = plot$zr
@@ -289,10 +289,10 @@ dPolygon = function(plot){
 
 
 
-DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ncol = length(col), ltheta, lphi, Shade, Light)
+DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ncol = length(col), ltheta, lphi, Shade, Light, trans)
 {
 
-    pout = dPolygon(plot)
+    pout = dPolygon(plot, trans)
     xyCoor = pout$xyCoor
     pMax = pout$pMax; colRep = pout$colRep
     polygonOrder = pout$polygonOrder

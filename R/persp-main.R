@@ -1,5 +1,5 @@
 ## initialize and create a viewport prepare for drawing
-perInit = function ( plot, trans, newpage = FALSE, dbox = TRUE ) {
+perInit = function ( plot, newpage = FALSE, dbox = TRUE ) {
     info = plot
     ## [[1]] is the all the grapical information that transfer into grid
     ## [[3]] is the persp call information
@@ -21,7 +21,7 @@ perInit = function ( plot, trans, newpage = FALSE, dbox = TRUE ) {
                 newpage = newpage, 
                 phi = info[[9]], theta = info[[8]], r = info[[10]], d = info[[11]],
                 axes = info[[20]], nTicks = info[[21]], tickType = info[[22]],
-                trans = trans, xlab = info[[23]], ylab = info[[24]], zlab = info[[25]],
+                xlab = info[[23]], ylab = info[[24]], zlab = info[[25]],
 				## parameters in 'par' that need added to per
                 lwd = info$lwd, lty = info$lty, col.axis = info$col.axis,
 				col.lab = info$col.lab, cex.lab = info$cex.lab, 
@@ -44,11 +44,12 @@ C_persp = function(plot = NULL, ...)
     dev.set(recordDev())
     par = currentPar(NULL)
     dev.set(playDev())
-    xc = yc = zc = xs = ys = zs = 0
     
-    plot = perInit(plot, trans = trans, newpage = FALSE)
+    
+    
     #information extraction
-    trans = plot$trans
+    xc = yc = zc = xs = ys = zs = 0
+    plot = perInit(plot, newpage = FALSE)
     xr = plot$xr; yr = plot$yr; zr = plot$zr
     xlab = plot$xlab; ylab = plot$ylab; zlab = plot$zlab
     col.axis = plot$col.axis; col.lab = plot$col.lab; cex.lab = plot$cex.lab
@@ -58,12 +59,6 @@ C_persp = function(plot = NULL, ...)
     main = plot$main; axes = plot$axes
     dbox = plot$dbox; shade = plot$shade
     r = plot$r; d = plot$d; phi = plot$phi; theta = plot$theta
-        
-    border = plot$border[1];
-    if(is.null(plot$lwd)) lwd = 1 else lwd = plot$lwd
-    if(is.null(plot$lty)) lty = 1 else lty = plot$lty
-    if(any(!(is.numeric(xr) & is.numeric(yr) & is.numeric(zr)))) stop("invalid limits")
-    if(any(!(is.finite(xr) & is.finite(yr) & is.finite(zr)))) stop("invalid limits")
     
     xs = LimitCheck(xr)[1]
     ys = LimitCheck(yr)[1]
@@ -72,19 +67,31 @@ C_persp = function(plot = NULL, ...)
     yc = LimitCheck(yr)[2]
     zc = LimitCheck(zr)[2]
     
+    VT = diag(1, 4)
+    VT = VT %*% Translate(-xc, -yc, -zc)
+    VT = VT %*% Scale(1/xs, 1/ys, expand/zs)
+    VT = VT %*% XRotate(-90.0)
+    VT = VT %*% YRotate(-theta)
+    VT = VT %*% XRotate(phi)
+    VT = VT %*% Translate(0.0, 0.0, -r - d)
+    trans = VT %*% Perspective(d)
+        
+    print(trans)
+        
+    border = plot$border[1];
+    if(is.null(plot$lwd)) lwd = 1 else lwd = plot$lwd
+    if(is.null(plot$lty)) lty = 1 else lty = plot$lty
+    if(any(!(is.numeric(xr) & is.numeric(yr) & is.numeric(zr)))) stop("invalid limits")
+    if(any(!(is.finite(xr) & is.finite(yr) & is.finite(zr)))) stop("invalid limits")
+    
+
+    
     if(!scale) xs = ys = zs = max(xs, ys, zs)
     if(is.finite(ltheta) && is.finite(lphi) && is.finite(shade))
     DoLighting = TRUE else DoLighting = FALSE
     if (DoLighting) Light = SetUpLight(ltheta, lphi)
     
-    VT = diag(1, 4); print(VT)
-    VT = VT %*% Translate(-xc, -yc, -zc); print(VT)
-    VT = VT %*% Scale(1/xs, 1/ys, expand/zs); print(VT)
-    VT = VT %*% XRotate(-90.0); print(VT)
-    VT = VT %*% YRotate(-theta); print(VT)
-    VT = VT %*% XRotate(phi); print(VT)
-    VT = VT %*% Translate(0.0, 0.0, -r - d); print(VT)
-    trans = VT %*% Perspective(d)
+
     
     # create a viewport inside a 'viewport'
     depth = gotovp(TRUE)
@@ -122,7 +129,7 @@ C_persp = function(plot = NULL, ...)
     DrawFacets(plot = plot, z = plot$z, x = plot$x, y = plot$y,     ## basic
                 xs = 1/xs, ys = 1/ys, zs = expand/zs,               ## Light
                 col = plot$col, length(plot$col),                   ## cols
-                ltheta = ltheta, lphi = lphi, Shade = shade, Light = Light)
+                ltheta = ltheta, lphi = lphi, Shade = shade, Light = Light, trans = trans)
     upViewport()
     upViewport(depth)
 
