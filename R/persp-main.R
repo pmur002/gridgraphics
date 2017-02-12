@@ -17,14 +17,16 @@ perInit = function ( plot, newpage = FALSE, dbox = TRUE ) {
     ## expand is [[13]], scale is [[12]]
     out = list(x = info[[2]], y = info[[3]], z = info[[4]],
                 xr = info[[5]], yr = info[[6]], zr = info[[7]],
-                col = info[[14]], border = info[[15]], dbox = info[[19]],
+                col = info[[14]], border = info[[15]][1] ##only allows one color for border
+				, dbox = info[[19]],
                 newpage = newpage, 
                 phi = info[[9]], theta = info[[8]], r = info[[10]], d = info[[11]],
                 axes = info[[20]], nTicks = info[[21]], tickType = info[[22]],
                 xlab = info[[23]], ylab = info[[24]], zlab = info[[25]],
 				## parameters in 'par' that need added to per
-                lwd = info$lwd, lty = info$lty, col.axis = info$col.axis,
-				col.lab = info$col.lab, cex.lab = info$cex.lab, 
+                lwd = info$lwd, lty = info$lty, #col.axis = info$col.axis,
+				#col.lab = info$col.lab, 
+				cex.lab = info$cex.lab, 
                 shade = info[[18]], ltheta = info[[16]], lphi = info[[17]],
                 expand = info[[13]], scale = info[[12]]
 				#main = plot[[1]][[4]][[2]][[2]]
@@ -59,13 +61,22 @@ C_persp = function(plot = NULL, ...)
     main = plot$main; axes = plot$axes
     dbox = plot$dbox; shade = plot$shade
     r = plot$r; d = plot$d; phi = plot$phi; theta = plot$theta
-    
-    xs = LimitCheck(xr)[1]
+	
+	xs = LimitCheck(xr)[1]
     ys = LimitCheck(yr)[1]
     zs = LimitCheck(zr)[1]
     xc = LimitCheck(xr)[2]
     yc = LimitCheck(yr)[2]
     zc = LimitCheck(zr)[2]
+	
+	if(scale == FALSE){
+		s = xs
+		if(s < ys) s = ys
+		if (s < zs) s = zs
+		xs = s
+		ys = s
+		zs = s
+	}
     
     VT = diag(1, 4)
     VT = VT %*% Translate(-xc, -yc, -zc)
@@ -75,9 +86,8 @@ C_persp = function(plot = NULL, ...)
     VT = VT %*% XRotate(phi)
     VT = VT %*% Translate(0.0, 0.0, -r - d)
     trans = VT %*% Perspective(d)
-        
-    print(trans)
-        
+	print(trans)
+                
     border = plot$border[1];
     if(is.null(plot$lwd)) lwd = 1 else lwd = plot$lwd
     if(is.null(plot$lty)) lty = 1 else lty = plot$lty

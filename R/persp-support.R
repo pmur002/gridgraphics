@@ -218,6 +218,7 @@ dPolygon = function(plot, trans){
 	nx = length(x)
 	ny = length(y)
     total = nx * ny
+	stops = (nx - 1) * (ny - 1)
 
     ## set the temp value for x,y,z prepare for subsetting
     xTmp = rep(x, length(y))
@@ -250,9 +251,9 @@ dPolygon = function(plot, trans){
     dp = rep((4 * seq(nx,total,nx)), each = 4) - (3:0)
 
     ## final subsetting
-    xCoor = xBreak[c(plot.index)][-dp]
-    yCoor = yBreak[c(plot.index)][-dp]
-    zCoor = zBreak[c(plot.index)][-dp]
+    xCoor = xBreak[c(plot.index)][-dp][1 : (4 * stops)]
+    yCoor = yBreak[c(plot.index)][-dp][1 : (4 * stops)]
+    zCoor = zBreak[c(plot.index)][-dp][1 : (4 * stops)]
     
     ## vectorize the cols
     colRep = rep_len(col, length(xCoor))
