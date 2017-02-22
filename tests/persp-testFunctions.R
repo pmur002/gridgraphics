@@ -13,12 +13,33 @@ testPersp = function(theta=120, phi = 20, expand = 0.5, col = 'White',
                    col = col, box = box, border = border, 
                    ticktype = ticktype, nticks = nticks, ...)
                    
-    trans
 }
 
-echoTest = function(trans = trans) {
-    plot = recordPlot()
-    plotInfo = perInit(plot, trans = trans, newpage = FALSE)
-    C_persp(plot = plotInfo)
-    grid.text('grid', 0.1, 0.9)
+
+## testing function
+testPersp1 = function(theta=120, phi = 20, expand = 0.5, col = 'orange ',
+                     box = TRUE, border = 'NA', 
+                     ticktype = 'simple', nticks = 5, ...) {
+  x = seq(-pi,pi,length = 45)
+  y = seq(-pi,pi,length = 45)
+  f <- function(x, y) { 1 + 3 * cos((x^2 + y^2) * 2) * exp(-(x^2 + y^2))}
+  z <- outer(x, y, f)
+  # color
+  jet.colors <- colorRampPalette( c("white",'yellow', "orange") )
+  nbcol <- 100
+  color <- jet.colors(nbcol)
+  zfacet <- z[-1, -1] + z[-1, -ncz] + z[-nrz, -1] + z[-nrz, -ncz]
+  facetcol <- cut(zfacet, nbcol)
+  
+  par(mar = c(2,2,2,2))
+  expand = 0.5
+  trans <- persp(x, y, z, theta = theta, 
+                 phi = phi, expand = expand, 
+                 col = color[facetcol], box = box, border = border, 
+                 ticktype = ticktype, nticks = nticks, ...)
+  
 }
+
+testPersp1()
+
+

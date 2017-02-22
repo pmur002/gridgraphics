@@ -134,7 +134,7 @@ C_persp = function(plot = NULL, ...)
     upViewport()
     upViewport(depth)
     
-    depth = gotovp(TRUE)
+    depth = gotovp(FALSE)
     pushViewport(vp)
     DrawFacets(plot = plot, z = plot$z, x = plot$x, y = plot$y,     ## basic
                 xs = 1/xs, ys = 1/ys, zs = expand/zs,               ## Light
