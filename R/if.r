@@ -87,6 +87,5 @@ FindCutPoints = function(low, high, x1, y1, z1, x2, y2, z2,
 	}
     }
     out = list(x = x, y = y, z = z, npt = npt)
-    outs<<- out
     out
 }

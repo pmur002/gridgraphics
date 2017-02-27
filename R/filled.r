@@ -23,14 +23,18 @@ FindPolygonVertices = function(low,  high,
 
 C_filledcontour = function(plot)
 {
-    plot.info = plot[[1]][[12]][[2]]
-    x <<- plot.info[[2]]
-    y <<- plot.info[[3]]
-    z <<- plot.info[[4]]
-    sc <<- plot.info[[5]]
+    dev.set(recordDev())
+    par = currentPar(NULL)
+    dev.set(playDev())
+    
+    #plot.info = plot[[1]][[12]][[2]]
+    x <<- plot[[2]]
+    y <<- plot[[3]]
+    z <<- plot[[4]]
+    sc <<- plot[[5]]
     px = py = pz = numeric(8)
     ## not sure if we need the "FixupCol" or not 
-    scol <<- FixupCol(plot.info[[6]])
+    scol <<- plot[[6]]
 
     nx <<- length(x)
     ny <<- length(y)
@@ -39,23 +43,23 @@ C_filledcontour = function(plot)
     ## do it this way as coerceVector can lose dims, e.g. for a list matrix
     if (nrow(z) != nx || ncol(z) != ny) stop("dimension mismatch")
  
-    nc <<- length(sc)
+    nc = length(sc)
     if (nc < 1) warning("no contour values")
 
     ncol = length(scol)
-    npt = 0
-    grid.newpage()
-    vp = plotViewport(par('usr'), xscale = range(x, na.rm = TRUE), 
-                        yscale = range(y, na.rm = TRUE),
-                        name = 'clipoff', clip = 'off')
-    pushViewport(vp)
-    upViewport()
+    npt = 1
+    # grid.newpage()
+    #vp = plotViewport(par('usr'), xscale = range(x, na.rm = TRUE), 
+    #                    yscale = range(y, na.rm = TRUE),
+    #                    name = 'clipoff', clip = 'off')
+    #pushViewport(vp)
+    #upViewport()
     
-    count = 0
+    depth = gotovp(FALSE)
+    
     for(i in 1:(nx - 1)){
     for(j in 1:(ny - 1)){
         for(k in 1:(nc - 1)){
-            if(count == 0)  npt = 1; count = count + 1            
             out = FindPolygonVertices(low = sc[k], high = sc[k + 1],
                     x1 = x[i], x2 = x[i + 1],
                     y1 = y[j], y2 = y[j + 1],
@@ -66,12 +70,15 @@ C_filledcontour = function(plot)
                     x = px, y = py, z = pz, npt = npt)
             
             npt = out$npt
-            if(npt > 2)
+            #print(npt)
+            if(npt > 3)
             {
-                grid.polygon(out$x, out$y,default.units = 'native', vp = 'clipoff')
+                grid.polygon(out$x[1:(npt - 1)], out$y[1:(npt - 1)], default.units = 'native',
+                    gp = gpar(fill = scol[(k - 1) %% ncol + 1], col = NA))
             }
         }
     }
     }
+    upViewport(depth)
    
 }

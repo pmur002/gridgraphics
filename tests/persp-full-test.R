@@ -1,6 +1,4 @@
 
-setwd('C:/Users/yeamin/Desktop/mproject/diff/sin/')
-
 ## test on theta
 	 
 	plotdiff(expression(testPersp(30)), 'persp-2')
