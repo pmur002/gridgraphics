@@ -15,9 +15,7 @@ testPersp = function(theta=120, phi = 20, expand = 0.5, col = 'White',
                    ticktype = ticktype, nticks = nticks, ...)
                    
 }
-testPersp()
-grid.echo()
-plotdiff(expression(testPersp()), 'sin')
+
 
 
 ## testing function
@@ -28,6 +26,8 @@ testPersp1 = function(theta=120, phi = 20, expand = 0.5, col = 'orange ',
   y = seq(-pi,pi,length = 45)
   f <- function(x, y) { 1 + 3 * cos((x^2 + y^2) * 2) * exp(-(x^2 + y^2))}
   z <- outer(x, y, f)
+  nrz <- nrow(z)
+  ncz <- ncol(z)
   # color
   jet.colors <- colorRampPalette( c("white",'yellow', "orange") )
   nbcol <- 100
@@ -43,13 +43,6 @@ testPersp1 = function(theta=120, phi = 20, expand = 0.5, col = 'orange ',
                  ticktype = ticktype, nticks = nticks, ...)
   
 }
-
-testPersp1()
-grid.echo()
-plotdiff(expression(testPersp1()), 'sin2')
-
-
-
 
 
 testPersp2 = function(theta=120, phi = 20, expand = 0.5, col = 'orange ',
@@ -59,8 +52,10 @@ testPersp2 = function(theta=120, phi = 20, expand = 0.5, col = 'orange ',
   y = seq(-1,1,length = 45)
   f <- function(x, y) { (0.4^2-(0.6-(x^2+y^2)^0.5)^2)^0.5}
   z <- outer(x, y, f)
+  nrz <- nrow(z)
+  ncz <- ncol(z)
   # color
-  jet.colors <- colorRampPalette( c("white",'yellow', "orange") )
+  jet.colors <- colorRampPalette( c("brown",'blue', "purple") )
   nbcol <- 100
   color <- jet.colors(nbcol)
   zfacet <- z[-1, -1] + z[-1, -ncz] + z[-nrz, -1] + z[-nrz, -ncz]
@@ -74,6 +69,15 @@ testPersp2 = function(theta=120, phi = 20, expand = 0.5, col = 'orange ',
                  ticktype = ticktype, nticks = nticks, ...)
   
 }
+
+
+testPersp()
+grid.echo()
+plotdiff(expression(testPersp()), 'sin')
+
+testPersp1()
+grid.echo()
+plotdiff(expression(testPersp1()), 'sin2')
 
 testPersp2()
 grid.echo()
