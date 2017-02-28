@@ -71,7 +71,7 @@ C_filledcontour = function(plot)
             
             npt = out$npt
             #print(npt)
-            if(npt > 3)
+            if(npt > 1)
             {
                 grid.polygon(out$x[1:(npt - 1)], out$y[1:(npt - 1)], default.units = 'native',
                     gp = gpar(fill = scol[(k - 1) %% ncol + 1], col = NA))

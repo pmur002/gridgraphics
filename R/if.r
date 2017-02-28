@@ -57,10 +57,7 @@ FindCutPoints = function(low, high, x1, y1, z1, x2, y2, z2,
 	}
     
     if (z2 < high) {
-	    x[npt] = x2
-	    y[npt] = y2
-	    z[npt] = z2
-	    npt = npt + 1
+
 	} else if (z2 == Inf) {
 	    x[npt] = x1
 	    y[npt] = y1
@@ -75,10 +72,6 @@ FindCutPoints = function(low, high, x1, y1, z1, x2, y2, z2,
 	}
     } else {
 	if(low <= z1 && z1 <= high) {
-	    x[npt] = x1
-	    y[npt] = y1
-	    z[npt] = z1
-	    npt = npt + 1
 
 	    x[npt] = x2
 	    y[npt] = y2
