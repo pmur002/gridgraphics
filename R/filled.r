@@ -3,22 +3,19 @@ FindPolygonVertices = function(low,  high,
 		     z11,  z21,  z12,  z22,
 		     x,  y,  z, npt)
 {
-	out = list(x = 0, y = 0, npt = 0)
-	x = y = z = numeric(8)
+	out = list()
 	npt = 0
-    out1 <<- FindCutPoints(low, high, x1,  y1,  z11, x2,  y1,  z21, x, y, z, npt)
+	out1 = FindCutPoints(low, high, x1,  y1,  z11, x2,  y1,  z21, x, y, z, npt)
 	x = out1$x; y = out1$y; z = out1$z; npt = out1$npt
-	x = y = z = numeric(8)
-    out2 <<- FindCutPoints(low, high, y1,  x2,  z21, y2,  x2,  z22, y, x, z, npt)
+	
+	out2 = FindCutPoints(low, high, y1,  x2,  z21, y2,  x2,  z22, y, x, z, npt)
 	x = out2$x; y = out2$y; z = out2$z; npt = out2$npt
 
-	x = y = z = numeric(8)
-    out3 <<- FindCutPoints(low, high, x2,  y2,  z22, x1,  y2,  z12, x, y, z, npt)
+	out3 = FindCutPoints(low, high, x2,  y2,  z22, x1,  y2,  z12, x, y, z, npt)
 	x = out3$x; y = out3$y; z = out3$z; npt = out3$npt
 			
-
-	x = y = z = numeric(8)
-    out4 <<- FindCutPoints(low, high, y2,  x1,  z12, y1,  x1,  z11, y, x, z, npt)
+	out4 = FindCutPoints(low, high, y2,  x1,  z12, y1,  x1,  z11, y, x, z, npt)
+	
 	out$x = out1$x + out2$y + out3$x + out4$y
 	out$y = out1$y + out2$x + out3$y + out4$x
 	out$npt = out4$npt
@@ -34,13 +31,11 @@ C_filledcontour = function(plot)
     par = currentPar(NULL)
     dev.set(playDev())
     
-    #plot.info = plot[[1]][[12]][[2]]
-    x <<- plot[[2]]
+    x  =  plot[[2]]
     y = plot[[3]]
     z = plot[[4]]
     sc = plot[[5]]
     px = py = pz = numeric(8)
-    ## not sure if we need the "FixupCol" or not 
     scol = plot[[6]]
 
     nx = length(x)
@@ -54,21 +49,11 @@ C_filledcontour = function(plot)
     if (nc < 1) warning("no contour values")
 
     ncol = length(scol)
-
     
     depth = gotovp(TRUE)
-    
     for(i in 1:(nx - 1)){
     for(j in 1:(ny - 1)){
         for(k in 1:(nc - 1)){
-            #out = FindPolygonVertices(low = sc[k], high = sc[k + 1],
-            #        x1 = x[i], x2 = x[i + 1],
-            #        y1 = y[j], y2 = y[j + 1],
-            #        z11 = z[i, (j)],
-            #        z21 = z[(i + 1), (j)],
-            #        z12 = z[i, (j + 1) ],
-            #        z22 = z[(i + 1), (j + 1)],
-            #        x = px, y = py, z = pz, npt = npt)
 			npt = 0
 			out = FindPolygonVertices(sc[k], sc[k + 1],
 					x[i], x[i + 1],
@@ -78,14 +63,9 @@ C_filledcontour = function(plot)
 				    z[i + (j) * nx],
 				    z[i + 1 + (j) * nx],
 				    px, py, pz, npt)
-
             npt = out$npt
-            #print(npt)
             if(npt > 2)
             {
-				#outs <<- out
-				#print(out)
-				#stop()
                 grid.polygon(out$x[1:npt], out$y[1:npt], default.units = 'native',
                     gp = gpar(fill = scol[(k - 1) %% ncol + 1], col = NA))
             }
@@ -95,3 +75,88 @@ C_filledcontour = function(plot)
     upViewport(depth)
    
 }
+
+
+FindCutPoints = function( low,  high,
+	       x1,  y1,  z1,
+	       x2,  y2,  z2,
+	       x,  y,  z,
+	       npt)
+{
+	x = y = z = numeric(8)
+	if (z1 > z2 ) {
+		if (z2 > high || z1 < low) return(out = list(x = x, y = y, z = z, npt = npt))
+		if (z1 < high) {
+			x[npt + 1] = x1
+			y[npt + 1] = y1
+			z[npt + 1] = z1
+			npt = npt + 1
+		} else if (z1 == Inf) {
+			x[npt + 1] = x2
+			y[npt + 1] = y1
+			z[npt + 1] = z2
+			npt = npt + 1
+		} else {
+			c = (z1 - high) / (z1 - z2)
+			x[npt + 1] = x1 + c * (x2 - x1)
+			y[npt + 1] = y1
+			z[npt + 1] = z1 + c * (z2 - z1)
+			npt = npt + 1
+		}
+		
+		if (z2 == -Inf) {
+			x[npt + 1] = x1
+			y[npt + 1] = y1
+			z[npt + 1] = z1
+			npt = npt + 1
+		} else if (z2 <= low) {
+			c = (z2 -low) / (z2 - z1)
+			x[npt + 1] = x2 - c * (x2 - x1)
+			y[npt + 1] = y1
+			z[npt + 1] = z2 - c * (z2 - z1)
+			npt = npt + 1
+		}
+    } else if (z1 < z2) {
+	if (z2 < low || z1 > high) return(out = list(x = x, y = y, z = z, npt = npt))
+		if (z1 > low) {
+			x[npt + 1] = x1
+			y[npt + 1] = y1
+			z[npt + 1] = z1
+			npt = npt + 1
+		} else if (z1 == -Inf) {
+			x[npt + 1] = x2
+			y[npt + 1] = y1
+			z[npt + 1] = z2
+			npt = npt + 1
+		} else { 
+			c = (z1 - low) / (z1 - z2)
+			x[npt + 1] = x1 + c * (x2 - x1)
+			y[npt + 1] = y1
+			z[npt + 1] = z1 + c * (z2 - z1)
+			npt = npt + 1
+		}
+		if (z2 < high) {
+		} else if (z2 == Inf) {
+			x[npt + 1] = x1
+			y[npt + 1] = y1
+			z[npt + 1] = z1
+			npt = npt + 1
+		} else {
+			c = (z2 - high) / (z2 - z1)
+			x[npt + 1] = x2 - c * (x2 - x1)
+			y[npt + 1] = y1
+			z[npt + 1] = z2 - c * (z2 - z1)
+			npt = npt + 1
+		}
+    } else {
+		if(low <= z1 && z1 <= high) {
+			x[npt + 1] = x1
+			y[npt + 1] = y1
+			z[npt + 1] = z1
+			npt = npt + 1
+		}
+    }
+	out = list(x = x, y = y, z = z, npt = npt)
+	out
+}
+
