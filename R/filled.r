@@ -83,7 +83,7 @@ FindCutPoints = function( low,  high,
 	       x,  y,  z,
 	       npt)
 {
-	x = y = z = numeric(8)
+	#x = y = z = numeric(8)
 	if (z1 > z2 ) {
 		if (z2 > high || z1 < low) return(out = list(x = x, y = y, z = z, npt = npt))
 		if (z1 < high) {

@@ -21,15 +21,26 @@ x = x1[z1 < high]
 y = y1[z1 < high]
 z = z1[z1 < high]
 
-
+xx = recordPlot()
 x = xx[[1]][[11]][[2]][[2]]
 y = xx[[1]][[11]][[2]][[3]]
 z = xx[[1]][[11]][[2]][[4]]
 s = xx[[1]][[11]][[2]][[5]]
 
+
+ind = ((length(x) * length(y)) * (length(s) - 1))
 xt = rep(rep(x, each = length(y)), each = length(s))
 yt = rep(rep(x, length(x)), each = length(s))
 zt = rep(as.numeric(z), each = length(s))
 st = rep(s, length(x) * length(y))
 
-mlength(y) * length(s)
+
+xtop = xt[1:ind]
+xbot = xt[(400 + 1): 8000]
+ytop = yt[1:ind]
+ybot = yt[(400 + 1): 8000]
+ztop = zt[1:ind]
+zbot = zt[(400 + 1): 8000]
+
+low = 3; high = 4;
+FindCutPoints(low, high, xtop, ytop, ztop, xbot, ybot, zbot)
