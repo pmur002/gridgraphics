@@ -5,15 +5,7 @@ FindPolygonVertices = function(low,  high,
 {
 	out = list()
 	npt = 0
-	
-	
-	#FindCutPoints = function( low,  high,
-	#       x1,  y1,  z1,
-	#       x2,  y2,  z2,
-	#       x,  y,  z,
-	#       npt)
-	
-	
+	#      FindCutPoints(low, high, x1,  y1,  z1,  x2,  y2,  z2,  x, y, z, npt)
 	out1 = FindCutPoints(low, high, x1,  y1,  z11, x2,  y1,  z21, x, y, z, npt)
 	x = out1$x; y = out1$y; z = out1$z; npt = out1$npt
 	
@@ -60,6 +52,9 @@ C_filledcontour = function(plot)
     ncol = length(scol)
     
     depth = gotovp(TRUE)
+	
+	ii = 0
+	
     for(i in 1:(nx - 1)){
     for(j in 1:(ny - 1)){
         for(k in 1:(nc - 1)){
@@ -73,6 +68,10 @@ C_filledcontour = function(plot)
 				    z[i + 1 + (j) * nx],
 				    px, py, pz, npt)
             npt = out$npt
+			
+			ii = ii + 1
+			if(ii <= 10){print(out$x)}
+			
             if(npt > 2)
             {
                 grid.polygon(out$x[1:npt], out$y[1:npt], default.units = 'native',
@@ -92,10 +91,14 @@ FindCutPoints = function( low,  high,
 	       x,  y,  z,
 	       npt)
 {
-	#x = y = z = numeric(8)
+	x = y = z = numeric(8)
 	if (z1 > z2 ) {
 		## first column
-		if (z2 > high || z1 < low) return(out = list(x = x, y = y, z = z, npt = npt))
+		if (z2 > high || z1 < low){
+			return(out = list(x = x, y = y, z = z, npt = npt))
+			# print('hey')
+			}
+	
 		if (z1 < high) {
 			x[npt + 1] = x1
 			y[npt + 1] = y1
@@ -127,7 +130,10 @@ FindCutPoints = function( low,  high,
 			npt = npt + 1
 		}
     } else if (z1 < z2) {
-		if (z2 < low || z1 > high) return(out = list(x = x, y = y, z = z, npt = npt))
+		if (z2 < low || z1 > high) {
+				return(out = list(x = x, y = y, z = z, npt = npt))
+				# print('hi')
+				}
 			if (z1 > low) {
 				x[npt + 1] = x1
 				y[npt + 1] = y1
@@ -142,10 +148,12 @@ FindCutPoints = function( low,  high,
 				c = (z1 - low) / (z1 - z2)
 				x[npt + 1] = x1 + c * (x2 - x1)
 				y[npt + 1] = y1
-				z[npt + 1] = z1 + c * (z2 - z1)
+					z[npt + 1] = z1 + c * (z2 - z1)
 				npt = npt + 1
 			}
+			
 			if (z2 < high) {
+				# print('sup')
 			} else if (z2 == Inf) {
 				x[npt + 1] = x1
 				y[npt + 1] = y1
