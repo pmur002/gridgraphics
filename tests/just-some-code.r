@@ -42,8 +42,6 @@ high = st[-((scut - 6) + 1)]
 
 
 ## vectors-join
-
-## inside if z1 > z2
 source('C:/Users/yeamin/Desktop/master/loading.r')
 v.1 = find(low = low, high = high, x1 = x2, y1 = y1, x2 = x2, y2 = y1, z1 = z11, z2 = z21)[[1]]
 v.2 = find(low = low, high = high, x1 = y1, y1 = x2, x2 = y2, y2 = x2, z1 = z21, z2 = z22)[[1]]
@@ -60,6 +58,7 @@ vy = cbind(v_1, v.2, v_3, v.4)
 xPoints = reduceProc(vx)
 yPoints = reduceProc(vy)
 
+## not done yet
 grid.newpage()
 pushViewport(vp = viewport(0.5, 0.5, 1, 1, xscale = range(x), yscale = range(y)))
 
