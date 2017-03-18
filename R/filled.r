@@ -69,11 +69,12 @@ C_filledcontour = function(plot)
                     px, py, pz, npt)
             npt = out$npt
             
-            ii = ii + 1
-            if(ii <= 10){print(out$x)}
             
             if(npt > 2)
             {
+				ii = ii + 1
+				cols = scol[(k - 1) %% ncol + 1]
+				cols.out[ii] <<- cols
                 grid.polygon(out$x[1:npt], out$y[1:npt], default.units = 'native',
                     gp = gpar(fill = scol[(k - 1) %% ncol + 1], col = NA))
             }
