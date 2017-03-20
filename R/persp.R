@@ -47,8 +47,6 @@ C_persp = function(plot = NULL, ...)
     par = currentPar(NULL)
     dev.set(playDev())
     
-    
-    
     #information extraction
     xc = yc = zc = xs = ys = zs = 0
     plot = perInit(plot, newpage = FALSE)
@@ -86,7 +84,6 @@ C_persp = function(plot = NULL, ...)
     VT = VT %*% XRotate(phi)
     VT = VT %*% Translate(0.0, 0.0, -r - d)
     trans = VT %*% Perspective(d)
-	print(trans)
                 
     border = plot$border[1];
     if(is.null(plot$lwd)) lwd = 1 else lwd = plot$lwd
@@ -467,8 +464,8 @@ DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ncol = length(col), ltheta
     }
     
     
-    xrange <<- range(polygons[,1], na.rm = TRUE)
-    yrange <<- range(polygons[,2])
+    xrange = range(polygons[,1], na.rm = TRUE)
+    yrange = range(polygons[,2])
     
     grid.polygon(polygons[,1], polygons[,2], id = polygon.id,
                     default.units = 'native', 
@@ -857,7 +854,6 @@ PerspWindow = function(xlim, ylim, zlim, VT, style)
     ## GScale in C
     xrange = GScale(xmin - xadd, xmax + xadd, style)
     yrange = GScale(ymin - yadd, ymax + yadd, style)
-    outs <<- c(xrange, yrange)
     c(xrange, yrange)
   
 }

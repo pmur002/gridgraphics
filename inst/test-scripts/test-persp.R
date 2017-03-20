@@ -1,5 +1,6 @@
 ## testing function
 ## sin surface
+library(gridGraphics)
 testPersp = function(theta=120, phi = 20, expand = 0.5, col = 'White',
                         box = TRUE, border = 'orange', 
                         ticktype = 'simple', nticks = 5, ...) {
@@ -71,18 +72,9 @@ testPersp2 = function(theta=120, phi = 20, expand = 0.5, col = 'orange ',
 }
 
 
-testPersp()
-grid.echo()
 plotdiff(expression(testPersp()), 'sin')
-
-testPersp1()
-grid.echo()
 plotdiff(expression(testPersp1()), 'sin2')
-
-testPersp2()
-grid.echo()
 plotdiff(expression(testPersp2()), 'Torus')
-system('compare Torus-graphics.pdf Torus-grid.pdf diff.pdf')
 
 ## test on theta
 	 
@@ -117,7 +109,7 @@ plotdiff(expression(testPersp(r = 20)), 'persp-19')
 
 ##test on d
 plotdiff(expression(testPersp(d = 0.5)), 'persp-20')
-plotdiff(expression(testPersp(d = 0)), 'persp-21')
+plotdiff(expression(testPersp(d = 1)), 'persp-21')
 plotdiff(expression(testPersp(d = 5)), 'persp-22')
 
 
@@ -184,12 +176,12 @@ plotdiff(expression(testPersp(col.lab = 'red', cex.lab = 1.5,
                               col.axis = 'green', ticktype = 'detail')), 
          'persp-48')
 
-name.graphics = paste('persp-', 1:48, '-graphics.png', sep = '')
-name.grid = paste('persp-', 1:48, '-grid.png', sep= '')
-name.out = paste('out-', 1:48, '.png', sep = '')
-cmd = paste('compare', name.graphics, name.grid, name.out, sep = ' ')
-for(i in 1:48)
-{
-  system(cmd[i])
-}
+#name.graphics = paste('persp-', 1:48, '-graphics.png', sep = '')
+#name.grid = paste('persp-', 1:48, '-grid.png', sep= '')
+#name.out = paste('out-', 1:48, '.png', sep = '')
+#cmd = paste('compare', name.graphics, name.grid, name.out, sep = ' ')
+#for(i in 1:48)
+#{
+#  system(cmd[i])
+#}
 

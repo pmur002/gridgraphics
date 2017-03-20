@@ -52,9 +52,6 @@ C_filledcontour = function(plot)
     ncol = length(scol)
 
     depth = gotovp(TRUE)
-
-    ii = 0
-
     for(i in 1:(nx - 1)){
     for(j in 1:(ny - 1)){
         for(k in 1:(nc - 1)){
@@ -69,12 +66,8 @@ C_filledcontour = function(plot)
                     px, py, pz, npt)
             npt = out$npt
             
-            
             if(npt > 2)
             {
-				ii = ii + 1
-				cols = scol[(k - 1) %% ncol + 1]
-				cols.out[ii] <<- cols
                 grid.polygon(out$x[1:npt], out$y[1:npt], default.units = 'native',
                     gp = gpar(fill = scol[(k - 1) %% ncol + 1], col = NA))
             }
@@ -251,7 +244,7 @@ vFindCutPoints = function(low, high, x1, y1, x2, y2, z1, z2)
 vFindPolygonVertices = function(low,  high,
 		     x1,  x2,  y1,  y2,
 		     z11,  z21,  z12,  z22,
-             npt, colrep){
+             colrep){
 
     v1 = vFindCutPoints(low, high, x1, y1, x2, y1, z11, z21)
     v2 = vFindCutPoints(low, high, y1, x2, y2, x2, z21, z22)
@@ -344,7 +337,7 @@ vC_filledcontour = function(plot)
                 z12 = z12, z22 = z22, colrep = colrep)
                 
     depth = gotovp(TRUE)
-    grid.polygon(out$x, out$y, default.units = 'native', id.length = out$id.length,
+    grid.polygon(out$x, out$y, default.units = 'native', id.lengths = out$id.length,
              gp = gpar(fill = out$cols, col = NA))
     upViewport(depth)
 
