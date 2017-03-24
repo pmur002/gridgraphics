@@ -307,26 +307,33 @@ vC_filledcontour = function(plot)
     s = plot[[5]]
     cols = plot[[6]]
 
-    xt = rep(rep(x, each = length(y)), each = length(s))
-    yt = rep(rep(x, length(x)), each = length(s))
-    zt = rep(as.numeric(z), each = length(s))
+    xt <<- rep(rep(x, each = length(y)), each = length(s))
+    yt <<- rep(rep(y, length(x)), each = length(s))
+    zt <<- rep(as.numeric(z), each = length(s))
     st = rep(s, ((length(x) - 1)) * ((length(y) - 1)))
 
-    xr = rep(x, each = length(y))
-    yr = rep(y, length(x))
-    zr = as.numeric(z)
+    xr <<- rep(x, each = length(y))
+    yr <<- rep(y, length(x))
+    zr <<- as.numeric(z)
 
     ## 1:length(x) + 1:length(y)
-    tot = length(x) * length(y)
+    tot <<- length(x) * length(y)
     det = seq(1, length(xr), by = length(x))
-    x1 = xr[1:(tot - length(x))][-(det - 1)]
-    x2 = xr[(length(x) + 1):tot][-(det - 1)]
-    y1 = yr[1:(tot - length(y))][-(det - 1)]
-    y2 = yr[(length(y) + 1):tot][-det]
-    z11 = zr[1:(tot - length(x))][-(det - 1)]
-    z12 = zr[2:(tot - length(x) + 1)][-(det - 1)]
-    z21 = zr[(length(x) + 1) : (tot - 1)][-(det - 1)]
-    z22 = zr[(length(x) + 2) : (tot)][-(det - 1)]
+    dets <<- det
+    dety <<- seq(1, length(yr), by = length(y))
+    x1 <<- xr[1:(tot - length(x))][-(det - 1)]
+    x2 <<- xr[(length(x) + 1):tot][-(det - 1)]
+    y1 <<- yr[1:(tot - length(y))][-(dety - 1)]
+    y2 <<- yr[(length(y) + 1):tot][-dety]
+    z11 <<- zr[1:(tot - length(x))][-(dety - 1)]
+    z12 <<- zr[2:(tot - length(x) + 1)][-(dety - 1)]
+    z21 <<- zr[(length(x) + 1) : (tot - 1)][-(dety - 1)]
+    z22 <<- zr[(length(x) + 2) : (tot)][-(dety - 1)]
+    
+    #y1 = yr[-seq(0, tot, length(y))][-(det - 1)]
+    #y2 = yr[-seq(1, tot, length(y))][-det]
+
+
 
     ## plus 1:length(k)
     ns = length(s) - 1
