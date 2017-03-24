@@ -1,8 +1,9 @@
 FindPolygonVertices = function(low,  high,
 		     x1,  x2,  y1,  y2,
 		     z11,  z21,  z12,  z22,
-		     x,  y,  z, npt)
+		     x,  y,  z, npt, iii)
 {
+    if(iii == 738){debug(FindPolygonVertices)}
     out = list()
     npt = 0
     #      FindCutPoints(low, high, x1,  y1,  z1,  x2,  y2,  z2,  x, y, z, npt)
@@ -50,12 +51,14 @@ C_filledcontour = function(plot)
     if (nc < 1) warning("no contour values")
 
     ncol = length(scol)
-
+    ii = 0
+    iii = 0
     depth = gotovp(TRUE)
     for(i in 1:(nx - 1)){
     for(j in 1:(ny - 1)){
         for(k in 1:(nc - 1)){
             npt = 0
+            iii = iii + 1
             out = FindPolygonVertices(sc[k], sc[k + 1],
                     x[i], x[i + 1],
                     y[j], y[j + 1],
@@ -63,11 +66,19 @@ C_filledcontour = function(plot)
                     z[i + 1 + (j - 1) * nx],
                     z[i + (j) * nx],
                     z[i + 1 + (j) * nx],
-                    px, py, pz, npt)
+                    px, py, pz, npt, iii = iii)
+            
             npt = out$npt
             
+           #ii = ii + 1
+            #if(ii <= 1000 & npt > 2) {print(out$x)}
             if(npt > 2)
-            {
+            { 
+                ii = ii + 1
+                #a[ii] <<- npt
+                
+                if(ii >= 110 && ii <= 120 ) {print(out$x); print(iii); print(out$npt)}
+                
                 grid.polygon(out$x[1:npt], out$y[1:npt], default.units = 'native',
                     gp = gpar(fill = scol[(k - 1) %% ncol + 1], col = NA))
             }
@@ -207,17 +218,17 @@ vFindCutPoints = function(low, high, x1, y1, x2, y2, z1, z2)
     y_1 = ifelse(z2 < low | z1 > high, NA, y_1)
                 
     c = (z2 - high) / (z2 - z1)
-    x_2 = ifelse(z2 < high, x1, 
+    x_2 = ifelse(z2 < high, NA, 
                 ifelse(z2 == Inf, x1, x2 - c * (x2 - x1)))
     x_2 = ifelse(z2 < low | z1 > high, NA, x_2)
                 
-    y_2 = ifelse(z2 < high, y1, 
+    y_2 = ifelse(z2 < high, NA, 
                 ifelse(z2 == Inf, y1, y1))
     y_2 = ifelse(z2 < low | z1 > high, NA, y_2)
                 
 ## third condiction
-    x..1 = ifelse(low <= z1 & z1 <= high, x1, x1)
-    y..1 = ifelse(low <= z1 & z1 <= high, y1, y1)
+    x..1 = ifelse(low <= z1 & z1 <= high, x1, NA)
+    y..1 = ifelse(low <= z1 & z1 <= high, y1, NA)
     ## inner condiction end
     
 ## outer condiction 
@@ -226,14 +237,22 @@ vFindCutPoints = function(low, high, x1, y1, x2, y2, z1, z2)
                         x..1))
     xout.2 = ifelse(z1 > z2, x.2,
                 ifelse(z1 < z2, x_2,
-                        x..1))						
+                        NA))						
 
     yout.1 = ifelse(z1 > z2, y.1,
                 ifelse(z1 < z2, y_1,
                         y..1))
     yout.2 = ifelse(z1 > z2, y.2,
                 ifelse(z1 < z2, y_2,
-                        y..1))					
+                        NA))			
+                        
+    #hitReturn1 = (z2 > high | z1 < low) 
+    #hitReturn2 = (z2 < low | z1 > high)
+    #hitReturn2 = 
+    #xout.1 = ifelse(hitReturn1, NA, xout.1)
+    #xout.2 = ifelse(hitReturn1, NA, xout.2)
+    #yout.1 = ifelse(hitReturn1, NA, yout.1)
+    #yout.2 = ifelse(hitReturn1, NA, yout.2)
     
     ## return x1, x2, y1, y2
     xout = cbind(xout.1, xout.2)
@@ -246,29 +265,30 @@ vFindPolygonVertices = function(low,  high,
 		     z11,  z21,  z12,  z22,
              colrep){
 
-    v1 = vFindCutPoints(low, high, x1, y1, x2, y1, z11, z21)
-    v2 = vFindCutPoints(low, high, y1, x2, y2, x2, z21, z22)
-    v3 = vFindCutPoints(low, high, x2, y2, x1, y2, z22, z12)
-    v4 = vFindCutPoints(low, high, y2, x1, y1, x1, z12, z11)
+    v1 <<- vFindCutPoints(low, high, x1, y1, x2, y1, z11, z21)
+    v2 <<- vFindCutPoints(low, high, y1, x2, y2, x2, z21, z22)
+    v3 <<- vFindCutPoints(low, high, x2, y2, x1, y2, z22, z12)
+    v4 <<- vFindCutPoints(low, high, y2, x1, y1, x1, z12, z11)
 
-    vx = cbind(v1[[1]], v2[[2]], v3[[1]], v4[[2]])
-    vy = cbind(v1[[2]], v2[[1]], v3[[2]], v4[[1]])
+    vx <<- cbind(v1[[1]], v2[[2]], v3[[1]], v4[[2]])
+    vy <<- cbind(v1[[2]], v2[[1]], v3[[2]], v4[[1]])
     
     ##  track the coordinate for x and y( if non-NA's)
-    index = rowSums(!is.na(vx))
+    index <<- rowSums(!is.na(vx) )
     ## keep if non-NAs row >= 2 (npt >= 2)
     vx = t(vx)
     vy = t(vy)
-    xcoor.na = as.vector(vx[, index >= 2])
-    ycoor.na = as.vector(vy[, index >= 2])
+    xcoor.na <<- as.vector(vx[, index > 2])
+    ycoor.na <<- as.vector(vy[, index > 2])
     ## delete all NA's,
     xcoor = xcoor.na[!is.na(xcoor.na)]
     ycoor = ycoor.na[!is.na(ycoor.na)]
 
-    id.length = index[index != 0]
+    id.length = index[index > 2]
     
-    cols = colrep[index >= 2]
+    cols = colrep[index > 2]
     out = list(x = xcoor, y = ycoor, id.length = id.length, cols = cols)
+    outs <<- out
     out
     
 }

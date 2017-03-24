@@ -243,7 +243,7 @@ FacetShade = function( u, v, Shade = 0.5, Light ) {
     sum^Shade   
 }
 
-shadeCol = function ( z, x, y, xs, ys, zs, col, ncol = length(col), ltheta, lphi, Shade, Light) {
+shadeCol = function( z, x, y, xs, ys, zs, col, ncol = length(col), ltheta, lphi, Shade, Light) {
     u = v = 0
     nx = nrow(z)
     ny = ncol(z)
@@ -259,12 +259,12 @@ shadeCol = function ( z, x, y, xs, ys, zs, col, ncol = length(col), ltheta, lphi
         j = (indx[k]) %/% nx1
         icol = (i + j * nx1) %% ncol + 1
 
-        u[1] = xs * (x[i+1+1] - x[i+1])
-	    u[2] = ys * (y[j+1] - y[j+1+1])
-	    u[3] = zs * (z[(i+1)+j*nx+1] - z[i+(j+1)*nx+1])
-	    v[1] = xs * (x[i+1+1] - x[i+1])
-	    v[2] = ys * (y[j+1+1] - y[j+1])
-	    v[3] = zs * (z[(i+1)+(j+1)*nx+1] - z[i+j*nx+1])
+        u[1] = xs * (x[i + 2] - x[i + 1])
+	    u[2] = ys * (y[j + 1] - y[j + 2])
+	    u[3] = zs * (z[(i + 1)+ j * nx + 1] - z[i + (j + 1) * nx + 1])
+	    v[1] = xs * (x[i + 2] - x[i + 1])
+	    v[2] = ys * (y[j + 2] - y[j + 1])
+	    v[3] = zs * (z[(i + 1) + (j + 1) * nx + 1] - z[i + j * nx + 1])
         icol = (i + j * nx1) %% ncol
 	    shade = FacetShade(u, v, Shade = Shade, Light = Light)
         ##one condiction here..if any bugs then check here...
@@ -462,7 +462,6 @@ DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ncol = length(col), ltheta
     } else {
         cols = rep_len(plot$col, length(polygons[,1]))[polygonOrder]
     }
-    
     
     xrange = range(polygons[,1], na.rm = TRUE)
     yrange = range(polygons[,2])
