@@ -3,7 +3,7 @@ FindPolygonVertices = function(low,  high,
 		     z11,  z21,  z12,  z22,
 		     x,  y,  z, npt, iii)
 {
-    if(iii == 738){debug(FindPolygonVertices)}
+    #if(iii == 2){debug(FindPolygonVertices)}
     out = list()
     npt = 0
     #      FindCutPoints(low, high, x1,  y1,  z1,  x2,  y2,  z2,  x, y, z, npt)
@@ -53,6 +53,7 @@ C_filledcontour = function(plot)
     ncol = length(scol)
     ii = 0
     iii = 0
+    
     depth = gotovp(TRUE)
     for(i in 1:(nx - 1)){
     for(j in 1:(ny - 1)){
@@ -75,9 +76,13 @@ C_filledcontour = function(plot)
             if(npt > 2)
             { 
                 ii = ii + 1
-                #a[ii] <<- npt
+                a[ii] = npt
+               # print(ii)
                 
-                if(ii >= 110 && ii <= 120 ) {print(out$x); print(iii); print(out$npt)}
+                if(ii >= 1 && ii <= 5 ) {
+                    print(out$x); 
+                    print(paste('#of polygons: ', iii)); 
+                    print(paste('npt: ', out$npt))}
                 
                 grid.polygon(out$x[1:npt], out$y[1:npt], default.units = 'native',
                     gp = gpar(fill = scol[(k - 1) %% ncol + 1], col = NA))
@@ -265,30 +270,30 @@ vFindPolygonVertices = function(low,  high,
 		     z11,  z21,  z12,  z22,
              colrep){
 
-    v1 <<- vFindCutPoints(low, high, x1, y1, x2, y1, z11, z21)
-    v2 <<- vFindCutPoints(low, high, y1, x2, y2, x2, z21, z22)
-    v3 <<- vFindCutPoints(low, high, x2, y2, x1, y2, z22, z12)
-    v4 <<- vFindCutPoints(low, high, y2, x1, y1, x1, z12, z11)
+    v1 = vFindCutPoints(low, high, x1, y1, x2, y1, z11, z21)
+    v2 = vFindCutPoints(low, high, y1, x2, y2, x2, z21, z22)
+    v3 = vFindCutPoints(low, high, x2, y2, x1, y2, z22, z12)
+    v4 = vFindCutPoints(low, high, y2, x1, y1, x1, z12, z11)
 
-    vx <<- cbind(v1[[1]], v2[[2]], v3[[1]], v4[[2]])
-    vy <<- cbind(v1[[2]], v2[[1]], v3[[2]], v4[[1]])
+    vx = cbind(v1[[1]], v2[[2]], v3[[1]], v4[[2]])
+    vy = cbind(v1[[2]], v2[[1]], v3[[2]], v4[[1]])
     
     ##  track the coordinate for x and y( if non-NA's)
-    index <<- rowSums(!is.na(vx) )
+    index = rowSums(!is.na(vx) )
     ## keep if non-NAs row >= 2 (npt >= 2)
     vx = t(vx)
     vy = t(vy)
-    xcoor.na <<- as.vector(vx[, index > 2])
-    ycoor.na <<- as.vector(vy[, index > 2])
+    xcoor.na = as.vector(vx[, index > 2])
+    ycoor.na = as.vector(vy[, index > 2])
     ## delete all NA's,
     xcoor = xcoor.na[!is.na(xcoor.na)]
     ycoor = ycoor.na[!is.na(ycoor.na)]
 
     id.length = index[index > 2]
-    
+
     cols = colrep[index > 2]
     out = list(x = xcoor, y = ycoor, id.length = id.length, cols = cols)
-    outs <<- out
+    outs = out
     out
     
 }
@@ -306,54 +311,38 @@ vC_filledcontour = function(plot)
     z = plot[[4]]
     s = plot[[5]]
     cols = plot[[6]]
-
-    xt <<- rep(rep(x, each = length(y)), each = length(s))
-    yt <<- rep(rep(y, length(x)), each = length(s))
-    zt <<- rep(as.numeric(z), each = length(s))
-    st = rep(s, ((length(x) - 1)) * ((length(y) - 1)))
-
-    xr <<- rep(x, each = length(y))
-    yr <<- rep(y, length(x))
-    zr <<- as.numeric(z)
-
-    ## 1:length(x) + 1:length(y)
-    tot <<- length(x) * length(y)
-    det = seq(1, length(xr), by = length(x))
-    dets <<- det
-    dety <<- seq(1, length(yr), by = length(y))
-    x1 <<- xr[1:(tot - length(x))][-(det - 1)]
-    x2 <<- xr[(length(x) + 1):tot][-(det - 1)]
-    y1 <<- yr[1:(tot - length(y))][-(dety - 1)]
-    y2 <<- yr[(length(y) + 1):tot][-dety]
-    z11 <<- zr[1:(tot - length(x))][-(dety - 1)]
-    z12 <<- zr[2:(tot - length(x) + 1)][-(dety - 1)]
-    z21 <<- zr[(length(x) + 1) : (tot - 1)][-(dety - 1)]
-    z22 <<- zr[(length(x) + 2) : (tot)][-(dety - 1)]
     
-    #y1 = yr[-seq(0, tot, length(y))][-(det - 1)]
-    #y2 = yr[-seq(1, tot, length(y))][-det]
+    ns = length(s)
+    nx = length(x)
+    ny = length(y)
 
+    x1 = rep(x[-nx], each = ny - 1)
+    x2 = rep(x[-1], each = ny - 1)
+    y1 = rep(y[-ny], nx - 1)
+    y2 = rep(y[-1], nx - 1)
 
-
+    z11 = as.numeric(t(z[-nx, -ny]))
+    z21 = as.numeric(t(z[-1, -ny ]))
+    z12 = as.numeric(t(z[-nx, -1]))
+    z22 = as.numeric(t(z[-1, -1]))
+    
     ## plus 1:length(k)
-    ns = length(s) - 1
-    x1 = rep(x1, each = ns)
-    x2 = rep(x2, each = ns)
-    y1 = rep(y1, each = ns)
-    y2 = rep(y2, each = ns)
-    z11 = rep(z11, each = ns)
-    z12 = rep(z12, each = ns)
-    z21 = rep(z21, each = ns)
-    z22 = rep(z22, each = ns)
 
-    scut = seq(0, length(st), by = length(s))[-1]
-    low = st[-scut]
-    high = st[-((scut - length(s)) + 1)]
+    x1 = rep(x1, each = ns - 1)
+    x2 = rep(x2, each = ns - 1)
+    y1 = rep(y1, each = ns - 1)
+    y2 = rep(y2, each = ns - 1)
+    z11 = rep(z11, each = ns - 1)
+    z12 = rep(z12, each = ns - 1)
+    z21 = rep(z21, each = ns - 1)
+    z22 = rep(z22, each = ns - 1)
+
+    low = rep(s[-ns], (nx - 1) * (ny - 1))
+    high = rep(s[-1], (nx - 1) * (ny - 1))
     
     ## rep color until the same length of x, then subsetting 
-    k = rep((1:length(s)), (length(x) - 1) * (length(y) - 1))
-    ncol = length(cols)
-    colrep = cols[(k - 1) %% ncol + 1][-scut]
+    colrep = rep(cols, nx * ny)
+    
 
     ## feed color as well as subseeting as x and y
     out = vFindPolygonVertices(
