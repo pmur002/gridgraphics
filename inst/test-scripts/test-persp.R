@@ -71,10 +71,32 @@ testPersp2 = function(theta=120, phi = 20, expand = 0.5, col = 'orange ',
   
 }
 
+testPersp3 = function(){
+    z <- 2 * volcano
+    x <- 10 * (1:nrow(z))
+    y <- 10 * (1:ncol(z))
+    z0 <- min(z) - 20
+    z <- rbind(z0, cbind(z0, z, z0), z0)
+    x <- c(min(x) - 1e-10, x, max(x) + 1e-10)
+    y <- c(min(y) - 1e-10, y, max(y) + 1e-10)
+    fill <- matrix("green3", nrow = nrow(z)-1, ncol = ncol(z)-1)
+    fill[ , i2 <- c(1,ncol(fill))] <- "gray"
+    fill[i1 <- c(1,nrow(fill)) , ] <- "gray"
+    fcol <- fill
+    zi <- volcano[ -1,-1] + volcano[ -1,-61] +
+    volcano[-87,-1] + volcano[-87,-61]  ## / 4
+    fcol[-i1,-i2] <-
+    terrain.colors(20)[cut(zi,
+                           stats::quantile(zi, seq(0,1, length.out = 21)),
+                           include.lowest = TRUE)]
+    persp(x, y, 2*z, theta = 110, phi = 40, col = fcol, scale = FALSE,
+    ltheta = -120, shade = 0.4, border = NA, box = FALSE)
+}
 
 plotdiff(expression(testPersp(box = FALSE)), 'sin')
 plotdiff(expression(testPersp1(box = FALSE)), 'sin2')
 plotdiff(expression(testPersp2(box = FALSE)), 'Torus')
+plotdiff(expression(testPersp3()), 'volcano')
 
 ## test on theta
 	plotdiff(expression(testPersp(30)), 'persp-1')
@@ -125,7 +147,8 @@ plotdiff(expression(testPersp(box = FALSE, axes = FALSE)), 'persp-16')
 
 ## test on ticktype
 plotdiff(expression(
-  testPersp(ticktype = 'detail', axes = TRUE, box = TRUE)), 'persp-17')
+            testPersp(ticktype = 'detail', axes = TRUE, box = TRUE)), 'persp-17',
+            antialias = FALSE)
 
 ## test on lty
 plotdiff(expression(testPersp(lty = 'dotted')), 'persp-18')

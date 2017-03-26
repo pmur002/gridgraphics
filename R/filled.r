@@ -1,22 +1,21 @@
-FindPolygonVertices = function(low,  high,
+lFindPolygonVertices = function(low,  high,
 		     x1,  x2,  y1,  y2,
 		     z11,  z21,  z12,  z22,
 		     x,  y,  z, npt, iii)
 {
-    #if(iii == 2){debug(FindPolygonVertices)}
     out = list()
     npt = 0
     #      FindCutPoints(low, high, x1,  y1,  z1,  x2,  y2,  z2,  x, y, z, npt)
-    out1 = FindCutPoints(low, high, x1,  y1,  z11, x2,  y1,  z21, x, y, z, npt)
+    out1 = lFindCutPoints(low, high, x1,  y1,  z11, x2,  y1,  z21, x, y, z, npt)
     x = out1$x; y = out1$y; z = out1$z; npt = out1$npt
 
-    out2 = FindCutPoints(low, high, y1,  x2,  z21, y2,  x2,  z22, y, x, z, npt)
+    out2 = lFindCutPoints(low, high, y1,  x2,  z21, y2,  x2,  z22, y, x, z, npt)
     x = out2$x; y = out2$y; z = out2$z; npt = out2$npt
 
-    out3 = FindCutPoints(low, high, x2,  y2,  z22, x1,  y2,  z12, x, y, z, npt)
+    out3 = lFindCutPoints(low, high, x2,  y2,  z22, x1,  y2,  z12, x, y, z, npt)
     x = out3$x; y = out3$y; z = out3$z; npt = out3$npt
             
-    out4 = FindCutPoints(low, high, y2,  x1,  z12, y1,  x1,  z11, y, x, z, npt)
+    out4 = lFindCutPoints(low, high, y2,  x1,  z12, y1,  x1,  z11, y, x, z, npt)
 
     out$x = out1$x + out2$y + out3$x + out4$y
     out$y = out1$y + out2$x + out3$y + out4$x
@@ -24,10 +23,7 @@ FindPolygonVertices = function(low,  high,
     out
 }
 
-
-
-
-C_filledcontour = function(plot)
+lC_filledcontour = function(plot)
 {
     dev.set(recordDev())
     par = currentPar(NULL)
@@ -51,8 +47,9 @@ C_filledcontour = function(plot)
     if (nc < 1) warning("no contour values")
 
     ncol = length(scol)
-    ii = 0
-    iii = 0
+    
+    # debug
+    # ii = 0; iii = 0 ## a = 0
     
     depth = gotovp(TRUE)
     for(i in 1:(nx - 1)){
@@ -60,7 +57,7 @@ C_filledcontour = function(plot)
         for(k in 1:(nc - 1)){
             npt = 0
             iii = iii + 1
-            out = FindPolygonVertices(sc[k], sc[k + 1],
+            out = lFindPolygonVertices(sc[k], sc[k + 1],
                     x[i], x[i + 1],
                     y[j], y[j + 1],
                     z[i + (j - 1) * nx],
@@ -71,13 +68,14 @@ C_filledcontour = function(plot)
             
             npt = out$npt
             
-           #ii = ii + 1
-            #if(ii <= 1000 & npt > 2) {print(out$x)}
+            ## debug
+            # ii = ii + 1
+            # if(ii <= 1000 & npt > 2) {print(out$x)}
             if(npt > 2)
             { 
                 ii = ii + 1
                 a[ii] = npt
-               # print(ii)
+                # print(ii)
                 
                 if(ii >= 1 && ii <= 5 ) {
                     print(out$x); 
@@ -95,7 +93,7 @@ C_filledcontour = function(plot)
 }
 
 
-FindCutPoints = function( low,  high,
+lFindCutPoints = function( low,  high,
 	       x1,  y1,  z1,
 	       x2,  y2,  z2,
 	       x,  y,  z,
@@ -103,10 +101,8 @@ FindCutPoints = function( low,  high,
 {
     x = y = z = numeric(8)
     if (z1 > z2 ) {
-        ## first column
         if (z2 > high || z1 < low){
             return(out = list(x = x, y = y, z = z, npt = npt))
-            # print('hey')
             }
 
         if (z1 < high) {
@@ -126,7 +122,6 @@ FindCutPoints = function( low,  high,
             z[npt + 1] = z1 + c * (z2 - z1)
             npt = npt + 1
         }
-        ## second column
         if (z2 == -Inf) {
             x[npt + 1] = x1
             y[npt + 1] = y1
@@ -142,7 +137,6 @@ FindCutPoints = function( low,  high,
     } else if (z1 < z2) {
         if (z2 < low || z1 > high) {
                 return(out = list(x = x, y = y, z = z, npt = npt))
-                # print('hi')
                 }
             if (z1 > low) {
                 x[npt + 1] = x1
@@ -163,7 +157,6 @@ FindCutPoints = function( low,  high,
             }
             
             if (z2 < high) {
-                # print('sup')
             } else if (z2 == Inf) {
                 x[npt + 1] = x1
                 y[npt + 1] = y1
@@ -190,7 +183,7 @@ FindCutPoints = function( low,  high,
 
 
 ## vectorization version
-vFindCutPoints = function(low, high, x1, y1, x2, y2, z1, z2)
+FindCutPoints = function(low, high, x1, y1, x2, y2, z1, z2)
 {
 ## inner condiction begin
     ## first ocndiction
@@ -231,10 +224,10 @@ vFindCutPoints = function(low, high, x1, y1, x2, y2, z1, z2)
                 ifelse(z2 == Inf, y1, y1))
     y_2 = ifelse(z2 < low | z1 > high, NA, y_2)
                 
-## third condiction
+    ## third condiction
     x..1 = ifelse(low <= z1 & z1 <= high, x1, NA)
     y..1 = ifelse(low <= z1 & z1 <= high, y1, NA)
-    ## inner condiction end
+## inner condiction end
     
 ## outer condiction 
     xout.1 = ifelse(z1 > z2, x.1,
@@ -250,30 +243,23 @@ vFindCutPoints = function(low, high, x1, y1, x2, y2, z1, z2)
     yout.2 = ifelse(z1 > z2, y.2,
                 ifelse(z1 < z2, y_2,
                         NA))			
-                        
-    #hitReturn1 = (z2 > high | z1 < low) 
-    #hitReturn2 = (z2 < low | z1 > high)
-    #hitReturn2 = 
-    #xout.1 = ifelse(hitReturn1, NA, xout.1)
-    #xout.2 = ifelse(hitReturn1, NA, xout.2)
-    #yout.1 = ifelse(hitReturn1, NA, yout.1)
-    #yout.2 = ifelse(hitReturn1, NA, yout.2)
-    
+## outer condiction end
+
     ## return x1, x2, y1, y2
     xout = cbind(xout.1, xout.2)
     yout = cbind(yout.1, yout.2)
     list(xout, yout)
 }
 
-vFindPolygonVertices = function(low,  high,
+FindPolygonVertices = function(low,  high,
 		     x1,  x2,  y1,  y2,
 		     z11,  z21,  z12,  z22,
              colrep){
 
-    v1 = vFindCutPoints(low, high, x1, y1, x2, y1, z11, z21)
-    v2 = vFindCutPoints(low, high, y1, x2, y2, x2, z21, z22)
-    v3 = vFindCutPoints(low, high, x2, y2, x1, y2, z22, z12)
-    v4 = vFindCutPoints(low, high, y2, x1, y1, x1, z12, z11)
+    v1 = FindCutPoints(low, high, x1, y1, x2, y1, z11, z21)
+    v2 = FindCutPoints(low, high, y1, x2, y2, x2, z21, z22)
+    v3 = FindCutPoints(low, high, x2, y2, x1, y2, z22, z12)
+    v4 = FindCutPoints(low, high, y2, x1, y1, x1, z12, z11)
 
     vx = cbind(v1[[1]], v2[[2]], v3[[1]], v4[[2]])
     vy = cbind(v1[[2]], v2[[1]], v3[[2]], v4[[1]])
@@ -290,18 +276,16 @@ vFindPolygonVertices = function(low,  high,
     ycoor = ycoor.na[!is.na(ycoor.na)]
 
     id.length = index[index > 2]
-
     cols = colrep[index > 2]
+    
     out = list(x = xcoor, y = ycoor, id.length = id.length, cols = cols)
     outs = out
     out
-    
 }
 
 
-vC_filledcontour = function(plot)
+C_filledcontour = function(plot)
 {
-
     dev.set(recordDev())
     par = currentPar(NULL)
     dev.set(playDev())
@@ -326,8 +310,6 @@ vC_filledcontour = function(plot)
     z12 = as.numeric(t(z[-nx, -1]))
     z22 = as.numeric(t(z[-1, -1]))
     
-    ## plus 1:length(k)
-
     x1 = rep(x1, each = ns - 1)
     x2 = rep(x2, each = ns - 1)
     y1 = rep(y1, each = ns - 1)
@@ -336,26 +318,23 @@ vC_filledcontour = function(plot)
     z12 = rep(z12, each = ns - 1)
     z21 = rep(z21, each = ns - 1)
     z22 = rep(z22, each = ns - 1)
-
     low = rep(s[-ns], (nx - 1) * (ny - 1))
     high = rep(s[-1], (nx - 1) * (ny - 1))
     
     ## rep color until the same length of x, then subsetting 
     colrep = rep(cols, nx * ny)
     
-
     ## feed color as well as subseeting as x and y
-    out = vFindPolygonVertices(
+    out = FindPolygonVertices(
                 low = low, high = high,
                 x1 = x1, x2 = x2, 
                 y1 = y1, y2 = y2,
                 z11 = z11, z21 = z21, 
                 z12 = z12, z22 = z22, colrep = colrep)
-                
+    ## actual drawing
     depth = gotovp(TRUE)
     grid.polygon(out$x, out$y, default.units = 'native', id.lengths = out$id.length,
              gp = gpar(fill = out$cols, col = NA))
     upViewport(depth)
-
 }
 

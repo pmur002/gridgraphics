@@ -145,6 +145,9 @@ C_persp = function(plot = NULL, ...)
     EdgeDone = PerspBox(1, xr, yr, zr, EdgeDone, trans, 'dotted', lwd)
     upViewport()
     upViewport(depth)
+    
+    #depth = gotovp(TRUE)
+    #pushViewport(vp)
 
 }
 
