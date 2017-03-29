@@ -101,10 +101,11 @@ C_persp = function(plot = NULL, ...)
 
     
     # create a viewport inside a 'viewport'
+
+       
     depth = gotovp(TRUE)
     lim = PerspWindow(xr, yr, zr, trans, 's')
-
-    upViewport(depth) 
+    upViewport(depth)
     
     incrementWindowAlpha()
     setWindowPlotAlpha(plotAlpha())
