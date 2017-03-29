@@ -103,20 +103,24 @@ C_persp = function(plot = NULL, ...)
     # create a viewport inside a 'viewport'
     depth = gotovp(TRUE)
     lim = PerspWindow(xr, yr, zr, trans, 's')
-    vp = viewport(0.5, 0.5, 1, 1, default.units = 'native',
-                    xscale = lim[1:2], yscale = lim[3:4])
-    upViewport(depth)
+
+    upViewport(depth) 
     
+    incrementWindowAlpha()
+    setWindowPlotAlpha(plotAlpha())
+    setUpUsr(lim)
+    
+
     if (dbox == TRUE) {
         EdgeDone = rep(0, 12)
         if(axes == TRUE){
             depth = gotovp(TRUE)
-            pushViewport(vp)
+           # pushViewport(vp)
             PerspAxes(xr, yr, zr, ##x, y, z
                     xlab, ylab, zlab, ## xlab, xenc, ylab, yenc, zlab, zenc
                     nTicks, tickType, trans, ## nTicks, tickType, VT
                     lwd, lty, col.axis, col.lab, cex.lab) ## lwd, lty, col.axis, col.lab, cex.lab
-            upViewport()
+            #upViewport()
             upViewport(depth)} 
     } else {
         EdgeDone = rep(1, 12)
@@ -126,24 +130,24 @@ C_persp = function(plot = NULL, ...)
     ## draw the behind face first
     ## return the EdgeDone inorder to not drawing the same Edege two times.
     depth = gotovp(TRUE)
-    pushViewport(vp)
+    #pushViewport(vp)
     EdgeDone = PerspBox(0, xr, yr, zr, EdgeDone, trans, 1, lwd)
-    upViewport()
+    #upViewport()
     upViewport(depth)
     
     depth = gotovp(FALSE)
-    pushViewport(vp)
+    #pushViewport(vp)
     DrawFacets(plot = plot, z = plot$z, x = plot$x, y = plot$y,     ## basic
                 xs = 1/xs, ys = 1/ys, zs = expand/zs,               ## Light
                 col = plot$col, length(plot$col),                   ## cols
                 ltheta = ltheta, lphi = lphi, Shade = shade, Light = Light, trans = trans)
-    upViewport()
+    #upViewport()
     upViewport(depth)
 
     depth = gotovp(TRUE)
-    pushViewport(vp)
+    #pushViewport(vp)
     EdgeDone = PerspBox(1, xr, yr, zr, EdgeDone, trans, 'dotted', lwd)
-    upViewport()
+    #upViewport()
     upViewport(depth)
     
     #depth = gotovp(TRUE)
