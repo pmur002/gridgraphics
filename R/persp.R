@@ -91,20 +91,17 @@ C_persp = function(plot = NULL, ...)
     if(any(!(is.numeric(xr) & is.numeric(yr) & is.numeric(zr)))) stop("invalid limits")
     if(any(!(is.finite(xr) & is.finite(yr) & is.finite(zr)))) stop("invalid limits")
     
-
     
     if(!scale) xs = ys = zs = max(xs, ys, zs)
     if(is.finite(ltheta) && is.finite(lphi) && is.finite(shade))
     DoLighting = TRUE else DoLighting = FALSE
     if (DoLighting) Light = SetUpLight(ltheta, lphi)
     
-
-    
     # create a viewport inside a 'viewport'
-
-       
     depth = gotovp(TRUE)
-    lim = PerspWindow(xr, yr, zr, trans, 's')
+    lim = PerspWindow(xr, yr, zr, trans, 'r')
+    #vp = viewport(0.5, 0.5, 1, 1, default.units = 'npc',
+    #                xscale = lim[1:2], yscale = lim[3:4])
     upViewport(depth)
     
     incrementWindowAlpha()
@@ -116,7 +113,7 @@ C_persp = function(plot = NULL, ...)
         EdgeDone = rep(0, 12)
         if(axes == TRUE){
             depth = gotovp(TRUE)
-           # pushViewport(vp)
+            #pushViewport(vp)
             PerspAxes(xr, yr, zr, ##x, y, z
                     xlab, ylab, zlab, ## xlab, xenc, ylab, yenc, zlab, zenc
                     nTicks, tickType, trans, ## nTicks, tickType, VT
