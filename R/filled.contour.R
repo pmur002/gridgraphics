@@ -186,65 +186,101 @@ lFindCutPoints = function( low,  high,
 
 
 ## vectorization version
-FindCutPoints = function(low, high, x1, y1, x2, y2, z1, z2)
+notworkingFindCutPoints = function(low, high, x1, y1, x2, y2, z1, z2)
 {
 ## inner condiction begin
     ## first ocndiction
     c = (z1 - high) / (z1 - z2)
-    x.1 = ifelse(z1 < high, x1, 
-              ifelse(z1 == Inf, x2, x1 + c * (x2 - x1)))
-    x.1 = ifelse(z2 > high | z1 < low, NA, x.1)
-                
-    y.1 = ifelse(z1 < high, y1, 
-               ifelse(z1 == Inf, y1, y1))
-    y.1 = ifelse(z2 > high | z1 < low, NA, y.1)
+
+    
+    cond1 = z1 < high
+    cond2 = z1 == Inf
+    cond3 = z2 > high | z1 < low
+    
+    X.1 = x1
+    X.1[cond1] = x1
+    X.1[cond2] = x2
+    X.1[!(cond1 | cond1)] = x1 + c * (x2 - x1)
+    X.1[cond3] = NA
+
+    Y.1 = y1
+    Y.1[cond3] = NA
+    
+    #x.1 = ifelse(cond1, x1, 
+    #          ifelse(cond2, x2, x1 + c * (x2 - x1)))
+    #x.1 = ifelse(cond3, NA, x.1)
+    #y.1 = ifelse(cond1, y1, 
+    #           ifelse(cond2, y1, y1))
+    #y.1 = ifelse(cond3, NA, y.1)
+    
+    cond4 = z2 == -Inf
+    cond5 = z2 <= low
+    cond6 = z2 > high | z1 < low
 
     c = (z2 -low) / (z2 - z1)
-    x.2 = ifelse(z2 == -Inf, x1,
-             ifelse(z2 <= low, x2 - c * (x2 - x1), NA))
-    x.2 = ifelse(z2 > high | z1 < low, NA, x.2)
-             
-    y.2 = ifelse(z2 == -Inf, y1,
-              ifelse(z2 <= low, y1, NA))
-    y.2 = ifelse(z2 > high | z1 < low, NA, y.2)
-
+    X.2 = x1
+    X.2[cond4] = x1
+    X.2[cond5] = x2 - c * (x2 - x1)
+    X.2[!(cond4 | cond5)] = NA
+    X.2[cond6] = NA
+    
+    Y.2 = y1 
+    Y.2[!cond4 | !cond5] = NA
+    Y.2[cond6] = NA
+    
     ## second condiction
+    cond7 = z1 > low
+    cond8 = z1 == -Inf
+    cond9 = z2 < low | z1 > high
+    
     c = (z1 - low) / (z1 - z2)
-    x_1 = ifelse(z1 > low, x1, 
-                ifelse(z1 == -Inf, x2, x1 + c * (x2 - x1)))
-    x_1 = ifelse(z2 < low | z1 > high, NA, x_1)
+    
+    X_1 = x1
+    
+    
+    x_1 = ifelse(cond7, x1, 
+                ifelse(cond8, x2, x1 + c * (x2 - x1)))
+    x_1 = ifelse(cond9, NA, x_1)
                 
-    y_1 = ifelse(z1 > low, y1, 
-                ifelse(z1 == -Inf, y1, y1))
-    y_1 = ifelse(z2 < low | z1 > high, NA, y_1)
+    y_1 = ifelse(cond7, y1, 
+                ifelse(cond8, y1, y1))
+    y_1 = ifelse(cond9, NA, y_1)
+    
+    cond10 = z2 < high
+    cond11 = z2 == Inf
+    cond12 = z2 < low | z1 > high
                 
     c = (z2 - high) / (z2 - z1)
-    x_2 = ifelse(z2 < high, NA, 
-                ifelse(z2 == Inf, x1, x2 - c * (x2 - x1)))
-    x_2 = ifelse(z2 < low | z1 > high, NA, x_2)
+    x_2 = ifelse(cond10, NA, 
+                ifelse(cond11, x1, x2 - c * (x2 - x1)))
+    x_2 = ifelse(cond12, NA, x_2)
                 
-    y_2 = ifelse(z2 < high, NA, 
-                ifelse(z2 == Inf, y1, y1))
-    y_2 = ifelse(z2 < low | z1 > high, NA, y_2)
+    y_2 = ifelse(cond10, NA, 
+                ifelse(cond11, y1, y1))
+    y_2 = ifelse(cond12, NA, y_2)
                 
     ## third condiction
-    x..1 = ifelse(low <= z1 & z1 <= high, x1, NA)
-    y..1 = ifelse(low <= z1 & z1 <= high, y1, NA)
+    cond13 = low <= z1 & z1 <= high
+    x..1 = ifelse(cond13, x1, NA)
+    y..1 = ifelse(cond13, y1, NA)
 ## inner condiction end
     
 ## outer condiction 
-    xout.1 = ifelse(z1 > z2, x.1,
-                ifelse(z1 < z2, x_1,
+    cond14 = z1 > z2
+    cond15 = z1 < z2
+
+    xout.1 = ifelse(cond14, x.1,
+                ifelse(cond15, x_1,
                         x..1))
-    xout.2 = ifelse(z1 > z2, x.2,
-                ifelse(z1 < z2, x_2,
+    xout.2 = ifelse(cond14, x.2,
+                ifelse(cond15, x_2,
                         NA))						
 
-    yout.1 = ifelse(z1 > z2, y.1,
-                ifelse(z1 < z2, y_1,
+    yout.1 = ifelse(cond14, y.1,
+                ifelse(cond15, y_1,
                         y..1))
-    yout.2 = ifelse(z1 > z2, y.2,
-                ifelse(z1 < z2, y_2,
+    yout.2 = ifelse(cond14, y.2,
+                ifelse(cond15, y_2,
                         NA))			
 ## outer condiction end
 
@@ -341,3 +377,90 @@ C_filledcontour = function(plot)
     upViewport(depth)
 }
 
+FindCutPoints = function(low, high, x1, y1, x2, y2, z1, z2)
+{
+## inner condiction begin
+    ## first ocndiction
+    c = (z1 - high) / (z1 - z2)
+    cond1 = z1 < high
+    cond2 = z1 == Inf
+    cond3 = z2 > high | z1 < low
+    
+    x.1 = ifelse(cond1, x1, 
+              ifelse(cond2, x2, x1 + c * (x2 - x1)))
+    x.1 = ifelse(cond3, NA, x.1)
+                
+    y.1 = ifelse(cond1, y1, 
+               ifelse(cond2, y1, y1))
+    y.1 = ifelse(cond3, NA, y.1)
+    
+    cond4 = z2 == -Inf
+    cond5 = z2 <= low
+    cond6 = z2 > high | z1 < low
+
+    c = (z2 -low) / (z2 - z1)
+    x.2 = ifelse(cond4, x1,
+             ifelse(cond5, x2 - c * (x2 - x1), NA))
+    x.2 = ifelse(cond6, NA, x.2)
+             
+    y.2 = ifelse(cond4, y1,
+              ifelse(cond5, y1, NA))
+    y.2 = ifelse(cond6, NA, y.2)
+
+    ## second condiction
+    cond7 = z1 > low
+    cond8 = z1 == -Inf
+    cond9 = z2 < low | z1 > high
+    
+    c = (z1 - low) / (z1 - z2)
+    x_1 = ifelse(cond7, x1, 
+                ifelse(cond8, x2, x1 + c * (x2 - x1)))
+    x_1 = ifelse(cond9, NA, x_1)
+                
+    y_1 = ifelse(cond7, y1, 
+                ifelse(cond8, y1, y1))
+    y_1 = ifelse(cond9, NA, y_1)
+    
+    cond10 = z2 < high
+    cond11 = z2 == Inf
+    cond12 = z2 < low | z1 > high
+                
+    c = (z2 - high) / (z2 - z1)
+    x_2 = ifelse(cond10, NA, 
+                ifelse(cond11, x1, x2 - c * (x2 - x1)))
+    x_2 = ifelse(cond12, NA, x_2)
+                
+    y_2 = ifelse(cond10, NA, 
+                ifelse(cond11, y1, y1))
+    y_2 = ifelse(cond12, NA, y_2)
+                
+    ## third condiction
+    cond13 = low <= z1 & z1 <= high
+    x..1 = ifelse(cond13, x1, NA)
+    y..1 = ifelse(cond13, y1, NA)
+## inner condiction end
+    
+## outer condiction 
+    cond14 = z1 > z2
+    cond15 = z1 < z2
+
+    xout.1 = ifelse(cond14, x.1,
+                ifelse(cond15, x_1,
+                        x..1))
+    xout.2 = ifelse(cond14, x.2,
+                ifelse(cond15, x_2,
+                        NA))						
+
+    yout.1 = ifelse(cond14, y.1,
+                ifelse(cond15, y_1,
+                        y..1))
+    yout.2 = ifelse(cond14, y.2,
+                ifelse(cond15, y_2,
+                        NA))			
+## outer condiction end
+
+    ## return x1, x2, y1, y2
+    xout = cbind(xout.1, xout.2)
+    yout = cbind(yout.1, yout.2)
+    list(xout, yout)
+}

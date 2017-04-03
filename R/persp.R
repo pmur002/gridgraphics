@@ -37,10 +37,7 @@ perInit = function ( plot, newpage = FALSE, dbox = TRUE ) {
     out
 }
 
-
-## actual drawing by passing the plot into the function
-## calculation are done from the function of the 'method.r' file
-## only simple function call and few calculation are been done on this function
+## main call 
 C_persp = function(plot = NULL, ...)
 {
     dev.set(recordDev())
@@ -285,10 +282,7 @@ shadeCol = function( z, x, y, xs, ys, zs, col, ncol = length(col), ltheta, lphi,
 
 ## font = 1 -> draw front face
 ## x, y, z are the range of x, y, z-axis
-## EdgeDone is not been used in this time
 ## VT = trans
-## lty = lty..
-## a function from C
 PerspBox = function(front = 1, x, y, z, EdgeDone, VT, lty, lwd = lwd )
 {
     u0 = u1 = u2 = u3 = 0
@@ -477,11 +471,10 @@ DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ncol = length(col), ltheta
 
 
 }
+
 ## method for check wheater the axes is front or behind.
 ## return a boxInfo that contain a vector of logical value that tells which face is
 ## front or behind. and a vector of points order as: x1, y1, z1, x2, y2, z2 and so on 
-
-## still need to understand this algorithm... 
 per.box = function(xlim, ylim, zlim, trans){
         
     Near = vector(length = 6)
@@ -529,7 +522,7 @@ lowest = function (y1, y2, y3, y4) {
     (y1 <= y2) && (y1 <= y3) && (y1 <= y4)		
 }
 
-labelAngle = function(x1, y1, x2, y2){
+labelAngle = function(x1, y1, x2, y2){  
 
     dx = abs(x2 - x1)
     if ( x2 > x1 ) {
@@ -537,7 +530,7 @@ labelAngle = function(x1, y1, x2, y2){
     } else {
         dy = y1 - y2
     }
-
+    
     if (dx == 0) {
         if( dy > 0 ) {
             angle = 90
