@@ -96,7 +96,7 @@ testPersp3 = function(){
 plotdiff(expression(testPersp(box = FALSE)), 'sin')
 plotdiff(expression(testPersp1(box = FALSE)), 'sin2')
 plotdiff(expression(testPersp2(box = FALSE)), 'Torus')
-plotdiff(expression(testPersp3()), 'volcano')
+plotdiff(expression(testPersp3()), 'volcano', antialias = FALSE)
 
 #### other bugs on axis
 plotdiff(expression(testPersp2(ticktype = 'detail')), 'volcano')
