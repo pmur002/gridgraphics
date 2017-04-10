@@ -98,6 +98,9 @@ plotdiff(expression(testPersp1(box = FALSE)), 'sin2')
 plotdiff(expression(testPersp2(box = FALSE)), 'Torus')
 plotdiff(expression(testPersp3()), 'volcano')
 
+#### other bugs on axis
+plotdiff(expression(testPersp2(ticktype = 'detail')), 'volcano')
+
 ## test on theta
 	plotdiff(expression(testPersp(30)), 'persp-1')
 

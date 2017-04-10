@@ -49,7 +49,7 @@ lC_filledcontour = function(plot)
     ncol = length(scol)
     
     # debug
-    # ii = 0; iii = 0 ## a = 0
+     ii = 0; iii = 0 ; a = 0
     
     depth = gotovp(TRUE)
     for(i in 1:(nx - 1)){

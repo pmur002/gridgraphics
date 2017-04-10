@@ -33,10 +33,95 @@ f3 = function()
 }
 
 
+f4 = function()
+{
+  x = y = seq(-4*pi, 4*pi, len = 60)
+  r = sqrt(outer(x^2, y^2, "+"))
+  filled.contour(cos(r^2)*exp(-r/(2*pi)), axes = FALSE, color = heat.colors)
+}
 
+f5 = function()
+{
+  x = y = seq(-1, 1, len = 30)
+  r = log(outer(x^2, y^2, "+"))
+  filled.contour(cos(r^2)*exp(-r/(2*pi)), axes = FALSE, color = rainbow)
+}
+
+
+
+f6 = function()
+{
+  d = c(0.4, 0.4, 0.7,-1.0,-0.1, 0.6,-0.4, 0.6,-0.4, 1.3, 0.7,-0.4, 1.1, 1.3, 0.6, 0.1,-0.0,-0.8,-0.8,-1.0 ,
+           0.4,-0.4, 0.4,-1.2,-0.7, 0.4,-0.9, 0.5,-0.9, 1.2, 0.5,-1.0, 1.3, 1.1, 0.5,-0.0,-0.1,-1.2,-1.0,-0.9 ,
+           0.7, 0.4, 0.1,-1.2,-0.2, 0.5,-0.6, 0.6,-0.2, 0.9, 0.6,-0.5, 1.1, 0.8, 0.6, 0.1,-0.4,-0.9,-0.7,-0.8 ,
+           -1.0,-1.2,-1.2,-4.4,-1.9,-0.8,-2.2,-1.0,-2.2, 0.0,-0.3,-2.0,-0.2, 0.2,-0.8,-1.6,-1.9,-2.4,-2.3,-2.6 ,
+           -0.1,-0.7,-0.2,-1.9,-2.0,-0.5,-1.9,-0.3,-1.7, 0.4,-0.2,-1.9, 0.3, 0.4,-0.3,-0.8,-0.9,-2.1,-1.8,-2.0 ,
+           0.6, 0.4, 0.5,-0.8,-0.5,-0.1,-0.8, 0.6,-0.5, 1.0, 0.5,-0.7, 0.8, 1.0, 0.5, 0.1,-0.3,-0.9,-0.7,-1.1 ,
+           -0.4,-0.9,-0.6,-2.2,-1.9,-0.8,-2.7,-0.6,-2.0, 0.3,-0.3,-2.3,-0.0,-0.0,-0.6,-1.1,-1.3,-2.4,-2.0,-2.2 ,
+           0.6, 0.5, 0.6,-1.0,-0.3, 0.6,-0.6, 0.1,-0.8, 1.3, 0.8,-0.8, 1.1, 1.3, 0.4, 0.1, 0.1,-0.8,-1.0,-1.0 ,
+           -0.4,-0.9,-0.2,-2.2,-1.7,-0.5,-2.0,-0.8,-2.9, 0.3,-0.4,-2.2,-0.0,-0.0,-0.7,-0.7,-1.3,-2.4,-2.1,-2.6 ,
+           1.3, 1.2, 0.9, 0.0, 0.4, 1.0, 0.3, 1.3, 0.3, 1.1, 1.0, 0.2, 0.7, 1.9, 0.9,-0.2, 0.3, 0.1,-0.4,-0.2 ,
+           0.7, 0.5, 0.6,-0.3,-0.2, 0.5,-0.3, 0.8,-0.4, 1.0, 0.3,-0.3, 1.0, 1.1, 0.6, 0.1, 0.3,-0.7,-0.5,-0.6 ,
+           -0.4,-1.0,-0.5,-2.0,-1.9,-0.7,-2.3,-0.8,-2.2, 0.2,-0.3,-2.7, 0.0,-0.0,-0.6,-1.0,-1.1,-2.3,-2.1,-2.4 ,
+           1.1, 1.3, 1.1,-0.2, 0.3, 0.8,-0.0, 1.1,-0.0, 0.7, 1.0, 0.0, 1.6, 0.8, 1.0, 0.8, 0.7,-0.2,-0.2,-0.2 ,
+           1.3, 1.1, 0.8, 0.2, 0.4, 1.0,-0.0, 1.3,-0.0, 1.9, 1.1,-0.0, 0.8, 1.2, 1.1, 0.0, 0.2,-0.1,-0.4, 0.0 ,
+           0.6, 0.5, 0.6,-0.8,-0.3, 0.5,-0.6, 0.4,-0.7, 0.9, 0.6,-0.6, 1.0, 1.1,-0.2, 0.1,-0.0,-0.9,-0.6,-1.2 ,
+           0.1,-0.0, 0.1,-1.6,-0.8, 0.1,-1.1, 0.1,-0.7,-0.2, 0.1,-1.0, 0.8, 0.0, 0.1,-0.6,-0.4,-1.2,-1.3,-1.4 ,
+           -0.0,-0.1,-0.4,-1.9,-0.9,-0.3,-1.3, 0.1,-1.3, 0.3, 0.3,-1.1, 0.7, 0.2,-0.0,-0.4,-1.3,-1.4,-1.6,-1.9 ,
+           -0.8,-1.2,-0.9,-2.4,-2.1,-0.9,-2.4,-0.8,-2.4, 0.1,-0.7,-2.3,-0.2,-0.1,-0.9,-1.2,-1.4,-3.0,-2.3,-2.5 ,
+           -0.8,-1.0,-0.7,-2.3,-1.8,-0.7,-2.0,-1.0,-2.1,-0.4,-0.5,-2.1,-0.2,-0.4,-0.6,-1.3,-1.6,-2.3,-2.3,-2.4 ,
+           -1.0,-0.9,-0.8,-2.6,-2.0,-1.1,-2.2,-1.0,-2.6,-0.2,-0.6,-2.4,-0.2, 0.0,-1.2,-1.4,-1.9,-2.5,-2.4,-3.3 )
+  d = matrix(d, nr = 20)
+  filled.contour(d, axes = FALSE, color = heat.colors)
+}
+
+f7 = function()
+{
+  sy = function(x)  .08 * x * 1./ sqrt(1. + .0001 * x)
+  sz = function(x)  .06 * x * 1./ sqrt(1. + .0015 * x)
+  x = seq(100,10000,200)
+  y = seq(-500,500,50)
+  ubar =   5.      # mean wind speed
+  height = 30.      # stack height (in m!)
+  qout =   1.0e6  # discharge ug/s
+  gpm = function(a,b)
+  {
+    # the input variable "a" is X, the downwind distance
+    # the input variable "b" is y, the crosswind distance
+    # Model Input Parameters
+    ubar =   5.      # mean wind speed
+    height = 30.      # stack height (in m!)
+    qout =   1.0e6  # discharge ug/s
+    # Here is the actual GPM for ground level concentrations
+    conc = qout / (pi * sy(a) * sz(a) * ubar) * 
+      exp(-1*(b*b/(2.*sy(a)*sy(a))+height*height/(2.*sz(a)*sz(a))))
+    # tell the function to return "conc" as its output
+    return(conc)
+  }
+  conc = outer(x,y,gpm)
+  filled.contour(x,y,conc, nlevels=20, col=rainbow(25),
+                 xlab="Downwind distance (m)", ylab="Crosswind distance (m)",
+                 main="Contours of Pollutant Concentration (ug/m^3)")
+}
+
+f8 = function()
+{
+  x <- y <- seq(-8*pi, 8*pi, len = 40)
+  r <- sqrt(outer(x^2, y^2, "+"))
+  filled.contour(cos(r^2)*exp(-r/(2*pi)), 
+                 axes=FALSE,
+                 color.palette=heat.colors,
+                 asp=1)
+}
 
 plotdiff(expression(f1()), "f1")
 plotdiff(expression(f2()), "f2")
 plotdiff(expression(f3()), "f3")
+plotdiff(expression(f4()), "f4")
+plotdiff(expression(f5()), "f5")
+plotdiff(expression(f6()), "f6")
+## color is 'break' for some reason(don't know why...)
+plotdiff(expression(f7()), "f7")
+plotdiff(expression(f8()), "f8")
 
 plotdiffResult()
