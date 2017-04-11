@@ -96,7 +96,7 @@ testPersp3 = function(){
 plotdiff(expression(testPersp(box = FALSE)), 'sin')
 plotdiff(expression(testPersp1(box = FALSE)), 'sin2')
 plotdiff(expression(testPersp2(box = FALSE)), 'Torus')
-plotdiff(expression(testPersp3()), 'volcano', antialias = FALSE)
+#plotdiff(expression(testPersp3()), 'volcano', antialias = FALSE)
 
 #### other bugs on axis
 plotdiff(expression(testPersp2(ticktype = 'detail')), 'volcano')
@@ -174,12 +174,4 @@ plotdiff(expression(testPersp(col = 1:10, border = 'NA',
                               shade =0.2, box = FALSE, 
                               scale = TRUE)), 'persp-23')
 
-#name.graphics = paste('persp-', 1:48, '-graphics.png', sep = '')
-#name.grid = paste('persp-', 1:48, '-grid.png', sep= '')
-#name.out = paste('out-', 1:48, '.png', sep = '')
-#cmd = paste('compare', name.graphics, name.grid, name.out, sep = ' ')
-#for(i in 1:48)
-#{
-#  system(cmd[i])
-#}
 

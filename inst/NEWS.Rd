@@ -2,10 +2,10 @@
 \title{NEWS file for the gridGraphics package}
 \encoding{UTF-8}
 \section{Changes in version 0.2}{
-  \itemize{
-    \item \code{grid.echo()} now supported \code{persp()} and \code{filled.contour()}
-    \item colors seems NOT correct for some example on the \code{filled.contour()}
-  }
+    \itemize{
+        \item \code{grid.echo()} now supports \code{persp()} and 
+        \code{filled.contour()}
+      }
 }
 
 \section{Changes in version 0.1-5}{

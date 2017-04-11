@@ -553,7 +553,7 @@ PerspAxis = function(x, y, z, axis, axisType,
     tickType = as.character(tickType)
     u1 = u2 = u3 = c(0.,0.,0.,0.)
     tickLength = .03
-
+    
     switch(axisType,
            '1' = {min = x[1]; max = x[2]; range = x},
            '2' = {min = y[1]; max = y[2]; range = y},
@@ -699,6 +699,7 @@ PerspAxis = function(x, y, z, axis, axisType,
     ## '2' seems working
     '2' = {
         at = axisTicks(range, FALSE, axp, nint = nint)
+        lab = format(at, trim = TRUE)
         for(i in 1:length(at)){
             switch(axisType, 
                 '1' = {
@@ -744,13 +745,11 @@ PerspAxis = function(x, y, z, axis, axisType,
                 )
 
             ## Draw tick label
-            lab = at[i]
-            #text(v3[1], v3[2], label, 0.5, srt = srt)
-            grid.text(label = lab, x = v3[1], y = v3[2],
-                  just = "centre",
-                  default.units = "native", #vp = 'clipoff',
-                  gp = gpar(col = col.axis, adj = 1, pos = 0.5, cex = 1)
-                  )
+            grid.text(label = lab[i], x = v3[1], y = v3[2],
+                just = "centre",
+                default.units = "native", #vp = 'clipoff',
+                gp = gpar(col = col.axis, adj = 1, pos = 0.5, cex = 1)
+                )
             }
         }
     )
