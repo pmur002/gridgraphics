@@ -123,3 +123,9 @@ plotdiff(expression(f7()), "f7")
 plotdiff(expression(f8()), "f8")
 
 plotdiffResult()
+
+
+
+source('C:/Users/yeamin/Desktop/mproject/gridGraphics_script/loading.R')
+f7()
+grid.echo()
