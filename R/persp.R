@@ -109,7 +109,7 @@ C_persp = function(plot = NULL, ...)
     if (dbox == TRUE) {
         EdgeDone = rep(0, 12)
         if(axes == TRUE){
-            depth = gotovp(TRUE)
+            depth = gotovp(FALSE)
             #pushViewport(vp)
             PerspAxes(xr, yr, zr, ##x, y, z
                     xlab, ylab, zlab, ## xlab, xenc, ylab, yenc, zlab, zenc
@@ -130,7 +130,7 @@ C_persp = function(plot = NULL, ...)
     #upViewport()
     upViewport(depth)
     
-    depth = gotovp(FALSE)
+    depth = gotovp(TRUE)
     #pushViewport(vp)
     DrawFacets(plot = plot, z = plot$z, x = plot$x, y = plot$y,     ## basic
                 xs = 1/xs, ys = 1/ys, zs = expand/zs,               ## Light
@@ -144,9 +144,6 @@ C_persp = function(plot = NULL, ...)
     EdgeDone = PerspBox(1, xr, yr, zr, EdgeDone, trans, 'dotted', lwd)
     #upViewport()
     upViewport(depth)
-    
-    #depth = gotovp(TRUE)
-    #pushViewport(vp)
 
 }
 
