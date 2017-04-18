@@ -10,7 +10,7 @@ testPersp = function(theta=120, phi = 20, expand = 0.5, col = 'White',
     z <- outer(x, y, f)
     z[is.na(z)] <- 1
     par(mar = c(2,2,2,2))
-    trans <- persp(x, y, z, theta = theta, 
+    persp(x, y, z, theta = theta, 
                    phi = phi, expand = expand, 
                    col = col, box = box, border = border, 
                    ticktype = ticktype, nticks = nticks, ...)
@@ -38,7 +38,7 @@ testPersp1 = function(theta=120, phi = 20, expand = 0.5, col = 'orange ',
   
   par(mar = c(2,2,2,2))
   expand = 0.5
-  trans <- persp(x, y, z, theta = theta, 
+  persp(x, y, z, theta = theta, 
                  phi = phi, expand = expand, 
                  col = color[facetcol], box = box, border = border, 
                  ticktype = ticktype, nticks = nticks, ...)
@@ -64,7 +64,7 @@ testPersp2 = function(theta=120, phi = 20, expand = 0.5, col = 'orange ',
   
   par(mar = c(2,2,2,2))
   expand = 0.5
-  trans <- persp(x, y, z, theta = theta, 
+  persp(x, y, z, theta = theta, 
                  phi = phi, expand = expand, 
                  col = color[facetcol], box = box, border = border, 
                  ticktype = ticktype, nticks = nticks, ...)
@@ -98,8 +98,6 @@ plotdiff(expression(testPersp1(box = FALSE)), 'sin2')
 plotdiff(expression(testPersp2(box = FALSE)), 'Torus')
 #plotdiff(expression(testPersp3()), 'volcano', antialias = FALSE)
 
-#### other bugs on axis
-plotdiff(expression(testPersp2(ticktype = 'detail')), 'volcano')
 
 ## test on theta
 	plotdiff(expression(testPersp(30)), 'persp-1')
@@ -148,10 +146,7 @@ plotdiff(expression(testPersp(axes = FALSE)), 'persp-14')
 plotdiff(expression(testPersp(box = FALSE, axes = TRUE)), 'persp-15')
 plotdiff(expression(testPersp(box = FALSE, axes = FALSE)), 'persp-16')
 
-## test on ticktype
-plotdiff(expression(
-            testPersp(ticktype = 'detail', axes = TRUE, box = TRUE)), 'persp-17',
-            antialias = FALSE)
+
 
 ## test on lty
 plotdiff(expression(testPersp(lty = 'dotted')), 'persp-18')
@@ -175,3 +170,10 @@ plotdiff(expression(testPersp(col = 1:10, border = 'NA',
                               scale = TRUE)), 'persp-23')
 
 
+plotdiff(expression(testPersp2(ticktype = 'detail')), 'tours-1', antialias = FALSE)
+
+## antialias seems NOT working on my pc
+plotdiff(expression(
+            testPersp(ticktype = 'detail', axes = TRUE, box = TRUE)), 'persp-17',
+            antialias = FALSE)
+            

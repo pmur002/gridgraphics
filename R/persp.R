@@ -95,7 +95,7 @@ C_persp = function(plot = NULL, ...)
     if (DoLighting) Light = SetUpLight(ltheta, lphi)
     
     # create a viewport inside a 'viewport'
-    depth = gotovp(TRUE)
+    depth = gotovp(FALSE)
     lim = PerspWindow(xr, yr, zr, trans, 'r')
     #vp = viewport(0.5, 0.5, 1, 1, default.units = 'npc',
     #                xscale = lim[1:2], yscale = lim[3:4])
@@ -109,7 +109,7 @@ C_persp = function(plot = NULL, ...)
     if (dbox == TRUE) {
         EdgeDone = rep(0, 12)
         if(axes == TRUE){
-            depth = gotovp(FALSE)
+            depth = gotovp(TRUE)
             #pushViewport(vp)
             PerspAxes(xr, yr, zr, ##x, y, z
                     xlab, ylab, zlab, ## xlab, xenc, ylab, yenc, zlab, zenc
@@ -130,7 +130,7 @@ C_persp = function(plot = NULL, ...)
     #upViewport()
     upViewport(depth)
     
-    depth = gotovp(TRUE)
+    depth = gotovp(FALSE)
     #pushViewport(vp)
     DrawFacets(plot = plot, z = plot$z, x = plot$x, y = plot$y,     ## basic
                 xs = 1/xs, ys = 1/ys, zs = expand/zs,               ## Light

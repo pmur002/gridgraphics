@@ -259,8 +259,13 @@ C_filledcontour = function(plot)
     high = rep(s[-1], (nx - 1) * (ny - 1))
     
     ## rep color until the same length of x, then subsetting 
+    if(length(cols) > ns){
+        cols = cols[1:(ns - 1)]
+    }else
+    {
+        cols = rep_len(cols, ns - 1)
+    }
     colrep = rep(cols[1:(ns - 1)], nx * ny)
-    
     ## feed color as well as subseeting as x and y
     out = FindPolygonVertices(
                 low = low, high = high,

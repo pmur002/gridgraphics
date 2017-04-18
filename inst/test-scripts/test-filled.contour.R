@@ -97,7 +97,7 @@ f7 = function()
     return(conc)
   }
   conc = outer(x,y,gpm)
-  filled.contour(x,y,conc, nlevels=20, col=rainbow(25),
+  filled.contour(x,y,conc, nlevels=20, col=rainbow(100),
                  xlab="Downwind distance (m)", ylab="Crosswind distance (m)",
                  main="Contours of Pollutant Concentration (ug/m^3)")
 }
@@ -112,14 +112,36 @@ f8 = function()
                  asp=1)
 }
 
+## length(color) > nlevels
+f9 = function()
+{
+  x <- y <- seq(-8*pi, 8*pi, len = 40)
+  r <- sqrt(outer(x^2, y^2, "+"))
+  filled.contour(cos(r^2)*exp(-r/(2*pi)), 
+                 axes=FALSE,
+                 col = heat.colors(100), nlevels = 35,
+                 asp=1)
+}
+
+## length(color) < nlevels
+f10 = function()
+{
+  x <- y <- seq(-8*pi, 8*pi, len = 40)
+  r <- sqrt(outer(x^2, y^2, "+"))
+  filled.contour(cos(r^2)*exp(-r/(2*pi)), 
+                 axes=FALSE,
+                 col = heat.colors(6), nlevels = 35,
+                 asp=1)
+}
+
 plotdiff(expression(f1()), "f1")
 plotdiff(expression(f2()), "f2")
 plotdiff(expression(f3()), "f3")
 plotdiff(expression(f4()), "f4")
 plotdiff(expression(f5()), "f5")
 plotdiff(expression(f6()), "f6")
-## color is 'break' for some reason(don't know why...)
 plotdiff(expression(f7()), "f7")
 plotdiff(expression(f8()), "f8")
-
+plotdiff(expression(f9()), "f9")
+plotdiff(expression(f10()), "f10")
 plotdiffResult()
