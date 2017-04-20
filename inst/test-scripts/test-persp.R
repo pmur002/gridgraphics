@@ -93,6 +93,34 @@ testPersp3 = function(){
     ltheta = -120, shade = 0.4, border = NA, box = FALSE)
 }
 
+
+testPersp4 = function(theta=120, phi = 20, expand = 0.5, col = 'orange ',
+                      box = TRUE, border = 'NA', 
+                      ticktype = 'simple', nticks = 5, ...) {
+  x = seq(-15,15,length = 45)
+  y = seq(-15,15,length = 45)
+  f <- function(x, y) { (25 - (10 - sqrt(x^2 + y^2))^2)}
+  z <- outer(x, y, f)
+  nrz <- nrow(z)
+  ncz <- ncol(z)
+  # color
+  jet.colors <- colorRampPalette( c("yellow",'gold', "orange") )
+  nbcol <- 100
+  color <- jet.colors(nbcol)
+  zfacet <- z[-1, -1] + z[-1, -ncz] + z[-nrz, -1] + z[-nrz, -ncz]
+  facetcol <- cut(zfacet, nbcol)
+  
+  par(mar = c(2,2,2,2))
+  persp(x, y, z, theta = theta, 
+        phi = phi, expand = expand, 
+        #col = color[facetcol], 
+        box = box, border = border, col = col,
+        ticktype = ticktype, nticks = nticks, ...)
+  
+}
+testPersp4(border = 'gray', expand = 0.5, col = 'NA')
+
+
 plotdiff(expression(testPersp(box = FALSE)), 'sin')
 plotdiff(expression(testPersp1(box = FALSE)), 'sin2')
 plotdiff(expression(testPersp2(box = FALSE)), 'Torus')
@@ -170,7 +198,7 @@ plotdiff(expression(testPersp(col = 1:10, border = 'NA',
                               scale = TRUE)), 'persp-23')
 
 
-plotdiff(expression(testPersp2(ticktype = 'detail')), 'tours-1', antialias = FALSE)
+plotdiff(expression(testPersp2(ticktype = 'detail')), 'Torus-1', antialias = FALSE)
 
 ## antialias seems NOT working on my pc
 plotdiff(expression(

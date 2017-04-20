@@ -353,13 +353,7 @@ PerspBox = function(front = 1, x, y, z, EdgeDone, VT, lty, lwd = lwd )
     EdgeDone
 }
 
-dPolygon = function(plot, trans){
-
-    x = plot$x; y = plot$y; z = plot$z
-    xr = plot$xr; yr = plot$yr; zr = plot$zr
-    dbox = plot$dbox; lim = plot$lim; mar = plot$mar
-    col = plot$col
-        
+dPolygon = function(x, y, z, col, trans){
 
     ## the total number of polygon that we need to draw	
 	nx = length(x)
@@ -440,7 +434,7 @@ dPolygon = function(plot, trans){
 DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ncol = length(col), ltheta, lphi, Shade, Light, trans)
 {
 
-    pout = dPolygon(plot, trans)
+    pout = dPolygon(x, y, z, col, trans)
     xyCoor = pout$xyCoor
     pMax = pout$pMax; colRep = pout$colRep
     polygonOrder = pout$polygonOrder
@@ -462,9 +456,13 @@ DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ncol = length(col), ltheta
     xrange = range(polygons[,1], na.rm = TRUE)
     yrange = range(polygons[,2])
     
+    #name = paste('polygon_', 1:pMax, sep = '')
+    
     grid.polygon(polygons[,1], polygons[,2], id = polygon.id,
                     default.units = 'native', 
-                    gp = gpar(col = plot$border, fill = cols, lty = plot$lty, lwd = plot$lwd))
+                    gp = gpar(col = plot$border, fill = cols, lty = plot$lty, lwd = plot$lwd),
+                   # name = name
+                    )
 
 
 }

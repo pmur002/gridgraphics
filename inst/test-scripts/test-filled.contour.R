@@ -27,7 +27,6 @@ f3 = function()
                      axis(2, seq(100, 600, by = 100)) },
                    key.title = title(main = "Height\n(meters)"),
                    key.axes = axis(4, seq(90, 190, by = 10)))  # maybe also asp = 1
-   # system.time(grid.echo())
 }
 
 
