@@ -461,7 +461,7 @@ DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ncol = length(col), ltheta
     grid.polygon(polygons[,1], polygons[,2], id = polygon.id,
                     default.units = 'native', 
                     gp = gpar(col = plot$border, fill = cols, lty = plot$lty, lwd = plot$lwd),
-                   # name = name
+                    name = 'polygon'
                     )
 
 
