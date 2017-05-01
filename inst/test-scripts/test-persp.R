@@ -4,8 +4,8 @@ library(gridGraphics)
 testPersp = function(theta=120, phi = 20, expand = 0.5, col = 'White',
                         box = TRUE, border = 'orange', 
                         ticktype = 'simple', nticks = 5, ...) {
-    x = seq(-10,10,length = 60)
-    y = seq(-10,10,length = 60)
+    x = seq(-10,10,length = 30)
+    y = seq(-10,10,length = 30)
     f <- function(x, y) { r <- sqrt(x^2+y^2); 10 * sin(r)/r }
     z <- outer(x, y, f)
     z[is.na(z)] <- 1
@@ -56,7 +56,7 @@ testPersp2 = function(theta=120, phi = 20, expand = 0.5, col = 'orange ',
   nrz <- nrow(z)
   ncz <- ncol(z)
   # color
-  jet.colors <- colorRampPalette( c("brown",'blue', "purple") )
+  jet.colors <- colorRampPalette( c("yellow",'gold', "orange") )
   nbcol <- 100
   color <- jet.colors(nbcol)
   zfacet <- z[-1, -1] + z[-1, -ncz] + z[-nrz, -1] + z[-nrz, -ncz]
@@ -119,6 +119,13 @@ testPersp4 = function(theta=120, phi = 20, expand = 0.5, col = 'orange ',
   
 }
 testPersp4(border = 'gray', expand = 0.5, col = 'NA')
+## bugs
+## calling shade when some z are NA
+# testPersp2(border = 'NA', shade = 0.2)
+# grid.echo()
+## alpha of rgb less than 0
+# testPersp(col = rgb(0.5, 0.2, 0.3, 0.8), shade = 0.5, border = NA)
+# grid.echo()
 
 
 plotdiff(expression(testPersp(box = FALSE)), 'sin')
