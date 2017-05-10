@@ -49,7 +49,8 @@ C_persp = function(plot = NULL, ...)
     plot = perInit(plot, newpage = FALSE)
     xr = plot$xr; yr = plot$yr; zr = plot$zr
     xlab = plot$xlab; ylab = plot$ylab; zlab = plot$zlab
-    col.axis = plot$col.axis; col.lab = plot$col.lab; cex.lab = plot$cex.lab
+    col.axis = plot$col.axis; col.lab = plot$col.lab; 
+    col = plot$col; cex.lab = plot$cex.lab
     nTicks = plot$nTicks; tickType = plot$tickType
     expand = plot$expand ;scale = plot$scale
     ltheta = plot$ltheta; lphi = plot$lphi
@@ -81,7 +82,7 @@ C_persp = function(plot = NULL, ...)
     VT = VT %*% XRotate(phi)
     VT = VT %*% Translate(0.0, 0.0, -r - d)
     trans = VT %*% Perspective(d)
-                
+
     border = plot$border[1];
     if(is.null(plot$lwd)) lwd = 1 else lwd = plot$lwd
     if(is.null(plot$lty)) lty = 1 else lty = plot$lty
@@ -90,8 +91,11 @@ C_persp = function(plot = NULL, ...)
     
     
     if(!scale) xs = ys = zs = max(xs, ys, zs)
-    if(is.finite(ltheta) && is.finite(lphi) && is.finite(shade))
+    colCheck = col2rgb(col, alpha = TRUE)[4,1] == 255
+    if(is.finite(ltheta) && is.finite(lphi) && is.finite(shade) && colCheck)
     DoLighting = TRUE else DoLighting = FALSE
+    ## check the first color act as Fixcols
+    
     if (DoLighting) Light = SetUpLight(ltheta, lphi)
     
     # create a viewport inside a 'viewport'
@@ -105,7 +109,6 @@ C_persp = function(plot = NULL, ...)
     setWindowPlotAlpha(plotAlpha())
     setUpUsr(lim)
     
-
     if (dbox == TRUE) {
         EdgeDone = rep(0, 12)
         if(axes == TRUE){
@@ -116,7 +119,7 @@ C_persp = function(plot = NULL, ...)
                     nTicks, tickType, trans, ## nTicks, tickType, VT
                     lwd, lty, col.axis, col.lab, cex.lab) ## lwd, lty, col.axis, col.lab, cex.lab
             #upViewport()
-            upViewport(depth)} 
+            upViewport(depth)}
     } else {
         EdgeDone = rep(1, 12)
         xr = yr = zr = c(0,0)
@@ -134,8 +137,9 @@ C_persp = function(plot = NULL, ...)
     #pushViewport(vp)
     DrawFacets(plot = plot, z = plot$z, x = plot$x, y = plot$y,     ## basic
                 xs = 1/xs, ys = 1/ys, zs = expand/zs,               ## Light
-                col = plot$col, length(plot$col),                   ## cols
-                ltheta = ltheta, lphi = lphi, Shade = shade, Light = Light, trans = trans)
+                col = col,                                          ## cols
+                ltheta = ltheta, lphi = lphi, Shade = shade, 
+                Light = Light, trans = trans, DoLighting = DoLighting)
     #upViewport()
     upViewport(depth)
 
@@ -147,7 +151,6 @@ C_persp = function(plot = NULL, ...)
 
 }
 
-
 ####Shade function
 #####################################################################
 LimitCheck = function ( lim ) {
@@ -156,7 +159,6 @@ LimitCheck = function ( lim ) {
     c = 0.5 * (lim[2] + lim[1])
     c(s, c)
 }
-
 
 XRotate = function ( angle ) {
     TT = diag(1, 4)
@@ -229,7 +231,7 @@ SetUpLight = function ( theta, phi ) {
     Light = u %*% VT
 }
 
-FacetShade = function( u, v, Shade = 0.5, Light ) {
+FacetShade = function( u, v, Shade, Light ) {
     nx = u[2] * v[3] - u[3] * v[2]
     ny = u[3] * v[1] - u[1] * v[3]
     nz = u[1] * v[2] - u[2] * v[1]
@@ -242,14 +244,14 @@ FacetShade = function( u, v, Shade = 0.5, Light ) {
     sum^Shade   
 }
 
-shadeCol = function( z, x, y, xs, ys, zs, col, ncol = length(col), ltheta, lphi, Shade, Light) {
+shadeCol = function( z, x, y, xs, ys, zs, col, ltheta, lphi, Shade, Light) {
     u = v = 0
     nx = nrow(z)
     ny = ncol(z)
     nx1 = nx - 1
     ny1 = ny - 1
     cols = 0
-    
+    ncol = length(col)
     indx = 0:(length(z))
     Light = SetUpLight(ltheta, lphi)
     for(k in 1:(nx1 * ny1)){
@@ -269,8 +271,11 @@ shadeCol = function( z, x, y, xs, ys, zs, col, ncol = length(col), ltheta, lphi,
         ##one condiction here..if any bugs then check here...
         #
         #
-        shadedCol = col2rgb(col[icol + 1])
-        cols[k] = rgb(shade * shadedCol[1], shade * shadedCol[2], shade * shadedCol[3], maxColorValue = 255)
+        shadedCol = col2rgb(col[icol + 1], alpha = TRUE)
+        cols[k] = rgb(shade * shadedCol[1], 
+                    shade * shadedCol[2], 
+                    shade * shadedCol[3], 
+                    maxColorValue = 255)
     }
         cols
 }
@@ -431,7 +436,7 @@ dPolygon = function(x, y, z, col, trans){
 
 
 
-DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ncol = length(col), ltheta, lphi, Shade, Light, trans)
+DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ltheta, lphi, Shade, Light, trans, DoLighting)
 {
 
     pout = dPolygon(x, y, z, col, trans)
@@ -440,17 +445,19 @@ DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ncol = length(col), ltheta
     polygonOrder = pout$polygonOrder
     polygons = cbind(xyCoor$x, xyCoor$y)
     polygon.id = rep(1:pMax, each = 4)
+    col = plot$col
     
-    if (!is.na(Shade)) {
+    if (DoLighting == TRUE) {
+        col[is.na(col)] = rgb(1, 1, 1)
         if(is.finite(Shade) && Shade <= 0 ) Shade = 1
         shadedCol = shadeCol(z, x, y,                       ## x, y, z
                 xs, ys, zs,                                 ## xs, ys, zs 
-                plot$col, length(plot$col),                 ## col, ncol
+                col,                           ## col, ncol
                 ltheta, lphi, Shade, Light = Light)         ## ltheta, lphi, Shade(not shade)
         cols = shadedCol[polygonOrder]
 
     } else {
-        cols = rep_len(plot$col, length(polygons[,1]))[polygonOrder]
+        cols = rep_len(col, length(polygons[,1]))[polygonOrder]
     }
     
     xrange = range(polygons[,1], na.rm = TRUE)

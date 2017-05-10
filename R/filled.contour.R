@@ -83,7 +83,7 @@ lC_filledcontour = function(plot)
                     print(paste('npt: ', out$npt))}
                 
                 grid.polygon(out$x[1:npt], out$y[1:npt], default.units = 'native',
-                    gp = gpar(fill = scol[(k - 1) %% ncol + 1], col = NA))
+                    gp = gpar(fill = scol[(k - 1) %% ncol + 1], col = NA), name = 'filled.contour')
             }
         }
     }
