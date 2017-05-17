@@ -229,4 +229,4 @@ unlikelyTest = function(i)
 ##first color is missing when shading
 plotdiff(expression(unlikelyTest(1)), 'unlikelyTest1')
 ##include missing color when shadding
-plotdiff(expression(unlikelyTest(1)), 'unlikelyTest2')
+plotdiff(expression(unlikelyTest(2)), 'unlikelyTest2')
