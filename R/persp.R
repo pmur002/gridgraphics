@@ -236,7 +236,10 @@ FacetShade = function( u, v, Shade, Light ) {
     ny = u[3] * v[1] - u[1] * v[3]
     nz = u[1] * v[2] - u[2] * v[1]
     sum = sqrt(nx * nx + ny * ny + nz * nz)
-    if (sum == 0) sum = 1
+    if (is.finite(sum)){
+        if (sum == 0) sum = 1
+        }else{Shade = NA}
+    
     nx = nx/sum
     ny = ny/sum
     nz = nz/sum
@@ -246,6 +249,7 @@ FacetShade = function( u, v, Shade, Light ) {
 
 shadeCol = function( z, x, y, xs, ys, zs, col, ltheta, lphi, Shade, Light) {
     u = v = 0
+    shade = 0
     nx = nrow(z)
     ny = ncol(z)
     nx1 = nx - 1
@@ -267,17 +271,21 @@ shadeCol = function( z, x, y, xs, ys, zs, col, ltheta, lphi, Shade, Light) {
 	    v[2] = ys * (y[j + 2] - y[j + 1])
 	    v[3] = zs * (z[(i + 1) + (j + 1) * nx + 1] - z[i + j * nx + 1])
         icol = (i + j * nx1) %% ncol
-	    shade = FacetShade(u, v, Shade = Shade, Light = Light)
+	    shade[k] = FacetShade(u, v, Shade = Shade, Light = Light)
         ##one condiction here..if any bugs then check here...
         #
         #
         shadedCol = col2rgb(col[icol + 1], alpha = TRUE)
-        cols[k] = rgb(shade * shadedCol[1], 
-                    shade * shadedCol[2], 
-                    shade * shadedCol[3], 
-                    maxColorValue = 255)
+        if(is.finite(shade[k])){
+            cols[k] = rgb(shade[k] * shadedCol[1], 
+                        shade[k] * shadedCol[2], 
+                        shade[k] * shadedCol[3], 
+                        maxColorValue = 255)
+        }else{
+            cols[k] = rgb(1,1,1,0)
+                        }
     }
-        cols
+        list(cols = cols, shade = shade)
 }
 ## shade end...
 #####################################################################
@@ -423,7 +431,9 @@ dPolygon = function(x, y, z, col, trans){
                     yCoor[oo],
                     zCoor[oo], trans)
                     
-    colRep = colRep[a]
+    colRep <<- colRep[a]
+    
+    
     
 
     ## record the total number of polygon
@@ -438,7 +448,6 @@ dPolygon = function(x, y, z, col, trans){
 
 DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ltheta, lphi, Shade, Light, trans, DoLighting)
 {
-
     pout = dPolygon(x, y, z, col, trans)
     xyCoor = pout$xyCoor
     pMax = pout$pMax; colRep = pout$colRep
@@ -450,21 +459,28 @@ DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ltheta, lphi, Shade, Light
     if (DoLighting == TRUE) {
         col[is.na(col)] = rgb(1, 1, 1)
         if(is.finite(Shade) && Shade <= 0 ) Shade = 1
-        shadedCol = shadeCol(z, x, y,                       ## x, y, z
+        shadding = shadeCol(z, x, y,                       ## x, y, z
                 xs, ys, zs,                                 ## xs, ys, zs 
                 col,                           ## col, ncol
                 ltheta, lphi, Shade, Light = Light)         ## ltheta, lphi, Shade(not shade)
-        cols = shadedCol[polygonOrder]
-
+        shadedCol = shadding[[1]]
+        
+        ## clean if any NA's Z-value
+        shade = shadding[[2]][polygonOrder]
+        misshade = !is.finite(shade)
+        misindex = rep(misshade, each = 4)
+        polygonOrder = polygonOrder[!misshade]
+        polygons = polygons[!misindex,]
+        polygon.id = polygon.id[!misindex]
+        
+        cols = shadedCol[polygonOrder]        
     } else {
         cols = rep_len(col, length(polygons[,1]))[polygonOrder]
     }
     
     xrange = range(polygons[,1], na.rm = TRUE)
-    yrange = range(polygons[,2])
-    
-    #name = paste('polygon_', 1:pMax, sep = '')
-    
+    yrange = range(polygons[,2], na.rm = TRUE)
+
     grid.polygon(polygons[,1], polygons[,2], id = polygon.id,
                     default.units = 'native', 
                     gp = gpar(col = plot$border, fill = cols, lty = plot$lty, lwd = plot$lwd),

@@ -60,10 +60,10 @@ lC_filledcontour = function(plot)
             out = lFindPolygonVertices(sc[k], sc[k + 1],
                     x[i], x[i + 1],
                     y[j], y[j + 1],
-                    z[i + (j - 1) * nx],
-                    z[i + 1 + (j - 1) * nx],
-                    z[i + (j) * nx],
-                    z[i + 1 + (j) * nx],
+                    z[i, j],
+                    z[i + 1, j],
+                    z[i, j + 1],
+                    z[i + 1, j + 1],
                     px, py, pz, npt, iii = iii)
             
             npt = out$npt

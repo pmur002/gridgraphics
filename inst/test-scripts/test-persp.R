@@ -212,3 +212,21 @@ plotdiff(expression(
             testPersp(ticktype = 'detail', axes = TRUE, box = TRUE)), 'persp-17',
             antialias = FALSE)
             
+## new test
+unlikelyTest = function(i)
+{
+  x = 1:3
+  y = 1:3
+  z = outer(x, y, "+")
+  z[1,1] = NA
+  cols = list(
+    col1 = c('NA', 'red', 'blue', 'brown'),
+    col2 = c('red', 'NA', 'blue', 'brown')
+  )
+  persp(z, col = cols[[i]], shade = 0.5)
+}
+## missing value on Z with:
+##first color is missing when shading
+plotdiff(expression(unlikelyTest(1)), 'unlikelyTest1')
+##include missing color when shadding
+plotdiff(expression(unlikelyTest(1)), 'unlikelyTest2')
