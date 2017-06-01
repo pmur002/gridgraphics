@@ -113,12 +113,10 @@ C_persp = function(plot = NULL, ...)
         EdgeDone = rep(0, 12)
         if(axes == TRUE){
             depth = gotovp(TRUE)
-            #pushViewport(vp)
             PerspAxes(xr, yr, zr, ##x, y, z
                     xlab, ylab, zlab, ## xlab, xenc, ylab, yenc, zlab, zenc
                     nTicks, tickType, trans, ## nTicks, tickType, VT
                     lwd, lty, col.axis, col.lab, cex.lab) ## lwd, lty, col.axis, col.lab, cex.lab
-            #upViewport()
             upViewport(depth)}
     } else {
         EdgeDone = rep(1, 12)
@@ -128,31 +126,24 @@ C_persp = function(plot = NULL, ...)
     ## draw the behind face first
     ## return the EdgeDone inorder to not drawing the same Edege two times.
     depth = gotovp(TRUE)
-    #pushViewport(vp)
     EdgeDone = PerspBox(0, xr, yr, zr, EdgeDone, trans, 1, lwd)
-    #upViewport()
     upViewport(depth)
     
     depth = gotovp(FALSE)
-    #pushViewport(vp)
     DrawFacets(plot = plot, z = plot$z, x = plot$x, y = plot$y,     ## basic
                 xs = 1/xs, ys = 1/ys, zs = expand/zs,               ## Light
                 col = col,                                          ## cols
                 ltheta = ltheta, lphi = lphi, Shade = shade, 
                 Light = Light, trans = trans, DoLighting = DoLighting)
-    #upViewport()
     upViewport(depth)
 
     depth = gotovp(TRUE)
-    #pushViewport(vp)
     EdgeDone = PerspBox(1, xr, yr, zr, EdgeDone, trans, 'dotted', lwd)
-    #upViewport()
     upViewport(depth)
 
 }
 
 ####Shade function
-#####################################################################
 LimitCheck = function ( lim ) {
     ## not finished yet...
     s = 0.5 * abs(lim[2] - lim[1])
@@ -272,9 +263,7 @@ shadeCol = function( z, x, y, xs, ys, zs, col, ltheta, lphi, Shade, Light) {
 	    v[3] = zs * (z[(i + 1) + (j + 1) * nx + 1] - z[i + j * nx + 1])
         icol = (i + j * nx1) %% ncol
 	    shade[k] = FacetShade(u, v, Shade = Shade, Light = Light)
-        ##one condiction here..if any bugs then check here...
-        #
-        #
+
         shadedCol = col2rgb(col[icol + 1], alpha = TRUE)
         if(is.finite(shade[k])){
             cols[k] = rgb(shade[k] * shadedCol[1], 
@@ -288,11 +277,6 @@ shadeCol = function( z, x, y, xs, ys, zs, col, ltheta, lphi, Shade, Light) {
         list(cols = cols, shade = shade)
 }
 ## shade end...
-#####################################################################
-
-## font = 1 -> draw front face
-## x, y, z are the range of x, y, z-axis
-## VT = trans
 PerspBox = function(front = 1, x, y, z, EdgeDone, VT, lty, lwd = lwd )
 {
     u0 = u1 = u2 = u3 = 0
@@ -405,9 +389,9 @@ dPolygon = function(x, y, z, col, trans){
     dp = rep((4 * seq(nx,total,nx)), each = 4) - (3:0)
 
     ## final subsetting
-    xCoor = xBreak[c(plot.index)][-dp][1 : (4 * stops)]
-    yCoor = yBreak[c(plot.index)][-dp][1 : (4 * stops)]
-    zCoor = zBreak[c(plot.index)][-dp][1 : (4 * stops)]
+    xCoor = xBreak[plot.index][-dp][1 : (4 * stops)]
+    yCoor = yBreak[plot.index][-dp][1 : (4 * stops)]
+    zCoor = zBreak[plot.index][-dp][1 : (4 * stops)]
     
     ## vectorize the cols
     colRep = rep_len(col, length(xCoor))
@@ -416,8 +400,6 @@ dPolygon = function(x, y, z, col, trans){
     corn.id = 4* 1:(length(xCoor)/4)
     xc = xCoor[corn.id]
     yc = yCoor[corn.id]
-    zc = zCoor[corn.id] 
-    
     
     ## method for using the zdepth for changing the drawing order for every polygon
     orderTemp = cbind(xc, yc, 0, 1) %*% trans 
@@ -431,14 +413,10 @@ dPolygon = function(x, y, z, col, trans){
                     yCoor[oo],
                     zCoor[oo], trans)
                     
-    colRep <<- colRep[a]
+    colRep = colRep[a]
     
-    
-    
-
     ## record the total number of polygon
     pMax = length(xyCoor$x) / 4
-
     pout = list(xyCoor = xyCoor, pMax = pMax, colRep = colRep, polygonOrder = a)
     pout
 }
@@ -490,47 +468,7 @@ DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ltheta, lphi, Shade, Light
 
 }
 
-## method for check wheater the axes is front or behind.
-## return a boxInfo that contain a vector of logical value that tells which face is
-## front or behind. and a vector of points order as: x1, y1, z1, x2, y2, z2 and so on 
-per.box = function(xlim, ylim, zlim, trans){
-        
-    Near = vector(length = 6)
-    o1 = o2 = o3 = o4 = numeric(0)
-    for (i in 1:6) {
-        p = Face[i, ]
 
-        pt = Vertex[p[1], ]
-        u1 = c(xlim[pt[1]] , ylim[pt[2]], zlim[pt[3]], 1)
-
-        pt = Vertex[p[2], ]
-        u2 = c(xlim[pt[1]] , ylim[pt[2]], zlim[pt[3]], 1)
-
-        pt = Vertex[p[3], ]
-        u3 = c(xlim[pt[1]] , ylim[pt[2]], zlim[pt[3]], 1)
-
-        pt = Vertex[p[4], ]
-        u4 = c(xlim[pt[1]] , ylim[pt[2]], zlim[pt[3]], 1)
-
-        ## return the points of drawing edges
-        o1 = c(o1,u1[1:3])
-        o2 = c(o2,u2[1:3])
-        o3 = c(o3,u3[1:3])
-        o4 = c(o4,u4[1:3])
-
-        v1 = u1 %*% trans
-        v2 = u2 %*% trans
-        v3 = u3 %*% trans
-        v4 = u4 %*% trans
-
-        dd = v2/v2[4] - v1/v1[4]
-        ee = v3/v3[4] - v2/v2[4]
-
-        Near[i] = (dd[1]*ee[2] - dd[2]*ee[1]) < 0
-    }
-    out = list(Near = Near, O = c(o1, o2, o3, o4))
-    out
-}
 
 TransVector = function(u, T) {
     u %*% T
@@ -653,7 +591,6 @@ PerspAxis = function(x, y, z, axis, axisType,
     )
     u2[4] = 1
 
-    ## ticktype is not working...
     switch(tickType,
         '1' = { 
         u3[1] = u1[1] + tickLength*(x[2]-x[1])*TickVector[axis, 1]
@@ -679,7 +616,6 @@ PerspAxis = function(x, y, z, axis, axisType,
         u3[3] = (min + max)/2
         }
     )
-
     u3[4] = 1
 
     ## transform the 3-d into 2-d
@@ -690,9 +626,7 @@ PerspAxis = function(x, y, z, axis, axisType,
     v1 = v1/v1[4]
     v2 = v2/v2[4]
     v3 = v3/v3[4]
-    
-    ## grid set up
-    
+      
     ## label at center of each axes
     srt = labelAngle(v1[1], v1[2], v2[1], v2[2])
     #text(v3[1], v3[2], label, 0.5, srt = srt)
@@ -914,7 +848,6 @@ Face  = matrix (ncol = 4, byrow = TRUE, data = c(
     1, 5, 7, 3,
     2, 4, 8, 6 ))
 
-
 Edge  = matrix (ncol = 4, byrow = TRUE, data = c(
     0, 1, 2, 3,
     4, 5, 6, 7,
@@ -922,8 +855,6 @@ Edge  = matrix (ncol = 4, byrow = TRUE, data = c(
     2,10, 5,11,
     3,11, 4, 8,
     9, 6,10, 1)) + 1
-
-    
     
 AxisStart = c(1, 1, 3, 5, 1, 5, 3, 7)
 

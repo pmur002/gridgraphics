@@ -128,45 +128,40 @@ testPersp4(border = 'gray', expand = 0.5, col = 'NA')
 # grid.echo()
 
 
-plotdiff(expression(testPersp(box = FALSE)), 'sin')
-plotdiff(expression(testPersp1(box = FALSE)), 'sin2')
-plotdiff(expression(testPersp2(box = FALSE)), 'Torus')
+
 #plotdiff(expression(testPersp3()), 'volcano', antialias = FALSE)
 
 
 ## test on theta
-	plotdiff(expression(testPersp(30)), 'persp-1')
+	plotdiff(expression(testPersp(30)), 'persp-01')
 
 ## test on phi
-	plotdiff(expression(testPersp(phi = 15)), 'persp-2')
+	plotdiff(expression(testPersp(phi = 5)), 'persp-02')
 
 ## test on expand
-	plotdiff(expression(testPersp(epand = 0.01)), 'persp-3')
+	plotdiff(expression(testPersp(expand = 0.01)), 'persp-03')
 
 ## test on lim
-	plotdiff(expression(testPersp(xlim = c(-5,5))), 'persp-4')
+	plotdiff(expression(testPersp(xlim = c(-5,5))), 'persp-04')
 
 ## test on label
 plotdiff(expression(
-  testPersp(xlab = 'xx', ylab = 'yy', zlab = 'zz')), 'persp-5')
+  testPersp(xlab = 'just a label of x', 
+            ylab = 'just a label of y',
+            zlab = 'just a label of z')), 'persp-05')
 
 ## test on r
-plotdiff(expression(testPersp(r = 5)), 'persp-6')
+plotdiff(expression(testPersp(r = 10)), 'persp-06')
 
 ##test on d
-plotdiff(expression(testPersp(d = 0.5)), 'persp-7')
+plotdiff(expression(testPersp(d = 0.2)), 'persp-07')
 
 
 ## test on scale
-plotdiff(expression(testPersp(scale = FALSE)), 'persp-8')
-
-## test on expand
-plotdiff(expression(testPersp(expand = 0.5)), 'persp-9')
-
+plotdiff(expression(testPersp(scale = FALSE)), 'persp-08')
 
 ## test on multi-col
 plotdiff(expression(testPersp(col = 1:5)), 'persp-10')
-
 
 ## test on border
 plotdiff(expression(testPersp(border = 'brown')), 'persp-11')
@@ -179,38 +174,25 @@ plotdiff(expression(testPersp(axes = FALSE)), 'persp-14')
 
 ## if box = False then not drawing any axes even axes = TRUE
 plotdiff(expression(testPersp(box = FALSE, axes = TRUE)), 'persp-15')
-plotdiff(expression(testPersp(box = FALSE, axes = FALSE)), 'persp-16')
-
-
 
 ## test on lty
 plotdiff(expression(testPersp(lty = 'dotted')), 'persp-18')
-plotdiff(expression(testPersp(lty = '1331')), 'persp-19')
-    
     
 ## test on lwd
-plotdiff(expression(testPersp(lwd = 2)), 'persp-20')
 plotdiff(expression(testPersp(lwd = 3)), 'persp-21')
 
-## other bugs:
-    ## 1. pty = 's'
     
-## test on shade
-    ## single colors
 plotdiff(expression(testPersp(col = 'orange', border = 'NA', 
-                              shade =0.2, box = FALSE, 
+                              shade =0.5, box = TRUE, 
                               scale = TRUE)), 'persp-22')
 plotdiff(expression(testPersp(col = 1:10, border = 'NA', 
-                              shade =0.2, box = FALSE, 
+                              shade =0.5, box = TRUE, 
                               scale = TRUE)), 'persp-23')
 
 
-plotdiff(expression(testPersp2(ticktype = 'detail')), 'Torus-1', antialias = FALSE)
 
-## antialias seems NOT working on my pc
-plotdiff(expression(
-            testPersp(ticktype = 'detail', axes = TRUE, box = TRUE)), 'persp-17',
-            antialias = FALSE)
+plotdiff(expression(testPersp1(box = FALSE)), 'persp-sin2')
+plotdiff(expression(testPersp2(box = FALSE)), 'persp-Torus')
             
 ## new test
 unlikelyTest = function(i)
@@ -227,6 +209,54 @@ unlikelyTest = function(i)
 }
 ## missing value on Z with:
 ##first color is missing when shading
-plotdiff(expression(unlikelyTest(1)), 'unlikelyTest1')
+plotdiff(expression(unlikelyTest(1)), 'persp-unlike-1')
 ##include missing color when shadding
-plotdiff(expression(unlikelyTest(2)), 'unlikelyTest2')
+plotdiff(expression(unlikelyTest(2)), 'persp-unlike-2')
+
+
+otherTest1 = function()
+{
+  par(bg = "white")
+  x <- seq(-1.95, 1.95, length = 30)
+  y <- seq(-1.95, 1.95, length = 35)
+  z <- outer(x, y, function(a, b) a*b^2)
+  nrz <- nrow(z)
+  ncz <- ncol(z)
+  # Create a function interpolating colors in the range of specified colors
+  jet.colors <- colorRampPalette( c("blue", "green") )
+  # Generate the desired number of colors from this palette
+  nbcol <- 100
+  color <- jet.colors(nbcol)
+  # Compute the z-value at the facet centres
+  zfacet <- z[-1, -1] + z[-1, -ncz] + z[-nrz, -1] + z[-nrz, -ncz]
+  # Recode facet z-values into color indices
+  facetcol <- cut(zfacet, nbcol)
+  persp(x, y, z, col = color[facetcol], phi = 30, theta = -30)
+}
+plotdiff(expression(otherTest1()), 'persp-other-1')
+
+
+otherTest2 = function()
+{
+  z <- 2 * volcano
+  x <- 10 * (1:nrow(z)) 
+  y <- 10 * (1:ncol(z))
+  z0 = min(z) - 20
+  
+  z = rbind(z0, cbind(z0, z, z0), z0)
+  x = c(min(x) - 1e-10, x, max(x) + 1e-10)
+  y = c(min(y) - 1e-10, y, max(y) + 1e-10)
+  fill = matrix("green3", nrow = nrow(z)-1, ncol = ncol(z)-1)
+  fill[ , i2 <- c(1,ncol(fill))] <- "gray"
+  fill[i1 <- c(1,nrow(fill)) , ] <- "gray"
+  zi = volcano[ -1,-1] + volcano[ -1,-61] +
+                volcano[-87,-1] + volcano[-87,-61]
+  fcol <- fill
+  fcol[-i1,-i2] =
+       terrain.colors(20)[cut(zi,
+                               stats::quantile(zi, seq(0,1, length.out = 21)),
+                               include.lowest = TRUE)]
+  persp(x, y, 2*z, theta = 110, phi = 40, col = fcol, scale = FALSE,
+             ltheta = -120, shade = 0.4, border = NA, box = FALSE)
+}
+plotdiff(expression(otherTest2()), 'persp-other-2')

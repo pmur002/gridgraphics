@@ -5,7 +5,6 @@ lFindPolygonVertices = function(low,  high,
 {
     out = list()
     npt = 0
-    #      FindCutPoints(low, high, x1,  y1,  z1,  x2,  y2,  z2,  x, y, z, npt)
     out1 = lFindCutPoints(low, high, x1,  y1,  z11, x2,  y1,  z21, x, y, z, npt)
     x = out1$x; y = out1$y; z = out1$z; npt = out1$npt
 
@@ -48,15 +47,11 @@ lC_filledcontour = function(plot)
 
     ncol = length(scol)
     
-    # debug
-     ii = 0; iii = 0 ; a = 0
-    
     depth = gotovp(TRUE)
     for(i in 1:(nx - 1)){
     for(j in 1:(ny - 1)){
         for(k in 1:(nc - 1)){
             npt = 0
-            iii = iii + 1
             out = lFindPolygonVertices(sc[k], sc[k + 1],
                     x[i], x[i + 1],
                     y[j], y[j + 1],
@@ -64,7 +59,7 @@ lC_filledcontour = function(plot)
                     z[i + 1, j],
                     z[i, j + 1],
                     z[i + 1, j + 1],
-                    px, py, pz, npt, iii = iii)
+                    px, py, pz, npt)
             
             npt = out$npt
             
@@ -78,10 +73,6 @@ lC_filledcontour = function(plot)
                 # print(ii)
                 
                 if(ii >= 1 && ii <= 5 ) {
-                    print(out$x); 
-                    print(paste('#of polygons: ', iii)); 
-                    print(paste('npt: ', out$npt))}
-                
                 grid.polygon(out$x[1:npt], out$y[1:npt], default.units = 'native',
                     gp = gpar(fill = scol[(k - 1) %% ncol + 1], col = NA), name = 'filled.contour')
             }
