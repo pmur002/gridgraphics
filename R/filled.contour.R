@@ -63,16 +63,9 @@ lC_filledcontour = function(plot)
             
             npt = out$npt
             
-            ## debug
-            # ii = ii + 1
-            # if(ii <= 1000 & npt > 2) {print(out$x)}
             if(npt > 2)
             { 
-                ii = ii + 1
-                a[ii] = npt
-                # print(ii)
-                
-                if(ii >= 1 && ii <= 5 ) {
+
                 grid.polygon(out$x[1:npt], out$y[1:npt], default.units = 'native',
                     gp = gpar(fill = scol[(k - 1) %% ncol + 1], col = NA), name = 'filled.contour')
             }
@@ -82,7 +75,6 @@ lC_filledcontour = function(plot)
     upViewport(depth)
    
 }
-
 
 lFindCutPoints = function( low,  high,
 	       x1,  y1,  z1,
