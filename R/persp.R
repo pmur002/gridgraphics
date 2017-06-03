@@ -323,25 +323,25 @@ PerspBox = function(front = 1, x, y, z, EdgeDone, VT, lty, lwd = lwd )
         if ((front && nearby) || (!front && !nearby)) {
             if (!EdgeDone[Edge[f, 1]]){
                 grid.lines(c(v0[1], v1[1]), c(v0[2], v1[2]), default.units = 'native',
-                    gp = gpar(lty = lty, lwd = lwd) #vp = 'clipon'
+                    gp = gpar(lty = lty, lwd = lwd) 
                     )
                 EdgeDone[Edge[f, 1]] = EdgeDone[Edge[f, 1]] + 1
                 }
             if (!EdgeDone[Edge[f, 2]]){
                 grid.lines(c(v1[1], v2[1]), c(v1[2], v2[2]), default.units = 'native',
-                    gp = gpar(lty = lty, lwd = lwd) #vp = 'clipon'
+                    gp = gpar(lty = lty, lwd = lwd) 
                     )
                 EdgeDone[Edge[f, 2]] = EdgeDone[Edge[f, 2]] + 1
                 }
             if (!EdgeDone[Edge[f, 3]]){
                 grid.lines(c(v2[1], v3[1]), c(v2[2], v3[2]), default.units = 'native',
-                    gp = gpar(lty = lty, lwd = lwd) #vp = 'clipon'
+                    gp = gpar(lty = lty, lwd = lwd) 
                     )
                 EdgeDone[Edge[f, 3]] = EdgeDone[Edge[f, 3]] + 1
                 }
             if (!EdgeDone[Edge[f, 4]]){
                 grid.lines(c(v3[1], v0[1]), c(v3[2], v0[2]), default.units = 'native',
-                    gp = gpar(lty = lty, lwd = lwd) #vp = 'clipon'
+                    gp = gpar(lty = lty, lwd = lwd)
                     )
                 EdgeDone[Edge[f, 4]] = EdgeDone[Edge[f, 4]] + 1
                 }
@@ -417,14 +417,17 @@ dPolygon = function(x, y, z, col, trans){
     
     ## record the total number of polygon
     pMax = length(xyCoor$x) / 4
-    pout = list(xyCoor = xyCoor, pMax = pMax, colRep = colRep, polygonOrder = a)
+    pout = list(xyCoor = xyCoor, pMax = pMax, 
+                colRep = colRep, polygonOrder = a)
     pout
 }
 
 
 
 
-DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ltheta, lphi, Shade, Light, trans, DoLighting)
+DrawFacets = function(plot, z, x, y, xs, ys, zs, 
+                        col, ltheta, lphi, Shade,
+                        Light, trans, DoLighting)
 {
     pout = dPolygon(x, y, z, col, trans)
     xyCoor = pout$xyCoor
@@ -461,13 +464,12 @@ DrawFacets = function(plot, z, x, y, xs, ys, zs, col, ltheta, lphi, Shade, Light
 
     grid.polygon(polygons[,1], polygons[,2], id = polygon.id,
                     default.units = 'native', 
-                    gp = gpar(col = plot$border, fill = cols, lty = plot$lty, lwd = plot$lwd),
-                    name = 'polygon'
+                    gp = gpar(col = plot$border, fill = cols, 
+                                lty = plot$lty, lwd = plot$lwd)
                     )
 
 
 }
-
 
 
 TransVector = function(u, T) {
@@ -749,9 +751,13 @@ PerspAxes = function(x, y, z,
     } else
         warning("Axis orientation not calculated")
     ## drawing x and y axes
-    
-    PerspAxis(x, y, z, xAxis, '1', nTicks, tickType, xlab, VT, lwd = lwd, lty = lty, col.axis = col.axis, col.lab = col.lab, cex.lab = cex.lab)
-    PerspAxis(x, y, z, yAxis, '2', nTicks, tickType, ylab, VT, lwd = lwd, lty = lty, col.axis = col.axis, col.lab = col.lab, cex.lab = cex.lab)
+    PerspAxis(x, y, z, xAxis, '1', nTicks, tickType, xlab, VT, 
+                lwd = lwd, lty = lty, col.axis = col.axis, 
+                col.lab = col.lab, cex.lab = cex.lab)
+                
+    PerspAxis(x, y, z, yAxis, '2', nTicks, tickType, ylab, VT, 
+                lwd = lwd, lty = lty, col.axis = col.axis, 
+                col.lab = col.lab, cex.lab = cex.lab)
 
     ## Figure out which Z axis to draw
     if (lowest(v0[1], v1[1], v2[1], v3[1])) {
@@ -766,7 +772,9 @@ PerspAxes = function(x, y, z,
     warning("Axis orientation not calculated")
 
     ## drawing the z-axis
-    PerspAxis(x, y, z, zAxis, '3', nTicks, tickType, zlab, VT, lwd = lwd, lty = lty, col.axis = col.axis, col.lab = col.lab, cex.lab = cex.lab)
+    PerspAxis(x, y, z, zAxis, '3', nTicks, tickType, zlab, VT, 
+                lwd = lwd, lty = lty, col.axis = col.axis, 
+                col.lab = col.lab, cex.lab = cex.lab)
 }
 
 

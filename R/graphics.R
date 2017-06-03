@@ -28,7 +28,7 @@ dlDispatch <- function(x) {
            C_contour = C_contour(x[[2]]),
            # These unsupported
            C_persp = C_persp(x[[2]]),
-           C_filledcontour = lC_filledcontour(x[[2]]),
+           C_filledcontour = C_filledcontour(x[[2]]),
            # These are ignored
            C_strWidth = NULL,
            C_strHeight = NULL,
