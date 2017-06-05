@@ -184,7 +184,7 @@ C_filledcontour = function(plot)
 lFindPolygonVertices = function(low,  high,
 		     x1,  x2,  y1,  y2,
 		     z11,  z21,  z12,  z22,
-		     x,  y,  z, npt, iii)
+		     x,  y,  z, npt)
 {
     out = list()
     npt = 0
