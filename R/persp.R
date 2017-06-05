@@ -276,6 +276,7 @@ shadeCol = function( z, x, y, xs, ys, zs, col, ltheta, lphi, Shade, Light) {
     }
         list(cols = cols, shade = shade)
 }
+
 ## shade end...
 PerspBox = function(front = 1, x, y, z, EdgeDone, VT, lty, lwd = lwd )
 {
@@ -422,9 +423,6 @@ dPolygon = function(x, y, z, col, trans){
     pout
 }
 
-
-
-
 DrawFacets = function(plot, z, x, y, xs, ys, zs, 
                         col, ltheta, lphi, Shade,
                         Light, trans, DoLighting)
@@ -467,8 +465,7 @@ DrawFacets = function(plot, z, x, y, xs, ys, zs,
                     gp = gpar(col = plot$border, fill = cols, 
                                 lty = plot$lty, lwd = plot$lwd)
                     )
-
-
+	
 }
 
 
@@ -837,6 +834,7 @@ TickVector = matrix(ncol = 3, byrow = TRUE, data = c(
     1, -1, 0,
     -1, 1, 0,
     1, 1, 0 ))
+
 Vertex = matrix(ncol = 3, byrow = TRUE, data = c(
 	1, 1, 1,  #xlim[1], ylim[1], zlim[1]
 	1, 1, 2,  #xlim[1], ylim[1], zlim[2]
@@ -846,7 +844,6 @@ Vertex = matrix(ncol = 3, byrow = TRUE, data = c(
 	2, 1, 2,
 	2, 2, 1,
 	2, 2, 2 ))
-
 
 Face  = matrix (ncol = 4, byrow = TRUE, data = c(
     1, 2, 6, 5,
