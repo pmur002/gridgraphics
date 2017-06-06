@@ -27,8 +27,8 @@ dlDispatch <- function(x) {
            # These only partially supported
            C_contour = C_contour(x[[2]]),
            # These unsupported
-           C_persp = warning("gridGraphics cannot emulate persp()"),
-           C_filledcontour = warning("gridGraphics cannot emulate persp()"),
+           C_persp = C_persp(x[[2]]),
+           C_filledcontour = C_filledcontour(x[[2]]),
            # These are ignored
            C_strWidth = NULL,
            C_strHeight = NULL,

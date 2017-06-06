@@ -1,6 +1,12 @@
 \name{NEWS}
 \title{NEWS file for the gridGraphics package}
 \encoding{UTF-8}
+\section{Changes in version 0.2}{
+    \itemize{
+        \item \code{grid.echo()} now supports \code{persp()} and 
+        \code{filled.contour()}
+      }
+}
 
 \section{Changes in version 0.1-5}{
   \itemize{

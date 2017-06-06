@@ -1,10 +1,12 @@
 
 importFrom("grDevices",
+           "axisTicks", "col2rgb",
            "contourLines", "dev.control", "dev.cur",
            "dev.list", "dev.new", "dev.off", "dev.set", "palette",
-           "pdf", "png", "recordPlot", "replayPlot")
+           "pdf", "png", "recordPlot", "replayPlot", "rgb", "trans3d")
 importFrom("graphics",
            "axTicks", "par", "plot.new")
+           
 import("grid")
 
 export("grid.echo")

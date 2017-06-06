@@ -37,7 +37,8 @@ graphics.pkg <- c("test-assocplot.R", "test-axis.POSIXct.R", "test-axTicks.R",
                   "test-points.R", "test-polypath.R", "test-rug.R",
                   "test-screen.R", "test-smoothScatter.R",
                   "test-spineplot.R", "test-stars.R", "test-stripchart.R",
-                  "test-sunflowerplot.R", "test-symbols.R", "test-units.R")
+                  "test-sunflowerplot.R", "test-symbols.R", "test-units.R", 
+                  "test-persp.R", "test-filled.contour.R")
 if ("graphics-pkg-core" %in% tests || "all" %in% tests) {
     testfiles <- c(testfiles, graphics.pkg.core)
 } 
@@ -54,5 +55,3 @@ if ("all" %in% tests) {
 for (i in unique(testfiles)) {
     file.copy(system.file("test-scripts", i, package="gridGraphics"), ".")  
 }
-
-

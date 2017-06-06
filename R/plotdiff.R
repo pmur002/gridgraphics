@@ -75,11 +75,11 @@ fungen <- function() {
                 if (!antialias)
                     options <- c(options, "+antialias")
                 if(Windows) {
-                    shell(paste("convert", options,
+                    shell(paste("convert", paste(options, collapse=" "),
                                 paste0(label, c("-graphics.pdf",
                                                 "-graphics.png"),
                                        collapse=" ")))
-                    shell(paste("convert", options,
+                    shell(paste("convert", paste(options, collapse=" "),
                                 paste0(label, c("-grid.pdf", "-grid.png"),
                                        collapse=" ")))
                 } else {
