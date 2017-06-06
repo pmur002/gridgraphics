@@ -1,8 +1,10 @@
 Package: gridGraphics
 Title: Redraw Base Graphics Using 'grid' Graphics
-Version: 0.2
-Authors@R: person("Paul", "Murrell", role = c("cre", "aut"),
-                  email = "paul@stat.auckland.ac.nz")
+Version: 0.2-1
+Authors@R: c(person("Paul", "Murrell", role = c("cre", "aut"),
+                    email = "paul@stat.auckland.ac.nz"),
+             person("Zhijian", "Wen", role = "aut",
+                    email = "jwen246@aucklanduni.ac.nz"))
 Description: Functions to convert a page of plots drawn with the 
   graphics package into identical output drawn with the grid package.
   The result looks like the original graphics-based plot, but consists
