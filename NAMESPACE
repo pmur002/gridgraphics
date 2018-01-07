@@ -6,7 +6,7 @@ importFrom("grDevices",
            "pdf", "png", "recordPlot", "replayPlot", "rgb", "trans3d")
 importFrom("graphics",
            "axTicks", "par", "plot.new")
-           
+
 import("grid")
 
 export("grid.echo")
@@ -19,3 +19,4 @@ export("plotdiffResult")
 S3method("grid.echo", "default")
 S3method("grid.echo", "recordedplot")
 S3method("grid.echo", "function")
+

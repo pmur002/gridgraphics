@@ -1,6 +1,16 @@
 \name{NEWS}
 \title{NEWS file for the gridGraphics package}
 \encoding{UTF-8}
+\section{Changes in version 0.2-1}{
+    \itemize{
+      \item Added Zhijian (Jason) Wen as package author (it was he
+      who contributed the \code{persp()} and \code{filled.contour()}
+      support).
+      \item Added \pkg{magick} and \pkg{pdftools} as (Suggests)
+      dependencies, to provide
+      better and more stable support for \code{plotdiff()}.
+}
+
 \section{Changes in version 0.2}{
     \itemize{
         \item \code{grid.echo()} now supports \code{persp()} and 

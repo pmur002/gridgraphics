@@ -12,7 +12,7 @@ Description: Functions to convert a page of plots drawn with the
   grid functions (e.g., edit grobs and revisit viewports).
 Depends: grid, graphics
 Imports: grDevices
-Suggests: KernSmooth
+Suggests: magick, pdftools, KernSmooth
 SystemRequirements: ImageMagick (for testing)
 License: GPL (>= 2)
 URL: https://github.com/pmur002/gridgraphics
