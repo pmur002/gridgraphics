@@ -1,13 +1,19 @@
 \name{NEWS}
 \title{NEWS file for the gridGraphics package}
 \encoding{UTF-8}
+\section{Changes in version 0.2-1}{
+  \itemize{
+    \item Fixed bug when echoing scatter plot with ZERO points in it.
+    Reported by github user zxzb
+    \url{https://github.com/pmur002/gridgraphics/issues/9}
+  }
+}
 \section{Changes in version 0.2}{
     \itemize{
         \item \code{grid.echo()} now supports \code{persp()} and 
         \code{filled.contour()}
       }
 }
-
 \section{Changes in version 0.1-5}{
   \itemize{
     \item Changed stop() to warning() when call grid.echo() with
