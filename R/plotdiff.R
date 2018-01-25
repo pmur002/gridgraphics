@@ -17,7 +17,7 @@ plotcompare <- function(label) {
                   paste0(label, c("-graphics.png", "-grid.png", "-diff.png"))),
                 stdout=TRUE, stderr=TRUE)
     }
-    if (result == "0") {
+    if (identical(result, "0")) {
         file.remove(diffname)
     }
     result
@@ -109,10 +109,10 @@ fungen <- function() {
             }
             pngLabel <- paste0(label, "-0")
             result <- plotcompare(label)
-            if (result != "0") {
+            if (!identical(result, "0")) {
                 diffs <<- c(diffs,
                             paste0(result,
-                                   if (result == 1) " difference "
+                                   if (identical(result, "1")) " difference "
                                    else " differences ",
                                    "detected (", label, "-diff.png)"))
             }

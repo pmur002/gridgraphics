@@ -6,6 +6,8 @@
     \item Fixed bug when echoing scatter plot with ZERO points in it.
     Reported by github user zxzb
     \url{https://github.com/pmur002/gridgraphics/issues/9}
+    \item Made plotdiff() more robust to unexpected output from
+    ImageMagick's compare.  Reported by Brian Ripley.
   }
 }
 \section{Changes in version 0.2}{
