@@ -7,10 +7,12 @@ plotcompare <- function(label) {
         stop("This comparison already exists")
     result <-
     if(.Platform$OS.type == "windows") {
-        shell(paste("compare", "-metric AE",
-                    paste0(label, c("-graphics.png", "-grid.png", "-diff.png"),
-                           collapse=" ")),
-              ignore.stdout=TRUE, ignore.stderr=TRUE)
+        as.character(shell(paste("compare", "-metric AE",
+                                 paste0(label,
+                                        c("-graphics.png", "-grid.png",
+                                          "-diff.png"),
+                                        collapse=" ")),
+                           ignore.stdout=TRUE, ignore.stderr=TRUE))
     } else {
         system2("compare",
                 c("-metric AE",
