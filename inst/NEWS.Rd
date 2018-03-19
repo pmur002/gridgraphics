@@ -1,6 +1,14 @@
 \name{NEWS}
 \title{NEWS file for the gridGraphics package}
 \encoding{UTF-8}
+\section{Changes in version 0.2-2}{
+  \itemize{
+        \item Added \code{device} argument to \code{grid.echo()}
+        so that user can specify a \dQuote{working device}.  This
+        is an in-memory PDF device by default, but that can have
+        problems with fonts.  Thanks to Claus Wilke.
+  }
+}
 \section{Changes in version 0.2-1}{
   \itemize{
     \item Fixed bug when echoing scatter plot with ZERO points in it.
