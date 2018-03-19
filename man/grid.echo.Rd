@@ -9,7 +9,7 @@ Echo \pkg{graphics} output using \pkg{grid} graphics
   to an identical scene drawn with the \pkg{grid} package.
 }
 \usage{
-grid.echo(x = NULL, newpage = TRUE, prefix = NULL)
+grid.echo(x = NULL, newpage = TRUE, prefix = NULL, device = offscreen)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -24,6 +24,12 @@ grid.echo(x = NULL, newpage = TRUE, prefix = NULL)
   \item{prefix}{
     A character value used as a prefix for all grob and viewport names.
     The default prefix is \code{"graphics"}.
+  }
+  \item{device}{
+    A function that opens a graphics device for \code{grid.echo()} to
+    work on.  By default this is an off-screen, in-memory device
+    based on the \code{pdf} device.  This default device may not be
+    satisfactory when using custom fonts.
   }
 }
 \details{
