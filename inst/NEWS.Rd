@@ -15,7 +15,10 @@
     \code{filled.contour()}.
 
     \item Fix for echoing correct \code{font} settings in \code{axis()}
-    and \code{persp()}. Reported by Claus Wilke.    
+    and \code{persp()}. Reported by Claus Wilke.
+
+    \item Attempt to survive errors during echoing (like
+    "figure margins too large") more elegantly
   }
 }
 \section{Changes in version 0.2-1}{
