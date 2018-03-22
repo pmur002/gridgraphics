@@ -1,6 +1,5 @@
 ## initialize and create a viewport prepare for drawing
-perInit = function ( plot, newpage = FALSE, dbox = TRUE ) {
-    info = plot
+perInit = function(info, newpage = FALSE, dbox = TRUE) {
     ## [[1]] is the all the grapical information that transfer into grid
     ## [[3]] is the persp call information
     ## [[2]] is the plot details eg: x, y, z, xlim, ylim, zlim, col ...
@@ -40,25 +39,27 @@ perInit = function ( plot, newpage = FALSE, dbox = TRUE ) {
 }
 
 ## main call 
-C_persp = function(plot = NULL, ...)
+C_persp = function(x)
 {
     dev.set(recordDev())
-    par = currentPar(NULL)
+    par = currentPar(x[-(1:25)])
     dev.set(playDev())
     
     #information extraction
     xc = yc = zc = xs = ys = zs = 0
-    plot = perInit(plot, newpage = FALSE)
-    xr = plot$xr; yr = plot$yr; zr = plot$zr
-    xlab = plot$xlab; ylab = plot$ylab; zlab = plot$zlab
-    col.axis = plot$col.axis; col.lab = plot$col.lab; 
-    col = plot$col; cex.lab = plot$cex.lab
-    nTicks = plot$nTicks; tickType = plot$tickType
-    expand = plot$expand ;scale = plot$scale
-    ltheta = plot$ltheta; lphi = plot$lphi
-    main = plot$main; axes = plot$axes
-    dbox = plot$dbox; shade = plot$shade
-    r = plot$r; d = plot$d; phi = plot$phi; theta = plot$theta
+    x = perInit(x, newpage = FALSE)
+    xr = x$xr; yr = x$yr; zr = x$zr
+    xlab = x$xlab; ylab = x$ylab; zlab = x$zlab
+    col.axis = x$col.axis; col.lab = x$col.lab; 
+    col = x$col; cex.lab = x$cex.lab
+    nTicks = x$nTicks; tickType = x$tickType
+    expand = x$expand ;scale = x$scale
+    ltheta = x$ltheta; lphi = x$lphi
+    main = x$main; axes = x$axes
+    dbox = x$dbox; shade = x$shade
+    r = x$r; d = x$d; phi = x$phi; theta = x$theta
+    font.lab = par$font.lab
+    font.axis = par$font.axis
     family = par$family
 	
     xs = LimitCheck(xr)[1]
@@ -86,9 +87,9 @@ C_persp = function(plot = NULL, ...)
     VT = VT %*% Translate(0.0, 0.0, -r - d)
     trans = VT %*% Perspective(d)
 
-    border = plot$border[1];
-    if(is.null(plot$lwd)) lwd = 1 else lwd = plot$lwd
-    if(is.null(plot$lty)) lty = 1 else lty = plot$lty
+    border = x$border[1];
+    if(is.null(x$lwd)) lwd = 1 else lwd = x$lwd
+    if(is.null(x$lty)) lty = 1 else lty = x$lty
     if(any(!(is.numeric(xr) & is.numeric(yr) & is.numeric(zr)))) stop("invalid limits")
     if(any(!(is.finite(xr) & is.finite(yr) & is.finite(zr)))) stop("invalid limits")
     
@@ -120,7 +121,7 @@ C_persp = function(plot = NULL, ...)
                       xlab, ylab, zlab, ## xlab, xenc, ylab, yenc, zlab, zenc
                       nTicks, tickType, trans, ## nTicks, tickType, VT
                       lwd, lty, col.axis, col.lab, cex.lab, ## lwd, lty, col.axis, col.lab, cex.lab
-                      family)
+                      font.lab, font.axis, family)
             upViewport(depth)}
     } else {
         EdgeDone = rep(1, 12)
@@ -134,7 +135,7 @@ C_persp = function(plot = NULL, ...)
     upViewport(depth)
     
     depth = gotovp(FALSE)
-    DrawFacets(plot = plot, z = plot$z, x = plot$x, y = plot$y,     ## basic
+    DrawFacets(plot = x, z = x$z, x = x$x, y = x$y,     ## basic
                 xs = 1/xs, ys = 1/ys, zs = expand/zs,               ## Light
                 col = col,                                          ## cols
                 ltheta = ltheta, lphi = lphi, Shade = shade, 
@@ -513,7 +514,7 @@ PerspAxis = function(x, y, z, axis, axisType,
                      nTicks, tickType, label, 
                      VT, lwd = 1, lty, col.axis = 1,
                      col.lab = 1, cex.lab = 1,
-                     family){
+                     font.lab, font.axis, family){
 
     ## don't know how to use numeric on the switch...
     axisType = as.character(axisType)
@@ -649,7 +650,7 @@ PerspAxis = function(x, y, z, axis, axisType,
           just = "centre", rot = srt,
           default.units = "native", #vp = 'clipoff',
           gp = gpar(col = col.lab, lwd = lwd, cex = cex.lab,
-                    fontfamily = family),
+                    font = font.lab, fontfamily = family),
           name = grobname(paste0("persp-", labname, "lab")))
     
     ## tickType is not working.. when = '2'
@@ -719,7 +720,8 @@ PerspAxis = function(x, y, z, axis, axisType,
                              just = "centre",
                              default.units = "native", #vp = 'clipoff',
                              gp = gpar(col = col.axis, adj = 1, pos = 0.5,
-                                       cex = 1, fonfamily = family),
+                                       cex = 1, font = font.axis,
+                                       fontfamily = family),
                              name = grobname(paste0("persp-", labname,
                                                     "-axis-labels")))
                }
@@ -734,7 +736,7 @@ PerspAxes = function(x, y, z,
                      nTicks, tickType, VT, 
                      ## parameters in par
                      lwd = 1, lty = 1, col.axis = 1, col.lab = 1, cex.lab = 1,
-                     family)
+                     font.lab, font.axis, family)
 {
     xAxis = yAxis = zAxis = 0 ## -Wall 
     u0 = u1 = u2 = u3 = 0
@@ -772,12 +774,12 @@ PerspAxes = function(x, y, z,
     PerspAxis(x, y, z, xAxis, '1', nTicks, tickType, xlab, VT, 
               lwd = lwd, lty = lty, col.axis = col.axis, 
               col.lab = col.lab, cex.lab = cex.lab,
-              family)
+              font.lab, font.axis, family)
                 
     PerspAxis(x, y, z, yAxis, '2', nTicks, tickType, ylab, VT, 
               lwd = lwd, lty = lty, col.axis = col.axis, 
               col.lab = col.lab, cex.lab = cex.lab,
-              family)
+              font.lab, font.axis, family)
 
     ## Figure out which Z axis to draw
     if (lowest(v0[1], v1[1], v2[1], v3[1])) {
@@ -795,7 +797,7 @@ PerspAxes = function(x, y, z,
     PerspAxis(x, y, z, zAxis, '3', nTicks, tickType, zlab, VT, 
               lwd = lwd, lty = lty, col.axis = col.axis, 
               col.lab = col.lab, cex.lab = cex.lab,
-              family)
+              font.lab, font.axis, family)
 }
 
 

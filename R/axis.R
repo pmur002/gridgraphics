@@ -64,6 +64,10 @@ C_axis <- function(x) {
     } else {
         tickLength <- unit(par$cin[2]*par$tcl*par$cex, "in")
     }
+    ## font is 'font' arg if not NA, otherwise par("font.axis")
+    if (is.na(font)) {
+        font <- par$font.axis
+    }
     returnvp <- NULL
     if (side == 1 && par$xaxt != "n") {
         if (is.finite(pos)) {
@@ -117,7 +121,7 @@ C_axis <- function(x) {
                    yadj=computePAdj(padj, side, par$las),
                    mex=par$mex, cin=par$cin, 
                    cex=par$cex.axis*par$cex, linecex=par$mex*par$cex,
-                   font=par$font.axis, family=par$family,
+                   font=font, family=par$family,
                    col=par$col.axis, lheight=par$lheight,
                    yLineBias=par$ylbias, allowOverlap=FALSE,
                    label="bottom-axis-labels")
@@ -167,7 +171,7 @@ C_axis <- function(x) {
                    yadj=computePAdj(padj, side, par$las),
                    mex=par$mex, cin=par$cin,
                    cex=par$cex.axis*par$cex, linecex=par$mex*par$cex,
-                   font=par$font.axis, family=par$family,
+                   font=font, family=par$family,
                    col=par$col.axis, lheight=par$lheight,
                    yLineBias=par$ylbias, allowOverlap=FALSE,
                    label="left-axis-labels")
@@ -219,7 +223,7 @@ C_axis <- function(x) {
                    yadj=computePAdj(padj, side, par$las),
                    mex=par$mex, cin=par$cin, 
                    cex=par$cex.axis*par$cex, linecex=par$mex*par$cex,
-                   font=par$font.axis, family=par$family,
+                   font=font, family=par$family,
                    col=par$col.axis, lheight=par$lheight,
                    yLineBias=par$ylbias, allowOverlap=FALSE,
                    label="top-axis-labels")
@@ -271,7 +275,7 @@ C_axis <- function(x) {
                    yadj=computePAdj(padj, side, par$las),
                    mex=par$mex, cin=par$cin,
                    cex=par$cex.axis*par$cex, linecex=par$mex*par$cex,
-                   font=par$font.axis, family=par$family,
+                   font=font, family=par$family,
                    col=par$col.axis, lheight=par$lheight,
                    yLineBias=par$ylbias, allowOverlap=FALSE,
                    label="right-axis-labels")

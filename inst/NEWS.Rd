@@ -6,12 +6,16 @@
     \item Added \code{device} argument to \code{grid.echo()}
     so that user can specify a \dQuote{working device}.  This
     is an in-memory PDF device by default, but that can have
-    problems with fonts.  Thanks to Claus Wilke.
+    problems with fonts.  Suggested by Claus Wilke.
 
     \item Added capture of font family when echoing persp() plots.
+    Reported by Claus Wilke.
 
     \item Added names for grobs from echoing \code{persp()} and
     \code{filled.contour()}.
+
+    \item Fix for echoing correct \code{font} settings in \code{axis()}
+    and \code{persp()}. Reported by Claus Wilke.    
   }
 }
 \section{Changes in version 0.2-1}{
