@@ -16,21 +16,23 @@ perInit = function ( plot, newpage = FALSE, dbox = TRUE ) {
     ## shade is 0.8, ltheta/lphi = [[16]]/[[17]]
     ## expand is [[13]], scale is [[12]]
     out = list(x = info[[2]], y = info[[3]], z = info[[4]],
-                xr = info[[5]], yr = info[[6]], zr = info[[7]],
-                col = info[[14]], border = info[[15]][1] ##only allows one color for border
-				, dbox = info[[19]],
-                newpage = newpage, 
-                phi = info[[9]], theta = info[[8]], r = info[[10]], d = info[[11]],
-                axes = info[[20]], nTicks = info[[21]], tickType = info[[22]],
-                xlab = info[[23]], ylab = info[[24]], zlab = info[[25]],
-				## parameters in 'par' that need added to per
-                lwd = info$lwd, lty = info$lty, #col.axis = info$col.axis,
-				#col.lab = info$col.lab, 
-				cex.lab = info$cex.lab, 
-                shade = info[[18]], ltheta = info[[16]], lphi = info[[17]],
-                expand = info[[13]], scale = info[[12]]
-				#main = plot[[1]][[4]][[2]][[2]]
-                )
+               xr = info[[5]], yr = info[[6]], zr = info[[7]],
+               col = info[[14]],
+               border = info[[15]][1], ##only allows one color for border
+               dbox = info[[19]],
+               newpage = newpage, 
+               phi = info[[9]], theta = info[[8]],
+               r = info[[10]], d = info[[11]],
+               axes = info[[20]], nTicks = info[[21]], tickType = info[[22]],
+               xlab = info[[23]], ylab = info[[24]], zlab = info[[25]],
+               ## parameters in 'par' that need added to per
+               lwd = info$lwd, lty = info$lty, ## col.axis = info$col.axis,
+               ## col.lab = info$col.lab, 
+               cex.lab = info$cex.lab, 
+               shade = info[[18]], ltheta = info[[16]], lphi = info[[17]],
+               expand = info[[13]], scale = info[[12]]
+               ##main = plot[[1]][[4]][[2]][[2]]
+               )
     
     if(out$newpage == TRUE)
         grid.newpage()
@@ -57,8 +59,9 @@ C_persp = function(plot = NULL, ...)
     main = plot$main; axes = plot$axes
     dbox = plot$dbox; shade = plot$shade
     r = plot$r; d = plot$d; phi = plot$phi; theta = plot$theta
+    family = par$family
 	
-	xs = LimitCheck(xr)[1]
+    xs = LimitCheck(xr)[1]
     ys = LimitCheck(yr)[1]
     zs = LimitCheck(zr)[1]
     xc = LimitCheck(xr)[2]
@@ -114,9 +117,10 @@ C_persp = function(plot = NULL, ...)
         if(axes == TRUE){
             depth = gotovp(TRUE)
             PerspAxes(xr, yr, zr, ##x, y, z
-                    xlab, ylab, zlab, ## xlab, xenc, ylab, yenc, zlab, zenc
-                    nTicks, tickType, trans, ## nTicks, tickType, VT
-                    lwd, lty, col.axis, col.lab, cex.lab) ## lwd, lty, col.axis, col.lab, cex.lab
+                      xlab, ylab, zlab, ## xlab, xenc, ylab, yenc, zlab, zenc
+                      nTicks, tickType, trans, ## nTicks, tickType, VT
+                      lwd, lty, col.axis, col.lab, cex.lab, ## lwd, lty, col.axis, col.lab, cex.lab
+                      family)
             upViewport(depth)}
     } else {
         EdgeDone = rep(1, 12)
@@ -499,9 +503,10 @@ labelAngle = function(x1, y1, x2, y2){
 }	
 
 PerspAxis = function(x, y, z, axis, axisType, 
-                    nTicks, tickType, label, 
-                    VT, lwd = 1, lty, col.axis = 1,
-                    col.lab = 1, cex.lab = 1){
+                     nTicks, tickType, label, 
+                     VT, lwd = 1, lty, col.axis = 1,
+                     col.lab = 1, cex.lab = 1,
+                     family){
 
     ## don't know how to use numeric on the switch...
     axisType = as.character(axisType)
@@ -632,7 +637,8 @@ PerspAxis = function(x, y, z, axis, axisType,
     grid.text(label = label, x = v3[1], y = v3[2],
           just = "centre", rot = srt,
           default.units = "native", #vp = 'clipoff',
-          gp = gpar(col = col.lab, lwd = lwd, cex = cex.lab)
+          gp = gpar(col = col.lab, lwd = lwd, cex = cex.lab,
+                    fontfamily = family)
           )
     
     ## tickType is not working.. when = '2'
@@ -697,10 +703,10 @@ PerspAxis = function(x, y, z, axis, axisType,
 
             ## Draw tick label
             grid.text(label = lab[i], x = v3[1], y = v3[2],
-                just = "centre",
-                default.units = "native", #vp = 'clipoff',
-                gp = gpar(col = col.axis, adj = 1, pos = 0.5, cex = 1)
-                )
+                      just = "centre",
+                      default.units = "native", #vp = 'clipoff',
+                      gp = gpar(col = col.axis, adj = 1, pos = 0.5, cex = 1,
+                                fonfamily = family))
             }
         }
     )
@@ -708,12 +714,13 @@ PerspAxis = function(x, y, z, axis, axisType,
 
 
 PerspAxes = function(x, y, z, 
-                    xlab, 
-                    ylab, 
-                    zlab, 
-                    nTicks, tickType, VT, 
-					## parameters in par
-                    lwd = 1, lty = 1, col.axis = 1, col.lab = 1, cex.lab = 1)
+                     xlab, 
+                     ylab, 
+                     zlab, 
+                     nTicks, tickType, VT, 
+                     ## parameters in par
+                     lwd = 1, lty = 1, col.axis = 1, col.lab = 1, cex.lab = 1,
+                     family)
 {
     xAxis = yAxis = zAxis = 0 ## -Wall 
     u0 = u1 = u2 = u3 = 0
@@ -749,12 +756,14 @@ PerspAxes = function(x, y, z,
         warning("Axis orientation not calculated")
     ## drawing x and y axes
     PerspAxis(x, y, z, xAxis, '1', nTicks, tickType, xlab, VT, 
-                lwd = lwd, lty = lty, col.axis = col.axis, 
-                col.lab = col.lab, cex.lab = cex.lab)
+              lwd = lwd, lty = lty, col.axis = col.axis, 
+              col.lab = col.lab, cex.lab = cex.lab,
+              family)
                 
     PerspAxis(x, y, z, yAxis, '2', nTicks, tickType, ylab, VT, 
-                lwd = lwd, lty = lty, col.axis = col.axis, 
-                col.lab = col.lab, cex.lab = cex.lab)
+              lwd = lwd, lty = lty, col.axis = col.axis, 
+              col.lab = col.lab, cex.lab = cex.lab,
+              family)
 
     ## Figure out which Z axis to draw
     if (lowest(v0[1], v1[1], v2[1], v3[1])) {
@@ -770,8 +779,9 @@ PerspAxes = function(x, y, z,
 
     ## drawing the z-axis
     PerspAxis(x, y, z, zAxis, '3', nTicks, tickType, zlab, VT, 
-                lwd = lwd, lty = lty, col.axis = col.axis, 
-                col.lab = col.lab, cex.lab = cex.lab)
+              lwd = lwd, lty = lty, col.axis = col.axis, 
+              col.lab = col.lab, cex.lab = cex.lab,
+              family)
 }
 
 
