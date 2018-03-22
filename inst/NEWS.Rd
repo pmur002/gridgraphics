@@ -9,6 +9,9 @@
     problems with fonts.  Thanks to Claus Wilke.
 
     \item Added capture of font family when echoing persp() plots.
+
+    \item Added names for grobs from echoing \code{persp()} and
+    \code{filled.contour()}.
   }
 }
 \section{Changes in version 0.2-1}{

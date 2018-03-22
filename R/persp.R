@@ -327,29 +327,37 @@ PerspBox = function(front = 1, x, y, z, EdgeDone, VT, lty, lwd = lwd )
         ## draw the face line by line rather than polygon
         if ((front && nearby) || (!front && !nearby)) {
             if (!EdgeDone[Edge[f, 1]]){
-                grid.lines(c(v0[1], v1[1]), c(v0[2], v1[2]), default.units = 'native',
-                    gp = gpar(lty = lty, lwd = lwd) 
-                    )
+                grid.lines(c(v0[1], v1[1]), c(v0[2], v1[2]),
+                           default.units = 'native',
+                           gp = gpar(lty = lty, lwd = lwd), 
+                           name = grobname(paste0("persp-box-face-", f,
+                                                  "-edge-1")))
                 EdgeDone[Edge[f, 1]] = EdgeDone[Edge[f, 1]] + 1
-                }
+            }
             if (!EdgeDone[Edge[f, 2]]){
-                grid.lines(c(v1[1], v2[1]), c(v1[2], v2[2]), default.units = 'native',
-                    gp = gpar(lty = lty, lwd = lwd) 
-                    )
+                grid.lines(c(v1[1], v2[1]), c(v1[2], v2[2]),
+                           default.units = 'native',
+                           gp = gpar(lty = lty, lwd = lwd), 
+                           name = grobname(paste0("persp-box-face-", f,
+                                                  "-edge-2")))
                 EdgeDone[Edge[f, 2]] = EdgeDone[Edge[f, 2]] + 1
-                }
+            }
             if (!EdgeDone[Edge[f, 3]]){
-                grid.lines(c(v2[1], v3[1]), c(v2[2], v3[2]), default.units = 'native',
-                    gp = gpar(lty = lty, lwd = lwd) 
-                    )
+                grid.lines(c(v2[1], v3[1]), c(v2[2], v3[2]),
+                           default.units = 'native',
+                           gp = gpar(lty = lty, lwd = lwd), 
+                           name = grobname(paste0("persp-box-face-", f,
+                                                  "-edge-3")))
                 EdgeDone[Edge[f, 3]] = EdgeDone[Edge[f, 3]] + 1
-                }
+            }
             if (!EdgeDone[Edge[f, 4]]){
-                grid.lines(c(v3[1], v0[1]), c(v3[2], v0[2]), default.units = 'native',
-                    gp = gpar(lty = lty, lwd = lwd)
-                    )
+                grid.lines(c(v3[1], v0[1]), c(v3[2], v0[2]),
+                           default.units = 'native',
+                           gp = gpar(lty = lty, lwd = lwd),
+                           name = grobname(paste0("persp-box-face-", f,
+                                                  "-edge-4")))
                 EdgeDone[Edge[f, 4]] = EdgeDone[Edge[f, 4]] + 1
-                }
+            }
         }
     }
     EdgeDone
@@ -465,11 +473,10 @@ DrawFacets = function(plot, z, x, y, xs, ys, zs,
     yrange = range(polygons[,2], na.rm = TRUE)
 
     grid.polygon(polygons[,1], polygons[,2], id = polygon.id,
-                    default.units = 'native', 
-                    gp = gpar(col = plot$border, fill = cols, 
-                                lty = plot$lty, lwd = plot$lwd)
-                    )
-	
+                 default.units = 'native', 
+                 gp = gpar(col = plot$border, fill = cols, 
+                           lty = plot$lty, lwd = plot$lwd),
+                 name = grobname("persp-surface"))
 }
 
 
@@ -634,82 +641,89 @@ PerspAxis = function(x, y, z, axis, axisType,
     ## label at center of each axes
     srt = labelAngle(v1[1], v1[2], v2[1], v2[2])
     #text(v3[1], v3[2], label, 0.5, srt = srt)
+    labname <- switch(axisType,
+                      '1' = "x",
+                      '2' = "y",
+                      '3' = "z")
     grid.text(label = label, x = v3[1], y = v3[2],
           just = "centre", rot = srt,
           default.units = "native", #vp = 'clipoff',
           gp = gpar(col = col.lab, lwd = lwd, cex = cex.lab,
-                    fontfamily = family)
-          )
+                    fontfamily = family),
+          name = grobname(paste0("persp-", labname, "lab")))
     
     ## tickType is not working.. when = '2'
     switch(tickType,
-    '1' = {
-    arrow = arrow(angle = 10, length = unit(0.1, "in"),
-                    ends = "last", type = "open")  
-	## drawing the tick..
-    
-    grid.lines(x = c(v1[1], v2[1]), y = c(v1[2], v2[2]),
-          default.units = "native", arrow = arrow, #vp = 'clipoff',
-          gp = gpar(col = 1, lwd = lwd , lty = lty )
-          )
-       },
-    ## '2' seems working
-    '2' = {
-        at = axisTicks(range, FALSE, axp, nint = nint)
-        lab = format(at, trim = TRUE)
-        for(i in 1:length(at)){
-            switch(axisType, 
-                '1' = {
-                u1[1] = at[i]
-                u1[2] = y[Vertex[AxisStart[axis], 2]]
-                u1[3] = z[Vertex[AxisStart[axis], 3]]
-                },
-                '2' = {
-                u1[1] = x[Vertex[AxisStart[axis], 1]]
-                u1[2] = at[i]
-                u1[3] = z[Vertex[AxisStart[axis], 3]]
-                },
-                '3' = {
-                u1[1] = x[Vertex[AxisStart[axis], 1]]
-                u1[2] = y[Vertex[AxisStart[axis], 2]]
-                u1[3] = at[i]
-                }
-            )
-            
-            tickLength = 0.03
-            
-            u1[4] = 1
-            u2[1] = u1[1] + tickLength*(x[2]-x[1])*TickVector[axis, 1]
-            u2[2] = u1[2] + tickLength*(y[2]-y[1])*TickVector[axis, 2]
-            u2[3] = u1[3] + tickLength*(z[2]-z[1])*TickVector[axis, 3]
-            u2[4] = 1
-            u3[1] = u2[1] + tickLength*(x[2]-x[1])*TickVector[axis, 1]
-            u3[2] = u2[2] + tickLength*(y[2]-y[1])*TickVector[axis, 2]
-            u3[3] = u2[3] + tickLength*(z[2]-z[1])*TickVector[axis, 3]
-            u3[4] = 1
-            v1 = TransVector(u1, VT)
-            v2 = TransVector(u2, VT)
-            v3 = TransVector(u3, VT)
-                        
-            v1 = v1/v1[4]
-            v2 = v2/v2[4]
-            v3 = v3/v3[4]
-            
-            ## Draw tick line
-            grid.lines(x = c(v1[1], v2[1]), y = c(v1[2], v2[2]),
-                default.units = "native", ##vp = 'clipoff',
-                gp = gpar(col = col.axis, lwd = lwd, lty = lty)
-                )
-
-            ## Draw tick label
-            grid.text(label = lab[i], x = v3[1], y = v3[2],
-                      just = "centre",
-                      default.units = "native", #vp = 'clipoff',
-                      gp = gpar(col = col.axis, adj = 1, pos = 0.5, cex = 1,
-                                fonfamily = family))
-            }
-        }
-    )
+           '1' = {
+               arrow = arrow(angle = 10, length = unit(0.1, "in"),
+                             ends = "last", type = "open")  
+               ## drawing the tick..    
+               grid.lines(x = c(v1[1], v2[1]), y = c(v1[2], v2[2]),
+                          default.units = "native", arrow = arrow,
+                          ## vp = 'clipoff',
+                          gp = gpar(col = 1, lwd = lwd , lty = lty ),
+                          name = grobname(paste0("persp-",
+                                                 labname, "-axis-arrow")))
+           },
+           ## '2' seems working
+           '2' = {
+               at = axisTicks(range, FALSE, axp, nint = nint)
+               lab = format(at, trim = TRUE)
+               for(i in 1:length(at)){
+                   switch(axisType, 
+                          '1' = {
+                              u1[1] = at[i]
+                              u1[2] = y[Vertex[AxisStart[axis], 2]]
+                              u1[3] = z[Vertex[AxisStart[axis], 3]]
+                          },
+                          '2' = {
+                              u1[1] = x[Vertex[AxisStart[axis], 1]]
+                              u1[2] = at[i]
+                              u1[3] = z[Vertex[AxisStart[axis], 3]]
+                          },
+                          '3' = {
+                              u1[1] = x[Vertex[AxisStart[axis], 1]]
+                              u1[2] = y[Vertex[AxisStart[axis], 2]]
+                              u1[3] = at[i]
+                          }
+                          )
+                   
+                   tickLength = 0.03
+                   
+                   u1[4] = 1
+                   u2[1] = u1[1] + tickLength*(x[2]-x[1])*TickVector[axis, 1]
+                   u2[2] = u1[2] + tickLength*(y[2]-y[1])*TickVector[axis, 2]
+                   u2[3] = u1[3] + tickLength*(z[2]-z[1])*TickVector[axis, 3]
+                   u2[4] = 1
+                   u3[1] = u2[1] + tickLength*(x[2]-x[1])*TickVector[axis, 1]
+                   u3[2] = u2[2] + tickLength*(y[2]-y[1])*TickVector[axis, 2]
+                   u3[3] = u2[3] + tickLength*(z[2]-z[1])*TickVector[axis, 3]
+                   u3[4] = 1
+                   v1 = TransVector(u1, VT)
+                   v2 = TransVector(u2, VT)
+                   v3 = TransVector(u3, VT)
+                   
+                   v1 = v1/v1[4]
+                   v2 = v2/v2[4]
+                   v3 = v3/v3[4]
+                   
+                   ## Draw tick line
+                   grid.lines(x = c(v1[1], v2[1]), y = c(v1[2], v2[2]),
+                              default.units = "native", ##vp = 'clipoff',
+                              gp = gpar(col = col.axis, lwd = lwd, lty = lty),
+                              name = grobname(paste0("persp-", labname,
+                                                     "-axis-ticks")))
+                   
+                   ## Draw tick label
+                   grid.text(label = lab[i], x = v3[1], y = v3[2],
+                             just = "centre",
+                             default.units = "native", #vp = 'clipoff',
+                             gp = gpar(col = col.axis, adj = 1, pos = 0.5,
+                                       cex = 1, fonfamily = family),
+                             name = grobname(paste0("persp-", labname,
+                                                    "-axis-labels")))
+               }
+           })
 }
 
 
