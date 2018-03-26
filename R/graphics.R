@@ -39,22 +39,28 @@ dlDispatch <- function(x) {
            warning("unsupported operation on the graphics display list"))
 }
 
-# TODO:  allow reproduction within a 'grid' viewport (rather than whole page) ?
-grid.echo <- function(x = NULL, newpage=TRUE, prefix=NULL) {
+offscreen <- function(width, height) {
+    pdf(NULL, width=width, height=height)
+    dev.control("enable")
+}
+
+grid.echo <- function(x=NULL, newpage=TRUE, prefix=NULL, device=offscreen) {
     UseMethod("grid.echo")
 }
 
-grid.echo.default <- function(x = NULL, newpage=TRUE, prefix=NULL) {
+grid.echo.default <- function(x=NULL, newpage=TRUE, prefix=NULL,
+                              device=offscreen) {
     if (!is.null(x)) {
         stop("Invalid graphics display list")
     }
     if (is.null(dev.list())) {
         stop("No graphics device")
     }
-    grid.echo(recordPlot(), newpage, prefix)
+    grid.echo(recordPlot(), newpage, prefix, device)
 }
 
-grid.echo.recordedplot <- function(x = NULL, newpage=TRUE, prefix=NULL) {
+grid.echo.recordedplot <- function(x=NULL, newpage=TRUE, prefix=NULL,
+                                   device=offscreen) {
     assign("newpage", newpage, .gridGraphicsEnv)
     if (!is.null(prefix)) {
         op <- prefix()
@@ -68,30 +74,43 @@ grid.echo.recordedplot <- function(x = NULL, newpage=TRUE, prefix=NULL) {
         width <- convertWidth(unit(1, "npc"), "in", valueOnly=TRUE)
         height <- convertHeight(unit(1, "npc"), "in", valueOnly=TRUE)
     }
-    init(x, width, height)
+    init(x, width, height, device)
     if (is.null(x[[1]][[2]])) {
         warning("No graphics to replay")
     }
+    ## Make sure we clean up if we error out during DL replay
+    ## (or once we have finished echoing)
+    on.exit(shutdown())
     lapply(x[[1]], dlDispatch)
-    shutdown()
+    invisible()
 }
 
-grid.echo.function <- function(x = NULL, newpage=TRUE, prefix=NULL) {
+grid.echo.function <- function(x=NULL, newpage=TRUE, prefix=NULL,
+                               device=offscreen) {
     if (newpage) {
-        width <- NULL
-        height <- NULL
+        if (dev.cur() == 1) {
+            width <- 7
+            height <- 7
+        } else {
+            din <- par("din")
+            width <- din[1]
+            height <- din[2]
+        }
     } else {
         width <- convertWidth(unit(1, "npc"), "in", valueOnly=TRUE)
         height <- convertHeight(unit(1, "npc"), "in", valueOnly=TRUE)
     }
     cd <- dev.cur()
-    pdf(NULL, width=width, height=height)
-    dev.control("enable")
+    device(width, height)
+    echod <- dev.cur()
+    ## Make sure that the device is closed if running x() errors out
+    on.exit({ dev.set(echod); dev.off(); dev.set(cd) })
     x()
     dl <- recordPlot()
-    dev.off()
+    ## Switch back to device we are echoing on
     dev.set(cd)
     grid.echo(dl, newpage, prefix)
+    invisible()
 }
 
 echoGrob <- function(x = NULL) {

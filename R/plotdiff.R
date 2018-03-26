@@ -7,17 +7,19 @@ plotcompare <- function(label) {
         stop("This comparison already exists")
     result <-
     if(.Platform$OS.type == "windows") {
-        shell(paste("compare", "-metric AE",
-                    paste0(label, c("-graphics.png", "-grid.png", "-diff.png"),
-                           collapse=" ")),
-              ignore.stdout=TRUE, ignore.stderr=TRUE)
+        as.character(shell(paste("compare", "-metric AE",
+                                 paste0(label,
+                                        c("-graphics.png", "-grid.png",
+                                          "-diff.png"),
+                                        collapse=" ")),
+                           ignore.stdout=TRUE, ignore.stderr=TRUE))
     } else {
         system2("compare",
                 c("-metric AE",
                   paste0(label, c("-graphics.png", "-grid.png", "-diff.png"))),
                 stdout=TRUE, stderr=TRUE)
     }
-    if (result == "0") {
+    if (identical(result, "0")) {
         file.remove(diffname)
     }
     result
@@ -109,10 +111,10 @@ fungen <- function() {
             }
             pngLabel <- paste0(label, "-0")
             result <- plotcompare(label)
-            if (result != "0") {
+            if (!identical(result, "0")) {
                 diffs <<- c(diffs,
                             paste0(result,
-                                   if (result == 1) " difference "
+                                   if (identical(result, "1")) " difference "
                                    else " differences ",
                                    "detected (", label, "-diff.png)"))
             }

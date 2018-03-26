@@ -31,12 +31,14 @@ C_plotXY <- function(x) {
 }
 
 points <- function(x, y, pch, col, bg, cex, lwd, par) {
-    grid.points(x, y, default.units="native",
-                #  GSTR_0  dpptr(dd)->scale * dd->dev->cra[1] * 0.5 * dd->dev->ipr[1] * gpptr(dd)->cex
-                size=unit(par$cin[2]*0.5*cex, "in"), pch=pch,
-                gp=gpar(lty="solid", col=col, fill=bg, lwd=lwd, cex=cex,
-                    fontface=par$font),
-                name=grobname("points"))
+    if (length(x) > 0 && length(y) > 0) {
+        grid.points(x, y, default.units="native",
+                    ##  GSTR_0  dpptr(dd)->scale * dd->dev->cra[1] * 0.5 * dd->dev->ipr[1] * gpptr(dd)->cex
+                    size=unit(par$cin[2]*0.5*cex, "in"), pch=pch,
+                    gp=gpar(lty="solid", col=col, fill=bg, lwd=lwd, cex=cex,
+                            fontface=par$font),
+                    name=grobname("points"))
+    }
 }
 
 lines <- function(x, y, lty, col, lwd, par) {

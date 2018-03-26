@@ -1,6 +1,5 @@
 ## initialize and create a viewport prepare for drawing
-perInit = function ( plot, newpage = FALSE, dbox = TRUE ) {
-    info = plot
+perInit = function(info, newpage = FALSE, dbox = TRUE) {
     ## [[1]] is the all the grapical information that transfer into grid
     ## [[3]] is the persp call information
     ## [[2]] is the plot details eg: x, y, z, xlim, ylim, zlim, col ...
@@ -16,21 +15,23 @@ perInit = function ( plot, newpage = FALSE, dbox = TRUE ) {
     ## shade is 0.8, ltheta/lphi = [[16]]/[[17]]
     ## expand is [[13]], scale is [[12]]
     out = list(x = info[[2]], y = info[[3]], z = info[[4]],
-                xr = info[[5]], yr = info[[6]], zr = info[[7]],
-                col = info[[14]], border = info[[15]][1] ##only allows one color for border
-				, dbox = info[[19]],
-                newpage = newpage, 
-                phi = info[[9]], theta = info[[8]], r = info[[10]], d = info[[11]],
-                axes = info[[20]], nTicks = info[[21]], tickType = info[[22]],
-                xlab = info[[23]], ylab = info[[24]], zlab = info[[25]],
-				## parameters in 'par' that need added to per
-                lwd = info$lwd, lty = info$lty, #col.axis = info$col.axis,
-				#col.lab = info$col.lab, 
-				cex.lab = info$cex.lab, 
-                shade = info[[18]], ltheta = info[[16]], lphi = info[[17]],
-                expand = info[[13]], scale = info[[12]]
-				#main = plot[[1]][[4]][[2]][[2]]
-                )
+               xr = info[[5]], yr = info[[6]], zr = info[[7]],
+               col = info[[14]],
+               border = info[[15]][1], ##only allows one color for border
+               dbox = info[[19]],
+               newpage = newpage, 
+               phi = info[[9]], theta = info[[8]],
+               r = info[[10]], d = info[[11]],
+               axes = info[[20]], nTicks = info[[21]], tickType = info[[22]],
+               xlab = info[[23]], ylab = info[[24]], zlab = info[[25]],
+               ## parameters in 'par' that need added to per
+               lwd = info$lwd, lty = info$lty, ## col.axis = info$col.axis,
+               ## col.lab = info$col.lab, 
+               cex.lab = info$cex.lab, 
+               shade = info[[18]], ltheta = info[[16]], lphi = info[[17]],
+               expand = info[[13]], scale = info[[12]]
+               ##main = plot[[1]][[4]][[2]][[2]]
+               )
     
     if(out$newpage == TRUE)
         grid.newpage()
@@ -38,27 +39,30 @@ perInit = function ( plot, newpage = FALSE, dbox = TRUE ) {
 }
 
 ## main call 
-C_persp = function(plot = NULL, ...)
+C_persp = function(x)
 {
     dev.set(recordDev())
-    par = currentPar(NULL)
+    par = currentPar(x[-(1:25)])
     dev.set(playDev())
     
     #information extraction
     xc = yc = zc = xs = ys = zs = 0
-    plot = perInit(plot, newpage = FALSE)
-    xr = plot$xr; yr = plot$yr; zr = plot$zr
-    xlab = plot$xlab; ylab = plot$ylab; zlab = plot$zlab
-    col.axis = plot$col.axis; col.lab = plot$col.lab; 
-    col = plot$col; cex.lab = plot$cex.lab
-    nTicks = plot$nTicks; tickType = plot$tickType
-    expand = plot$expand ;scale = plot$scale
-    ltheta = plot$ltheta; lphi = plot$lphi
-    main = plot$main; axes = plot$axes
-    dbox = plot$dbox; shade = plot$shade
-    r = plot$r; d = plot$d; phi = plot$phi; theta = plot$theta
+    x = perInit(x, newpage = FALSE)
+    xr = x$xr; yr = x$yr; zr = x$zr
+    xlab = x$xlab; ylab = x$ylab; zlab = x$zlab
+    col.axis = x$col.axis; col.lab = x$col.lab; 
+    col = x$col; cex.lab = x$cex.lab
+    nTicks = x$nTicks; tickType = x$tickType
+    expand = x$expand ;scale = x$scale
+    ltheta = x$ltheta; lphi = x$lphi
+    main = x$main; axes = x$axes
+    dbox = x$dbox; shade = x$shade
+    r = x$r; d = x$d; phi = x$phi; theta = x$theta
+    font.lab = par$font.lab
+    font.axis = par$font.axis
+    family = par$family
 	
-	xs = LimitCheck(xr)[1]
+    xs = LimitCheck(xr)[1]
     ys = LimitCheck(yr)[1]
     zs = LimitCheck(zr)[1]
     xc = LimitCheck(xr)[2]
@@ -83,9 +87,9 @@ C_persp = function(plot = NULL, ...)
     VT = VT %*% Translate(0.0, 0.0, -r - d)
     trans = VT %*% Perspective(d)
 
-    border = plot$border[1];
-    if(is.null(plot$lwd)) lwd = 1 else lwd = plot$lwd
-    if(is.null(plot$lty)) lty = 1 else lty = plot$lty
+    border = x$border[1];
+    if(is.null(x$lwd)) lwd = 1 else lwd = x$lwd
+    if(is.null(x$lty)) lty = 1 else lty = x$lty
     if(any(!(is.numeric(xr) & is.numeric(yr) & is.numeric(zr)))) stop("invalid limits")
     if(any(!(is.finite(xr) & is.finite(yr) & is.finite(zr)))) stop("invalid limits")
     
@@ -114,9 +118,10 @@ C_persp = function(plot = NULL, ...)
         if(axes == TRUE){
             depth = gotovp(TRUE)
             PerspAxes(xr, yr, zr, ##x, y, z
-                    xlab, ylab, zlab, ## xlab, xenc, ylab, yenc, zlab, zenc
-                    nTicks, tickType, trans, ## nTicks, tickType, VT
-                    lwd, lty, col.axis, col.lab, cex.lab) ## lwd, lty, col.axis, col.lab, cex.lab
+                      xlab, ylab, zlab, ## xlab, xenc, ylab, yenc, zlab, zenc
+                      nTicks, tickType, trans, ## nTicks, tickType, VT
+                      lwd, lty, col.axis, col.lab, cex.lab, ## lwd, lty, col.axis, col.lab, cex.lab
+                      font.lab, font.axis, family)
             upViewport(depth)}
     } else {
         EdgeDone = rep(1, 12)
@@ -130,7 +135,7 @@ C_persp = function(plot = NULL, ...)
     upViewport(depth)
     
     depth = gotovp(FALSE)
-    DrawFacets(plot = plot, z = plot$z, x = plot$x, y = plot$y,     ## basic
+    DrawFacets(plot = x, z = x$z, x = x$x, y = x$y,     ## basic
                 xs = 1/xs, ys = 1/ys, zs = expand/zs,               ## Light
                 col = col,                                          ## cols
                 ltheta = ltheta, lphi = lphi, Shade = shade, 
@@ -323,29 +328,37 @@ PerspBox = function(front = 1, x, y, z, EdgeDone, VT, lty, lwd = lwd )
         ## draw the face line by line rather than polygon
         if ((front && nearby) || (!front && !nearby)) {
             if (!EdgeDone[Edge[f, 1]]){
-                grid.lines(c(v0[1], v1[1]), c(v0[2], v1[2]), default.units = 'native',
-                    gp = gpar(lty = lty, lwd = lwd) 
-                    )
+                grid.lines(c(v0[1], v1[1]), c(v0[2], v1[2]),
+                           default.units = 'native',
+                           gp = gpar(lty = lty, lwd = lwd), 
+                           name = grobname(paste0("persp-box-face-", f,
+                                                  "-edge-1")))
                 EdgeDone[Edge[f, 1]] = EdgeDone[Edge[f, 1]] + 1
-                }
+            }
             if (!EdgeDone[Edge[f, 2]]){
-                grid.lines(c(v1[1], v2[1]), c(v1[2], v2[2]), default.units = 'native',
-                    gp = gpar(lty = lty, lwd = lwd) 
-                    )
+                grid.lines(c(v1[1], v2[1]), c(v1[2], v2[2]),
+                           default.units = 'native',
+                           gp = gpar(lty = lty, lwd = lwd), 
+                           name = grobname(paste0("persp-box-face-", f,
+                                                  "-edge-2")))
                 EdgeDone[Edge[f, 2]] = EdgeDone[Edge[f, 2]] + 1
-                }
+            }
             if (!EdgeDone[Edge[f, 3]]){
-                grid.lines(c(v2[1], v3[1]), c(v2[2], v3[2]), default.units = 'native',
-                    gp = gpar(lty = lty, lwd = lwd) 
-                    )
+                grid.lines(c(v2[1], v3[1]), c(v2[2], v3[2]),
+                           default.units = 'native',
+                           gp = gpar(lty = lty, lwd = lwd), 
+                           name = grobname(paste0("persp-box-face-", f,
+                                                  "-edge-3")))
                 EdgeDone[Edge[f, 3]] = EdgeDone[Edge[f, 3]] + 1
-                }
+            }
             if (!EdgeDone[Edge[f, 4]]){
-                grid.lines(c(v3[1], v0[1]), c(v3[2], v0[2]), default.units = 'native',
-                    gp = gpar(lty = lty, lwd = lwd)
-                    )
+                grid.lines(c(v3[1], v0[1]), c(v3[2], v0[2]),
+                           default.units = 'native',
+                           gp = gpar(lty = lty, lwd = lwd),
+                           name = grobname(paste0("persp-box-face-", f,
+                                                  "-edge-4")))
                 EdgeDone[Edge[f, 4]] = EdgeDone[Edge[f, 4]] + 1
-                }
+            }
         }
     }
     EdgeDone
@@ -461,11 +474,10 @@ DrawFacets = function(plot, z, x, y, xs, ys, zs,
     yrange = range(polygons[,2], na.rm = TRUE)
 
     grid.polygon(polygons[,1], polygons[,2], id = polygon.id,
-                    default.units = 'native', 
-                    gp = gpar(col = plot$border, fill = cols, 
-                                lty = plot$lty, lwd = plot$lwd)
-                    )
-	
+                 default.units = 'native', 
+                 gp = gpar(col = plot$border, fill = cols, 
+                           lty = plot$lty, lwd = plot$lwd),
+                 name = grobname("persp-surface"))
 }
 
 
@@ -499,9 +511,10 @@ labelAngle = function(x1, y1, x2, y2){
 }	
 
 PerspAxis = function(x, y, z, axis, axisType, 
-                    nTicks, tickType, label, 
-                    VT, lwd = 1, lty, col.axis = 1,
-                    col.lab = 1, cex.lab = 1){
+                     nTicks, tickType, label, 
+                     VT, lwd = 1, lty, col.axis = 1,
+                     col.lab = 1, cex.lab = 1,
+                     font.lab, font.axis, family){
 
     ## don't know how to use numeric on the switch...
     axisType = as.character(axisType)
@@ -629,91 +642,101 @@ PerspAxis = function(x, y, z, axis, axisType,
     ## label at center of each axes
     srt = labelAngle(v1[1], v1[2], v2[1], v2[2])
     #text(v3[1], v3[2], label, 0.5, srt = srt)
+    labname <- switch(axisType,
+                      '1' = "x",
+                      '2' = "y",
+                      '3' = "z")
     grid.text(label = label, x = v3[1], y = v3[2],
           just = "centre", rot = srt,
           default.units = "native", #vp = 'clipoff',
-          gp = gpar(col = col.lab, lwd = lwd, cex = cex.lab)
-          )
+          gp = gpar(col = col.lab, lwd = lwd, cex = cex.lab,
+                    font = font.lab, fontfamily = family),
+          name = grobname(paste0("persp-", labname, "lab")))
     
     ## tickType is not working.. when = '2'
     switch(tickType,
-    '1' = {
-    arrow = arrow(angle = 10, length = unit(0.1, "in"),
-                    ends = "last", type = "open")  
-	## drawing the tick..
-    
-    grid.lines(x = c(v1[1], v2[1]), y = c(v1[2], v2[2]),
-          default.units = "native", arrow = arrow, #vp = 'clipoff',
-          gp = gpar(col = 1, lwd = lwd , lty = lty )
-          )
-       },
-    ## '2' seems working
-    '2' = {
-        at = axisTicks(range, FALSE, axp, nint = nint)
-        lab = format(at, trim = TRUE)
-        for(i in 1:length(at)){
-            switch(axisType, 
-                '1' = {
-                u1[1] = at[i]
-                u1[2] = y[Vertex[AxisStart[axis], 2]]
-                u1[3] = z[Vertex[AxisStart[axis], 3]]
-                },
-                '2' = {
-                u1[1] = x[Vertex[AxisStart[axis], 1]]
-                u1[2] = at[i]
-                u1[3] = z[Vertex[AxisStart[axis], 3]]
-                },
-                '3' = {
-                u1[1] = x[Vertex[AxisStart[axis], 1]]
-                u1[2] = y[Vertex[AxisStart[axis], 2]]
-                u1[3] = at[i]
-                }
-            )
-            
-            tickLength = 0.03
-            
-            u1[4] = 1
-            u2[1] = u1[1] + tickLength*(x[2]-x[1])*TickVector[axis, 1]
-            u2[2] = u1[2] + tickLength*(y[2]-y[1])*TickVector[axis, 2]
-            u2[3] = u1[3] + tickLength*(z[2]-z[1])*TickVector[axis, 3]
-            u2[4] = 1
-            u3[1] = u2[1] + tickLength*(x[2]-x[1])*TickVector[axis, 1]
-            u3[2] = u2[2] + tickLength*(y[2]-y[1])*TickVector[axis, 2]
-            u3[3] = u2[3] + tickLength*(z[2]-z[1])*TickVector[axis, 3]
-            u3[4] = 1
-            v1 = TransVector(u1, VT)
-            v2 = TransVector(u2, VT)
-            v3 = TransVector(u3, VT)
-                        
-            v1 = v1/v1[4]
-            v2 = v2/v2[4]
-            v3 = v3/v3[4]
-            
-            ## Draw tick line
-            grid.lines(x = c(v1[1], v2[1]), y = c(v1[2], v2[2]),
-                default.units = "native", ##vp = 'clipoff',
-                gp = gpar(col = col.axis, lwd = lwd, lty = lty)
-                )
-
-            ## Draw tick label
-            grid.text(label = lab[i], x = v3[1], y = v3[2],
-                just = "centre",
-                default.units = "native", #vp = 'clipoff',
-                gp = gpar(col = col.axis, adj = 1, pos = 0.5, cex = 1)
-                )
-            }
-        }
-    )
+           '1' = {
+               arrow = arrow(angle = 10, length = unit(0.1, "in"),
+                             ends = "last", type = "open")  
+               ## drawing the tick..    
+               grid.lines(x = c(v1[1], v2[1]), y = c(v1[2], v2[2]),
+                          default.units = "native", arrow = arrow,
+                          ## vp = 'clipoff',
+                          gp = gpar(col = 1, lwd = lwd , lty = lty ),
+                          name = grobname(paste0("persp-",
+                                                 labname, "-axis-arrow")))
+           },
+           ## '2' seems working
+           '2' = {
+               at = axisTicks(range, FALSE, axp, nint = nint)
+               lab = format(at, trim = TRUE)
+               for(i in 1:length(at)){
+                   switch(axisType, 
+                          '1' = {
+                              u1[1] = at[i]
+                              u1[2] = y[Vertex[AxisStart[axis], 2]]
+                              u1[3] = z[Vertex[AxisStart[axis], 3]]
+                          },
+                          '2' = {
+                              u1[1] = x[Vertex[AxisStart[axis], 1]]
+                              u1[2] = at[i]
+                              u1[3] = z[Vertex[AxisStart[axis], 3]]
+                          },
+                          '3' = {
+                              u1[1] = x[Vertex[AxisStart[axis], 1]]
+                              u1[2] = y[Vertex[AxisStart[axis], 2]]
+                              u1[3] = at[i]
+                          }
+                          )
+                   
+                   tickLength = 0.03
+                   
+                   u1[4] = 1
+                   u2[1] = u1[1] + tickLength*(x[2]-x[1])*TickVector[axis, 1]
+                   u2[2] = u1[2] + tickLength*(y[2]-y[1])*TickVector[axis, 2]
+                   u2[3] = u1[3] + tickLength*(z[2]-z[1])*TickVector[axis, 3]
+                   u2[4] = 1
+                   u3[1] = u2[1] + tickLength*(x[2]-x[1])*TickVector[axis, 1]
+                   u3[2] = u2[2] + tickLength*(y[2]-y[1])*TickVector[axis, 2]
+                   u3[3] = u2[3] + tickLength*(z[2]-z[1])*TickVector[axis, 3]
+                   u3[4] = 1
+                   v1 = TransVector(u1, VT)
+                   v2 = TransVector(u2, VT)
+                   v3 = TransVector(u3, VT)
+                   
+                   v1 = v1/v1[4]
+                   v2 = v2/v2[4]
+                   v3 = v3/v3[4]
+                   
+                   ## Draw tick line
+                   grid.lines(x = c(v1[1], v2[1]), y = c(v1[2], v2[2]),
+                              default.units = "native", ##vp = 'clipoff',
+                              gp = gpar(col = col.axis, lwd = lwd, lty = lty),
+                              name = grobname(paste0("persp-", labname,
+                                                     "-axis-ticks")))
+                   
+                   ## Draw tick label
+                   grid.text(label = lab[i], x = v3[1], y = v3[2],
+                             just = "centre",
+                             default.units = "native", #vp = 'clipoff',
+                             gp = gpar(col = col.axis, adj = 1, pos = 0.5,
+                                       cex = 1, font = font.axis,
+                                       fontfamily = family),
+                             name = grobname(paste0("persp-", labname,
+                                                    "-axis-labels")))
+               }
+           })
 }
 
 
 PerspAxes = function(x, y, z, 
-                    xlab, 
-                    ylab, 
-                    zlab, 
-                    nTicks, tickType, VT, 
-					## parameters in par
-                    lwd = 1, lty = 1, col.axis = 1, col.lab = 1, cex.lab = 1)
+                     xlab, 
+                     ylab, 
+                     zlab, 
+                     nTicks, tickType, VT, 
+                     ## parameters in par
+                     lwd = 1, lty = 1, col.axis = 1, col.lab = 1, cex.lab = 1,
+                     font.lab, font.axis, family)
 {
     xAxis = yAxis = zAxis = 0 ## -Wall 
     u0 = u1 = u2 = u3 = 0
@@ -749,12 +772,14 @@ PerspAxes = function(x, y, z,
         warning("Axis orientation not calculated")
     ## drawing x and y axes
     PerspAxis(x, y, z, xAxis, '1', nTicks, tickType, xlab, VT, 
-                lwd = lwd, lty = lty, col.axis = col.axis, 
-                col.lab = col.lab, cex.lab = cex.lab)
+              lwd = lwd, lty = lty, col.axis = col.axis, 
+              col.lab = col.lab, cex.lab = cex.lab,
+              font.lab, font.axis, family)
                 
     PerspAxis(x, y, z, yAxis, '2', nTicks, tickType, ylab, VT, 
-                lwd = lwd, lty = lty, col.axis = col.axis, 
-                col.lab = col.lab, cex.lab = cex.lab)
+              lwd = lwd, lty = lty, col.axis = col.axis, 
+              col.lab = col.lab, cex.lab = cex.lab,
+              font.lab, font.axis, family)
 
     ## Figure out which Z axis to draw
     if (lowest(v0[1], v1[1], v2[1], v3[1])) {
@@ -770,8 +795,9 @@ PerspAxes = function(x, y, z,
 
     ## drawing the z-axis
     PerspAxis(x, y, z, zAxis, '3', nTicks, tickType, zlab, VT, 
-                lwd = lwd, lty = lty, col.axis = col.axis, 
-                col.lab = col.lab, cex.lab = cex.lab)
+              lwd = lwd, lty = lty, col.axis = col.axis, 
+              col.lab = col.lab, cex.lab = cex.lab,
+              font.lab, font.axis, family)
 }
 
 

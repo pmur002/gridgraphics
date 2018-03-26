@@ -1,23 +1,50 @@
 \name{NEWS}
 \title{NEWS file for the gridGraphics package}
 \encoding{UTF-8}
-\section{Changes in version 0.2-1}{
-    \itemize{
-      \item Added Zhijian (Jason) Wen as package author (it was he
-      who contributed the \code{persp()} and \code{filled.contour()}
-      support).
-      \item Added \pkg{magick} and \pkg{pdftools} as (Suggests)
-      dependencies, to provide
-      better and more stable support for \code{plotdiff()}.
-}
+\section{Changes in version 0.2-2}{
+  \itemize{
+    \item Added \code{device} argument to \code{grid.echo()}
+    so that user can specify a \dQuote{working device}.  This
+    is an in-memory PDF device by default, but that can have
+    problems with fonts.  Suggested by Claus Wilke.
 
+    \item Added capture of font family when echoing persp() plots.
+    Reported by Claus Wilke.
+
+    \item Added names for grobs from echoing \code{persp()} and
+    \code{filled.contour()}.
+
+    \item Fix for echoing correct \code{font} settings in \code{axis()}
+    and \code{persp()}. Reported by Claus Wilke.
+
+    \item Attempt to survive errors during echoing (like
+    "figure margins too large") more elegantly
+
+    \item Added \pkg{magick} and \pkg{pdftools} as (Suggests)
+    dependencies, to provide
+    better and more stable support for \code{plotdiff()}.
+  }
+}
+\section{Changes in version 0.2-1}{
+  \itemize{
+    \item Fixed bug when echoing scatter plot with ZERO points in it.
+    Reported by github user zxzb
+    \url{https://github.com/pmur002/gridgraphics/issues/9}
+    
+    \item Made plotdiff() more robust to unexpected output from
+    ImageMagick's compare.  Reported by Brian Ripley.
+    
+    \item Added Zhijian (Jason) Wen as package author (it was he
+    who contributed the \code{persp()} and \code{filled.contour()}
+    support).
+  }
+}
 \section{Changes in version 0.2}{
     \itemize{
         \item \code{grid.echo()} now supports \code{persp()} and 
         \code{filled.contour()}
       }
 }
-
 \section{Changes in version 0.1-5}{
   \itemize{
     \item Changed stop() to warning() when call grid.echo() with
