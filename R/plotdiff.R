@@ -7,6 +7,10 @@ plotcompare <- function(graphicsPNG, gridPNG, label) {
     nDiff <- attr(diff, "distortion")
     if (nDiff > 0) {
         magick::image_write(diff, diffFile)
+        graphicsFile <- paste0(label, "-graphics.png")
+        magick::image_write(graphicsPNG, graphicsFile)
+        gridFile <- paste0(label, "-grid.png")
+        magick::image_write(gridPNG, gridFile)
     }
     nDiff
 }
@@ -74,13 +78,17 @@ fungen <- function() {
                 graphicsPNG <- magick::image_read(graphicsFile)
                 gridPNG <- magick::image_read(gridFile)
             } else { ## ASSUME dev == "pdf"
-                ## TODO: Need to ADD ability to turn OFF antialias
                 # 'antialias' must be off to get reliable comparison of
                 # images that include adjacent polygon fills
-                graphicsImage <- magick::image_read_pdf(graphicsFile,
-                                                        density=density)
+                graphicsBitmap <- pdftools::pdf_render_page(graphicsFile,
+                                                            dpi=density,
+                                                            antialias=antialias)
+                graphicsImage <- magick::image_read(graphicsBitmap)
                 graphicsPNG <- magick::image_convert(graphicsImage, "png")
-                gridImage <- magick::image_read_pdf(gridFile, density=density)
+                gridBitmap <- pdftools::pdf_render_page(gridFile,
+                                                        dpi=density,
+                                                        antialias=antialias)
+                gridImage <- magick::image_read(gridBitmap)
                 gridPNG <- magick::image_convert(gridImage, "png")
             } 
             ## Check for multiple-page PDF
