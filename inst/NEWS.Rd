@@ -1,6 +1,12 @@
 \name{NEWS}
 \title{NEWS file for the gridGraphics package}
 \encoding{UTF-8}
+\section{Changes in version 0.2-3}{
+  \itemize{
+    \item Added \pkg{magick} as (Suggests) dependency, to provide better
+    and more stable support for \code{plotdiff()}.
+  }
+}
 \section{Changes in version 0.2-2}{
   \itemize{
     \item Added \code{device} argument to \code{grid.echo()}
@@ -20,9 +26,6 @@
     \item Attempt to survive errors during echoing (like
     "figure margins too large") more elegantly
 
-    \item Added \pkg{magick} and \pkg{pdftools} as (Suggests)
-    dependencies, to provide
-    better and more stable support for \code{plotdiff()}.
   }
 }
 \section{Changes in version 0.2-1}{

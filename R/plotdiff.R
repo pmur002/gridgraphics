@@ -1,42 +1,19 @@
 
 # Code used by test files
 
-plotcompare <- function(label) {
-    diffname <- paste0(label, "-diff.png")
-    if (file.exists(diffname))
-        stop("This comparison already exists")
-    result <-
-    if(.Platform$OS.type == "windows") {
-        as.character(shell(paste("compare", "-metric AE",
-                                 paste0(label,
-                                        c("-graphics.png", "-grid.png",
-                                          "-diff.png"),
-                                        collapse=" ")),
-                           ignore.stdout=TRUE, ignore.stderr=TRUE))
-    } else {
-        system2("compare",
-                c("-metric AE",
-                  paste0(label, c("-graphics.png", "-grid.png", "-diff.png"))),
-                stdout=TRUE, stderr=TRUE)
+plotcompare <- function(graphicsPNG, gridPNG, label) {
+    diffFile <- paste0(label, "-diff.png")
+    diff <- magick::image_compare(graphicsPNG, gridPNG, metric="AE")
+    nDiff <- attr(diff, "distortion")
+    if (nDiff > 0) {
+        magick::image_write(diff, diffFile)
     }
-    if (identical(result, "0")) {
-        file.remove(diffname)
-    }
-    result
+    nDiff
 }
 
 fungen <- function() {
 
     diffs <- NULL
-    Windows <- .Platform$OS.type == "windows"
-    haveIM <-
-    if(Windows) {
-        grepl("ImageMagick", shell("convert --version",
-                                   intern=TRUE, ignore.stderr=TRUE)[1])
-    } else {
-        grepl("ImageMagick", system("convert --version",
-                                    intern=TRUE, ignore.stderr=TRUE)[1])
-    }
     version <- getRversion()
     haveRecentR <- version >= "3.2.0"
     haveWarned <- FALSE
@@ -52,69 +29,72 @@ fungen <- function() {
                    antialias=TRUE, density=100, width=7, height=7) {
         suffix <- switch(dev, pdf=".pdf", png=".png",
                          stop("I do not like your choice of device"))
+        graphicsFile <- paste0(label, "-graphics", suffix)
+        gridFile <- paste0(label, "-grid", suffix)
+        curDev <- dev.cur()
         switch(dev,
-               pdf=pdf(paste0(label, "-graphics", suffix),
+               pdf=pdf(graphicsFile,
                        width=width, height=height, compress=FALSE),
-               png=png(paste0(label, "-graphics", suffix),
+               png=png(graphicsFile,
                        width=width*100, height=height*100))
+        graphicsDev <- dev.cur()
         dev.control("enable")
-        eval(expr)
-        dl <- recordPlot()
-        dev.off()
+        tryCatch(
+        {
+            eval(expr)
+            dl <- recordPlot()
+        },
+        ## Try to clean up if we error out
+        finally={
+            dev.set(graphicsDev)
+            dev.off()
+            ## Do not reset current device if there were no devices open
+            if (curDev != 1) dev.set(curDev)
+        })
         switch(dev,
-               pdf=pdf(paste0(label, "-grid.pdf"),
+               pdf=pdf(gridFile,
                        width=width, height=height, compress=FALSE),
-               png=png(paste0(label, "-grid.png"),
+               png=png(gridFile,
                        width=width*100, height=height*100))
-        grid.echo(dl)
-        dev.off()
+        gridDev <- dev.cur()
+        tryCatch(
+        {
+            grid.echo(dl)
+        },
+        ## Try to clean up if we error out
+        finally={
+            dev.set(gridDev)
+            dev.off()
+            ## Do not reset current device if there were no devices open
+            if (curDev != 1) dev.set(curDev)
+        })
         # Only convert and compare if have the tools
-        if (haveIM && haveRecentR) {
-            if (dev != "png") {
-                options <- paste0("-density ", density, "x", density)
+        if (haveRecentR) {
+            if (dev == "png") {
+                graphicsPNG <- magick::image_read(graphicsFile)
+                gridPNG <- magick::image_read(gridFile)
+            } else { ## ASSUME dev == "pdf"
+                ## TODO: Need to ADD ability to turn OFF antialias
                 # 'antialias' must be off to get reliable comparison of
                 # images that include adjacent polygon fills
-                if (!antialias)
-                    options <- c(options, "+antialias")
-                if(Windows) {
-                    shell(paste("convert", paste(options, collapse=" "),
-                                paste0(label, c("-graphics.pdf",
-                                                "-graphics.png"),
-                                       collapse=" ")))
-                    shell(paste("convert", paste(options, collapse=" "),
-                                paste0(label, c("-grid.pdf", "-grid.png"),
-                                       collapse=" ")))
-                } else {
-                    system2("convert",
-                            c(options,
-                              paste0(label, c("-graphics.pdf",
-                                              "-graphics.png"))))
-                    system2("convert",
-                            c(options,
-                              paste0(label, c("-grid.pdf", "-grid.png"))))
-                }
-            }
-            # Check for multiple-page PDF
-            # If found, only compare the last page
-            pngFiles <- list.files(pattern=paste0("^", label,
-                                       "-graphics-[0-9]+.png"))
-            numPNG <- length(pngFiles)
-            if (numPNG > 0) {
+                graphicsImage <- magick::image_read_pdf(graphicsFile,
+                                                        density=density)
+                graphicsPNG <- magick::image_convert(graphicsImage, "png")
+                gridImage <- magick::image_read_pdf(gridFile, density=density)
+                gridPNG <- magick::image_convert(gridImage, "png")
+            } 
+            ## Check for multiple-page PDF
+            ## If found, only compare the last page
+            numPNG <- length(graphicsPNG)
+            if (numPNG > 1) {
                 warning(paste0("Only comparing final page (of ",
                                numPNG, " pages)"))
-                file.rename(pngFiles[numPNG],
-                            gsub("-[0-9]+.png", ".png", pngFiles[1]))
-                gridFiles <- list.files(pattern=paste0("^", label,
-                                            "-grid-[0-9]+.png"))
-                file.rename(gridFiles[numPNG],
-                            gsub("-[0-9]+.png", ".png", gridFiles[1]))
             }
-            pngLabel <- paste0(label, "-0")
-            result <- plotcompare(label)
-            if (!identical(result, "0")) {
+            result <- plotcompare(graphicsPNG[1], gridPNG[1], label)
+            if (result > 0) {
                 diffs <<- c(diffs,
                             paste0(result,
-                                   if (identical(result, "1")) " difference "
+                                   if (result == 1) " difference "
                                    else " differences ",
                                    "detected (", label, "-diff.png)"))
             }
