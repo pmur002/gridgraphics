@@ -1,7 +1,7 @@
 \name{NEWS}
 \title{NEWS file for the gridGraphics package}
 \encoding{UTF-8}
-\section{Changes in version 0.2-3}{
+\section{Changes in version 0.3-0}{
   \itemize{
     \item Added \pkg{magick} and \pkg{pdftools} as (Suggests)
     dependencies, to provide better
