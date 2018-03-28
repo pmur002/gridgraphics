@@ -172,7 +172,7 @@ C_filledcontour = function(plot)
                 z11 = z11, z21 = z21, 
                 z12 = z12, z22 = z22, colrep = colrep)
     ## actual drawing
-    depth = gotovp(TRUE)
+    depth = gotovp(FALSE)
     grid.polygon(out$x, out$y, default.units = 'native',
                  id.lengths = out$id.length,
                  gp = gpar(fill = out$cols, col = NA),
