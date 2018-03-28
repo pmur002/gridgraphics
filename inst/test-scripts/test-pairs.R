@@ -65,7 +65,7 @@ plotdiff(expression(pairs2()), "pairs-2")
 plotdiff(expression(pairs3()), "pairs-3", width=15, height=15)
 plotdiff(expression(pairs4()), "pairs-4", width=15, height=15)
 plotdiff(expression(pairs5()), "pairs-5")
-plotdiff(expression(pairs6()), "pairs-6", width=15, height=15, density=72)
+plotdiff(expression(pairs6()), "pairs-6", width=15, height=15, antialias=FALSE)
 plotdiff(expression(pairs7()), "pairs-7", width=10, height=10)
 plotdiff(expression(pairs8()), "pairs-8", width=12, height=12)
 

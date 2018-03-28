@@ -47,11 +47,8 @@ curve8 <- function() {
 }
 
 plotdiff(expression(curve1()), "curve-1")
-# Strange difference in positioning of "i" in "qlogis" in title
-# There is some heavy rasterisation occurring, but not sure why it
-# should be occurring differently for 'graphics' vs 'grid' version.
-# Anyway, upping the resolution fixes things (on my system).
-plotdiff(expression(curve2()), "curve-2", density=200)
+## Antialiasing of the "q" in qlogis() is unreliable
+plotdiff(expression(curve2()), "curve-2", antialias=FALSE)
 plotdiff(expression(curve3()), "curve-3")
 plotdiff(expression(curve4()), "curve-4")
 plotdiff(expression(curve5()), "curve-5")

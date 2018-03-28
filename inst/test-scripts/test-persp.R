@@ -118,7 +118,6 @@ testPersp4 = function(theta=120, phi = 20, expand = 0.5, col = 'orange ',
         ticktype = ticktype, nticks = nticks, ...)
   
 }
-testPersp4(border = 'gray', expand = 0.5, col = 'NA')
 ## bugs
 ## calling shade when some z are NA
 # testPersp2(border = 'NA', shade = 0.2)
@@ -259,4 +258,6 @@ otherTest2 = function()
   persp(x, y, 2*z, theta = 110, phi = 40, col = fcol, scale = FALSE,
              ltheta = -120, shade = 0.4, border = NA, box = FALSE)
 }
-plotdiff(expression(otherTest2()), 'persp-other-2')
+plotdiff(expression(otherTest2()), 'persp-other-2', antialias=FALSE)
+
+plotdiffResult()

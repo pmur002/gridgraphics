@@ -44,7 +44,7 @@ text4 <- function() {
 }
 
 plotdiff(expression(text1()), "text-1")
-plotdiff(expression(text2()), "text-2")
+plotdiff(expression(text2()), "text-2", dev="png")
 plotdiff(expression(text3()), "text-3")
 plotdiff(expression(text4()), "text-4")
 

@@ -75,7 +75,8 @@ bxp8 <- function() {
 plotdiff(expression(bxp1()), "bxp-1")
 plotdiff(expression(bxp2()), "bxp-2")
 plotdiff(expression(bxp3()), "bxp-3")
-plotdiff(expression(bxp4()), "bxp-4")
+## Antialiasing of the "t" in boxplot() is unreliable
+plotdiff(expression(bxp4()), "bxp-4", antialias=FALSE)
 plotdiff(expression(bxp5()), "bxp-5", width=8)
 plotdiff(expression(bxp6()), "bxp-6")
 plotdiff(expression(bxp7()), "bxp-7")

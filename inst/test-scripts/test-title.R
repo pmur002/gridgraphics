@@ -34,7 +34,7 @@ title4 <- function() {
     abline(h = 0, v = pi/2 * c(-1,1), lty = 2, lwd = .1, col = "gray70")
 }
 
-plotdiff(expression(title1()), "title-1")
+plotdiff(expression(title1()), "title-1", dev="png")
 plotdiff(expression(title2()), "title-2")
 plotdiff(expression(title3()), "title-3")
 plotdiff(expression(title4()), "title-4")

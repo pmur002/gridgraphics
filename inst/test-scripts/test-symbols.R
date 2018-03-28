@@ -60,7 +60,7 @@ symbols7 <- function() {
 plotdiff(expression(symbols1()), "symbols-1")
 plotdiff(expression(symbols2()), "symbols-2")
 plotdiff(expression(symbols3()), "symbols-3")
-plotdiff(expression(symbols4()), "symbols-4", density=72, antialias=FALSE)
+plotdiff(expression(symbols4()), "symbols-4", dev="png") 
 plotdiff(expression(symbols3()), "symbols-5")
 plotdiff(expression(symbols3()), "symbols-6")
 plotdiff(expression(symbols3()), "symbols-7")

@@ -150,7 +150,8 @@ legend11 <- function() {
 }
 
 plotdiff(expression(legend1()), "legend-1")
-plotdiff(expression(legend2()), "legend-2", density=72)
+## Straight to PNG to avoid PDF->PNG funny business
+plotdiff(expression(legend2()), "legend-2", dev="png")
 plotdiff(expression(legend3()), "legend-3")
 plotdiff(expression(legend4()), "legend-4")
 plotdiff(expression(legend5()), "legend-5")

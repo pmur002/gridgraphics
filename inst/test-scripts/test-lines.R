@@ -6,6 +6,7 @@ lines1 <- function() {
     lines(stats::lowess(cars))
 }
 
-plotdiff(expression(lines1()), "lines-1")
+## Straight to PNG to avoid PDF->PNG funny business
+plotdiff(expression(lines1()), "lines-1", dev="png")
 
 plotdiffResult()
