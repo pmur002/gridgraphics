@@ -3,8 +3,12 @@
 \encoding{UTF-8}
 \section{Changes in version 0.2-3}{
   \itemize{
-    \item Added \pkg{magick} as (Suggests) dependency, to provide better
+    \item Added \pkg{magick} and \pkg{pdftools} as (Suggests)
+    dependencies, to provide better
     and more stable support for \code{plotdiff()}.
+
+    \item Fixed clipping (of main contour region) bug for echoing
+    \code{filled.contour()}. 
   }
 }
 \section{Changes in version 0.2-2}{
