@@ -78,26 +78,28 @@ fungen <- function() {
                 graphicsPNG <- magick::image_read(graphicsFile)
                 gridPNG <- magick::image_read(gridFile)
             } else { ## ASSUME dev == "pdf"
+                ## Check for multiple-page PDF
+                ## If found, only compare the last page
+                numPages <- pdftools::pdf_info(graphicsFile)$pages
+                if (numPages > 1) {
+                    warning(paste0("Only comparing final page (of ",
+                                   numPages, " pages)"))
+                }
                 # 'antialias' must be off to get reliable comparison of
                 # images that include adjacent polygon fills
                 graphicsBitmap <- pdftools::pdf_render_page(graphicsFile,
+                                                            page=numPages,
                                                             dpi=density,
                                                             antialias=antialias)
                 graphicsImage <- magick::image_read(graphicsBitmap)
                 graphicsPNG <- magick::image_convert(graphicsImage, "png")
+                ## grid.echo() will only have captured final page
                 gridBitmap <- pdftools::pdf_render_page(gridFile,
                                                         dpi=density,
                                                         antialias=antialias)
                 gridImage <- magick::image_read(gridBitmap)
                 gridPNG <- magick::image_convert(gridImage, "png")
             } 
-            ## Check for multiple-page PDF
-            ## If found, only compare the last page
-            numPNG <- length(graphicsPNG)
-            if (numPNG > 1) {
-                warning(paste0("Only comparing final page (of ",
-                               numPNG, " pages)"))
-            }
             result <- plotcompare(graphicsPNG[1], gridPNG[1], label)
             if (result > 0) {
                 diffs <<- c(diffs,
