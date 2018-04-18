@@ -52,22 +52,24 @@ gparFromPar <- function(x) {
     do.call(gpar, x)
 }
 
+# Attempt to behave like (C function) processInlinePars()
 currentPar <- function(inlinePars) {
+    par <- par()
     # Drop any inlinePars that are NULL
     # (should never set a par to NULL ?)
     inlinePars <- inlinePars[!sapply(inlinePars, is.null)]
     if (length(inlinePars)) {
-        opar <- par(inlinePars)
+        par[names(inlinePars)] <- inlinePars
     }
-    cpar <- par()
-    # For some weird reason, par()$lty gives different result from par("lty")
-    # (and the former can be WRONG or at least an invalid value)
-    # Until figure out what is going on, use this workaround
-    cpar$lty <- par("lty")
-    if (length(inlinePars)) {
-        par(opar)
+    par
+}
+
+getInlinePar <- function(args, name) {
+    if (name %in% names(args)) {
+        args[[name]]
+    } else {
+        NULL
     }
-    cpar
 }
 
 FixupPch <- function(pch, dflt) {

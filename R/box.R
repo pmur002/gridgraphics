@@ -4,6 +4,20 @@ C_box <- function(x) {
     dev.set(recordDev())
     # NOTE: although 'lty' is passed in, it is not explicitly handled
     par <- currentPar(x[-(1:2)])
+    ## If specified non-NA or non-NULL 'col' use that
+    inlineCol <- getInlinePar(x[-(1:2)], "col")
+    if (!is.null(inlineCol) && !is.na(inlineCol[1])) {
+        par$col <- inlineCol
+    } else {
+        ## Else if specified non-NA or non-NULL 'fg' use that
+        inlineFg <- getInlinePar(x[-(1:2)], "fg")
+        if (!is.null(inlineFg) && !is.na(inlineFg[1])) {
+            par$col <- inlineFg
+        } else {
+            ## Else use par("col")
+            par$col <- par("col")
+        }
+    }
     dev.set(playDev())
     which <- x[[2]]
     if (which == 1) { # "plot"
