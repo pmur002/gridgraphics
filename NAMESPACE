@@ -9,7 +9,7 @@ importFrom("graphics",
 
 import("grid")
 
-export("grid.echo")
+export("grid.echo", "echoGrob")
 
 # For test code in ./tests/
 export("plotdiffInit")
@@ -20,3 +20,4 @@ S3method("grid.echo", "default")
 S3method("grid.echo", "recordedplot")
 S3method("grid.echo", "function")
 
+S3method("makeContent", "echogrob")

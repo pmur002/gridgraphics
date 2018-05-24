@@ -113,7 +113,20 @@ grid.echo.function <- function(x=NULL, newpage=TRUE, prefix=NULL,
     invisible()
 }
 
-echoGrob <- function(x = NULL) {
-    stop("I hope to write this one day!")
+## The relationship between grid.echo() and echoGrob() is backwards
+## compared to most grid.*()/*Grob() pairs.
+## grid.echo() is the one that does the real work and echoGrob()
+## just calls grid.echo() (eventually)
+echoGrob <- function(x=NULL, prefix=NULL, device=offscreen, name=NULL) {
+    gTree(x=x, prefix=prefix, device=device, name=name,
+          cl="echogrob")
 }
 
+makeContent.echogrob <- function(x) {
+    width <- convertWidth(unit(1, "npc"), "in", valueOnly=TRUE)
+    height <- convertHeight(unit(1, "npc"), "in", valueOnly=TRUE)
+    grobs <- grid.grabExpr(grid.echo(x$x, newpage=FALSE, x$prefix, x$device),
+                           width=width, height=height, device=x$device,
+                           name=x$name)
+    setChildren(x, gList(grobs))
+}

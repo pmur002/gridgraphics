@@ -1,13 +1,18 @@
 \name{NEWS}
 \title{NEWS file for the gridGraphics package}
 \encoding{UTF-8}
+\section{Changes in version 0.4-0}{
+  \itemize{
+    \item New function \code{echoGrob()}.
+  }
+}
 \section{Changes in version 0.3-1}{
   \itemize{
-    \item Improved currentPar() function so that it behaves more like
-    the graphics engine's ProcessInlinePars().  The main point is that
-    setting a par() parameter in a high-level function is allowed to
+    \item Improved \code{currentPar()} function so that it behaves more like
+    the graphics engine's \code{ProcessInlinePars()}.  The main point is that
+    setting a \code{par()} parameter in a high-level function is allowed to
     specify multiple values for the setting (whereas setting via
-    par() itself only allows a single value per parameter setting).
+    \code{par()} itself only allows a single value per parameter setting).
   }
 }
 \section{Changes in version 0.3-0}{
