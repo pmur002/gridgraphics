@@ -4,6 +4,9 @@
 \section{Changes in version 0.4-0}{
   \itemize{
     \item New function \code{echoGrob()}.
+
+    \item Echoing \code{persp()} now respects \code{cex.axis} setting
+    (for size of tick labels).
   }
 }
 \section{Changes in version 0.3-1}{

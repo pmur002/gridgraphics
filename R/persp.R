@@ -60,6 +60,7 @@ C_persp = function(x)
     r = x$r; d = x$d; phi = x$phi; theta = x$theta
     font.lab = par$font.lab
     font.axis = par$font.axis
+    cex.axis = par$cex.axis
     family = par$family
 	
     xs = LimitCheck(xr)[1]
@@ -120,7 +121,7 @@ C_persp = function(x)
             PerspAxes(xr, yr, zr, ##x, y, z
                       xlab, ylab, zlab, ## xlab, xenc, ylab, yenc, zlab, zenc
                       nTicks, tickType, trans, ## nTicks, tickType, VT
-                      lwd, lty, col.axis, col.lab, cex.lab, ## lwd, lty, col.axis, col.lab, cex.lab
+                      lwd, lty, col.axis, cex.axis, col.lab, cex.lab, 
                       font.lab, font.axis, family)
             upViewport(depth)}
     } else {
@@ -512,7 +513,8 @@ labelAngle = function(x1, y1, x2, y2){
 
 PerspAxis = function(x, y, z, axis, axisType, 
                      nTicks, tickType, label, 
-                     VT, lwd = 1, lty, col.axis = 1,
+                     VT, lwd = 1, lty,
+                     col.axis = 1, cex.axis = 1,
                      col.lab = 1, cex.lab = 1,
                      font.lab, font.axis, family){
 
@@ -720,7 +722,7 @@ PerspAxis = function(x, y, z, axis, axisType,
                              just = "centre",
                              default.units = "native", #vp = 'clipoff',
                              gp = gpar(col = col.axis, adj = 1, pos = 0.5,
-                                       cex = 1, font = font.axis,
+                                       cex = cex.axis, font = font.axis,
                                        fontfamily = family),
                              name = grobname(paste0("persp-", labname,
                                                     "-axis-labels")))
@@ -735,7 +737,9 @@ PerspAxes = function(x, y, z,
                      zlab, 
                      nTicks, tickType, VT, 
                      ## parameters in par
-                     lwd = 1, lty = 1, col.axis = 1, col.lab = 1, cex.lab = 1,
+                     lwd = 1, lty = 1,
+                     col.axis = 1, cex.axis = 1,
+                     col.lab = 1, cex.lab = 1,
                      font.lab, font.axis, family)
 {
     xAxis = yAxis = zAxis = 0 ## -Wall 
@@ -772,12 +776,14 @@ PerspAxes = function(x, y, z,
         warning("Axis orientation not calculated")
     ## drawing x and y axes
     PerspAxis(x, y, z, xAxis, '1', nTicks, tickType, xlab, VT, 
-              lwd = lwd, lty = lty, col.axis = col.axis, 
+              lwd = lwd, lty = lty,
+              col.axis = col.axis, cex.axis = cex.axis,
               col.lab = col.lab, cex.lab = cex.lab,
               font.lab, font.axis, family)
                 
     PerspAxis(x, y, z, yAxis, '2', nTicks, tickType, ylab, VT, 
-              lwd = lwd, lty = lty, col.axis = col.axis, 
+              lwd = lwd, lty = lty, 
+              col.axis = col.axis, cex.axis = cex.axis,
               col.lab = col.lab, cex.lab = cex.lab,
               font.lab, font.axis, family)
 
@@ -795,7 +801,8 @@ PerspAxes = function(x, y, z,
 
     ## drawing the z-axis
     PerspAxis(x, y, z, zAxis, '3', nTicks, tickType, zlab, VT, 
-              lwd = lwd, lty = lty, col.axis = col.axis, 
+              lwd = lwd, lty = lty,
+              col.axis = col.axis, cex.axis = cex.axis,
               col.lab = col.lab, cex.lab = cex.lab,
               font.lab, font.axis, family)
 }
