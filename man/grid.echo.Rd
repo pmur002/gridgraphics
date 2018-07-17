@@ -1,5 +1,6 @@
 \name{grid.echo}
 \alias{grid.echo}
+\alias{echoGrob}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Echo \pkg{graphics} output using \pkg{grid} graphics
@@ -10,6 +11,8 @@ Echo \pkg{graphics} output using \pkg{grid} graphics
 }
 \usage{
 grid.echo(x = NULL, newpage = TRUE, prefix = NULL, device = offscreen)
+
+echoGrob(x = NULL, prefix = NULL, device = offscreen, name = NULL) 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -31,6 +34,9 @@ grid.echo(x = NULL, newpage = TRUE, prefix = NULL, device = offscreen)
     based on the \code{pdf} device.  This default device may not be
     satisfactory when using custom fonts.
   }
+  \item{name}{
+A character identifier.
+  }
 }
 \details{
   If the first argument is a function, it must be a function with zero
@@ -40,7 +46,10 @@ grid.echo(x = NULL, newpage = TRUE, prefix = NULL, device = offscreen)
   devices, or change the current graphics device.
 }
 \value{
-  This function is called for its side-effect of drawing on the
+  The \code{echoGrob} function returns a grob that will echo \code{x}
+  when it is drawn.
+
+  The \code{grid.echo} function is called for its side-effect of drawing on the
   current graphics device.
 }
 \author{
