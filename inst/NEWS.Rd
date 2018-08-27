@@ -7,6 +7,8 @@
 
     \item Echoing \code{persp()} now respects \code{cex.axis} setting
     (for size of tick labels).
+
+    \item Fixup for axis() when scale is reversed.
   }
 }
 \section{Changes in version 0.3-1}{

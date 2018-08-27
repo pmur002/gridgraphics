@@ -83,7 +83,11 @@ C_axis <- function(x) {
         # for log transforms
         ticks <- tx(ticks, par)
         # Clip ticks (and labels) to plot boundaries
-        ticksub <- ticks >= par$usr[1] & ticks <= par$usr[2]
+        if (par$usr[1] < par$usr[2]) {
+            ticksub <- ticks >= par$usr[1] & ticks <= par$usr[2]
+        } else {
+            ticksub <- ticks <= par$usr[1] & ticks >= par$usr[2]
+        }
         if (doticks) {
             if (lwd > 0) {
                 grid.segments(unit(min(par$usr[2], max(par$usr[1], min(ticks))),
@@ -136,7 +140,11 @@ C_axis <- function(x) {
             axis_base <- unit(0, "npc") - unit(line*par$cin[2]*par$cex, "in")
         }
         ticks <- ty(ticks, par)
-        ticksub <- ticks >= par$usr[3] & ticks <= par$usr[4]
+        if (par$usr[3] < par$usr[4]) {
+            ticksub <- ticks >= par$usr[3] & ticks <= par$usr[4]
+        } else {
+            ticksub <- ticks <= par$usr[3] & ticks >= par$usr[4]
+        }
         if (doticks) {
             if (lwd > 0) {
                 grid.segments(axis_base,
@@ -186,7 +194,11 @@ C_axis <- function(x) {
             axis_base <- unit(1, "npc") + unit(line*par$cin[2]*par$cex, "in")
         }
         ticks <- tx(ticks, par)
-        ticksub <- ticks >= par$usr[1] & ticks <= par$usr[2]
+        if (par$usr[1] < par$usr[2]) {
+            ticksub <- ticks >= par$usr[1] & ticks <= par$usr[2]
+        } else {
+            ticksub <- ticks <= par$usr[1] & ticks >= par$usr[2]
+        }
         if (doticks) {
             if (lwd > 0) {
                 grid.segments(unit(min(par$usr[2], max(par$usr[1], min(ticks))),
@@ -238,7 +250,11 @@ C_axis <- function(x) {
             axis_base <- unit(1, "npc") + unit(line*par$cin[2]*par$cex, "in")
         }
         ticks <- ty(ticks, par)
-        ticksub <- ticks >= par$usr[3] & ticks <= par$usr[4]
+        if (par$usr[3] < par$usr[4]) {
+            ticksub <- ticks >= par$usr[3] & ticks <= par$usr[4]
+        } else {
+            ticksub <- ticks <= par$usr[3] & ticks >= par$usr[4]
+        }
         if (doticks) {
             if (lwd > 0) {
                 grid.segments(axis_base,
