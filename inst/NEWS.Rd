@@ -9,6 +9,14 @@
     (for size of tick labels).
 
     \item Fixup for axis() when scale is reversed.
+
+    \item Fixes for \code{C_axis()} (and \code{GMtext()}) to use
+    \code{graphics::grconvertX()} (and \code{Y}) to calculate length
+    of tick marks and placement of tick labels.  This is to respond
+    correctly to \code{par()} changes AFTER \code{plot()}, but
+    before \code{axis()} (either via explicit \code{par()} calls,
+    or implicitly when functions like \code{dotchart()} reset
+    \code{par()} internally).
   }
 }
 \section{Changes in version 0.3-1}{

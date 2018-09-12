@@ -129,7 +129,7 @@ GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
             angle <- 0
         }
         x <- at
-        y <- unit(-line*cin[2]*linecex, "in")
+        y <- unit(-grconvertY(line, "lines", "in"), "in")
     } else if (side == 2) {
         if(las == 1 || las == 2) {
 	    angle <- 0
@@ -137,7 +137,7 @@ GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
 	    line <- line + 1/mex*yLineBias
 	    angle <- 90
 	}
-        x <- unit(-line*cin[2]*linecex, "in")
+        x <- unit(-grconvertX(line, "lines", "in"), "in")
         y <- at
     } else if (side == 3) {
         if(las == 2 || las == 3) {
@@ -148,7 +148,7 @@ GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
 	    angle <- 0
 	}
         x <- at
-        y <- unit(1, "npc") + unit(line*cin[2]*linecex, "in")
+        y <- unit(1, "npc") + unit(grconvertY(line, "lines", "in"), "in")
     } else if (side == 4) {
 	if(las == 1 || las == 2) {
 	    angle <- 0
@@ -157,7 +157,7 @@ GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
 	    line <- line + 1/mex*(1 - yLineBias)
 	    angle <- 90
 	}
-        x <- unit(1, "npc") + unit(line*cin[2]*linecex, "in")
+        x <- unit(1, "npc") + unit(grconvertX(line, "lines", "in"), "in")
         y <- at
     } else {
         stop("Invalid 'side'")

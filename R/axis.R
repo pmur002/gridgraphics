@@ -62,7 +62,7 @@ C_axis <- function(x) {
                               convertHeight(unit(par$tck, "npc"), "in"))
         }
     } else {
-        tickLength <- unit(par$cin[2]*par$tcl*par$cex, "in")
+        tickLength <- unit(grconvertX(par$tcl, "lines", "in"), "in")
     }
     ## font is 'font' arg if not NA, otherwise par("font.axis")
     if (is.na(font)) {
