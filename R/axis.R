@@ -68,15 +68,26 @@ C_axis <- function(x) {
     if (is.na(font)) {
         font <- par$font.axis
     }
-    returnvp <- NULL
     if (side == 1 && par$xaxt != "n") {
         if (is.finite(pos)) {
             axis_base <- unit(pos, "native")
         } else {
             if (outer) {
-                returnvp <- pushTempViewport(side)
-            } 
-            axis_base <- unit(0, "npc") - unit(line*par$cin[2]*par$cex, "in")
+                coords <- "nic"
+            } else {
+                coords <- "npc"
+            }
+            ## It may be the case that the calculation of axis base
+            ## is working off different plot region than the
+            ## original plot (e.g., if par(mex) has been modified
+            ## AFTER plotting)
+            ## Also, grconvertY(..., "in") is inches on the device
+            ## (NOT inches within the current viewport)
+            ## That is why this calculation looks complicated
+            axis_base <- unit(grconvertY(0, coords, "in") -
+                              deviceLoc(unit(0, "npc"), unit(0, "npc"),
+                                        valueOnly=TRUE)$y -
+                              grconvertY(line, "lines", "in"), "in")
         }
         # Now that have generated tick labels from tick locations
         # (if necessary), can transform tick locations (if necessary)
@@ -116,8 +127,8 @@ C_axis <- function(x) {
         #       to get the margin line to draw on
         #       PLUS adjustment made in GMtext() based on that line value
         if (drawLabels) {
-            labLine <- - (convertY(axis_base, "in", valueOnly=TRUE)/
-                          (par$cin[2]*par$cex)) +
+            axis_base_in <- convertY(axis_base, "in", valueOnly=TRUE)
+            labLine <- - grconvertY(axis_base_in, "in", "lines") +
                        par$mgp[2] - lineoff
             GMtext(labels[ticksub], 1, line=labLine,
                    at=unit(ticks[ticksub], "native"), las=par$las, 
@@ -135,9 +146,14 @@ C_axis <- function(x) {
             axis_base <- unit(pos, "native")
         } else {
             if (outer) {
-                returnvp <- pushTempViewport(side)
-            } 
-            axis_base <- unit(0, "npc") - unit(line*par$cin[2]*par$cex, "in")
+                coords <- "nic"
+            } else {
+                coords <- "npc"
+            }
+            axis_base <- unit(grconvertX(0, coords, "in") -
+                              deviceLoc(unit(0, "npc"), unit(0, "npc"),
+                                        valueOnly=TRUE)$x -
+                              grconvertX(line, "lines", "in"), "in")
         }
         ticks <- ty(ticks, par)
         if (par$usr[3] < par$usr[4]) {
@@ -170,8 +186,8 @@ C_axis <- function(x) {
             }
         }
         if (drawLabels) {
-            labLine <- - (convertX(axis_base, "in", valueOnly=TRUE)/
-                          (par$cin[2]*par$cex)) +
+            axis_base_in <- convertX(axis_base, "in", valueOnly=TRUE)
+            labLine <- - grconvertX(axis_base_in, "in", "lines") +
                        par$mgp[2] - lineoff
             GMtext(labels[ticksub], 2, line=labLine,
                    at=unit(ticks[ticksub], "native"), las=par$las,
@@ -189,9 +205,14 @@ C_axis <- function(x) {
             axis_base <- unit(pos, "native")
         } else {
             if (outer) {
-                returnvp <- pushTempViewport(side)
-            } 
-            axis_base <- unit(1, "npc") + unit(line*par$cin[2]*par$cex, "in")
+                coords <- "nic"
+            } else {
+                coords <- "npc"
+            }
+            axis_base <- unit(grconvertY(1, coords, "in") -
+                              deviceLoc(unit(0, "npc"), unit(0, "npc"),
+                                        valueOnly=TRUE)$y +
+                              grconvertY(line, "lines", "in"), "in")
         }
         ticks <- tx(ticks, par)
         if (par$usr[1] < par$usr[2]) {
@@ -224,11 +245,11 @@ C_axis <- function(x) {
             }
         }
         if (drawLabels) {
-            labLine <- (convertY(axis_base, "in", valueOnly=TRUE)/
-                        (par$cin[2]*par$cex)) +
+            axis_base_in <- convertY(axis_base, "in", valueOnly=TRUE)
+            plot_top_in <- convertY(unit(1, "npc"), "in", valueOnly=TRUE)
+            labLine <- grconvertY(axis_base_in, "in", "lines") +
                        par$mgp[2] - lineoff -
-                       (convertY(unit(1, "npc"), "in", valueOnly=TRUE)/
-                        (par$cin[2]*par$cex))
+                       grconvertY(plot_top_in, "in", "lines")
             GMtext(labels[ticksub], 3, line=labLine,
                    at=unit(ticks[ticksub], "native"), las=par$las, 
                    xadj=computeXAdj(hadj, side, par$las),
@@ -245,9 +266,14 @@ C_axis <- function(x) {
             axis_base <- unit(pos, "native")
         } else {
             if (outer) {
-                returnvp <- pushTempViewport(side)
-            } 
-            axis_base <- unit(1, "npc") + unit(line*par$cin[2]*par$cex, "in")
+                coords <- "nic"
+            } else {
+                coords <- "npc"
+            }
+            axis_base <- unit(grconvertX(1, coords, "in") -
+                              deviceLoc(unit(0, "npc"), unit(0, "npc"),
+                                        valueOnly=TRUE)$x +
+                              grconvertY(line, "lines", "in"), "in")
         }
         ticks <- ty(ticks, par)
         if (par$usr[3] < par$usr[4]) {
@@ -280,11 +306,11 @@ C_axis <- function(x) {
             }
         }
         if (drawLabels) {
-            labLine <- (convertX(axis_base, "in", valueOnly=TRUE)/
-                        (par$cin[2]*par$cex)) +
+            axis_base_in <- convertX(axis_base, "in", valueOnly=TRUE)
+            plot_right_in <- convertX(unit(1, "npc"), "in", valueOnly=TRUE)
+            labLine <- grconvertX(axis_base_in, "in", "lines") +
                        par$mgp[2] - lineoff -
-                       (convertX(unit(1, "npc"), "in", valueOnly=TRUE)/
-                        (par$cin[2]*par$cex))
+                       grconvertX(plot_right_in, "in", "lines")
             GMtext(labels[ticksub], 4, line=labLine,
                    at=unit(ticks[ticksub], "native"), las=par$las,
                    xadj=computeXAdj(hadj, side, par$las),
@@ -296,11 +322,6 @@ C_axis <- function(x) {
                    yLineBias=par$ylbias, allowOverlap=FALSE,
                    label="right-axis-labels")
         }
-    }
-    # Undo any temporary "outer" viewport
-    if (!is.null(returnvp)) {
-        upViewport()
-        downViewport(returnvp)
     }
     upViewport(depth)
 }
@@ -352,24 +373,3 @@ computePAdj <- function(padj, side, las) {
     padj
 }
 
-pushTempViewport <- function(side) {
-    cvp <- current.viewport()
-    xscale <- cvp$xscale
-    yscale <- cvp$yscale
-    name <- cvp$name
-    returnvp <- upViewport(2)
-    if (side == 1 || side == 3) {
-        pushViewport(viewport(x=grobX(rectGrob(vp=returnvp), "west"),
-                              width=grobWidth(rectGrob(vp=returnvp)),
-                              just="left",
-                              xscale=xscale,
-                              name=paste0(name, "-outer-axis")))
-    } else { # side == 2 || side == 4
-        pushViewport(viewport(y=grobY(rectGrob(vp=returnvp), "south"),
-                              height=grobHeight(rectGrob(vp=returnvp)),
-                              just="bottom",
-                              yscale=yscale,
-                              name=paste0(name, "-outer-axis")))        
-    }
-    returnvp
-}
