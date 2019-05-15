@@ -33,6 +33,7 @@ C_mtext <- function(x) {
     name <- paste0("mtext-", switch(side, "bottom", "left", "top", "right"))
     if (outer)
         name <- paste(name, "outer", sep="-")
+    ## Allow 'gridGraphics' to be used pre-R 3.6.0, warts and all
     GMtext(text, side, line, outer, at,
            las=par$las, xadj=adj, yadj=padj,
            mex=par$mex, cin=par$cin, cex=cex, linecex=par$cex,
@@ -121,6 +122,12 @@ GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
                    mex, cin, cex, linecex, font, family,
                    col, lheight, yLineBias,
                    allowOverlap=TRUE, label) {
+    if (getRversion() < "3.6.0") {
+        return(old_GMtext(str, side, line, outer, at, las, xadj, yadj,
+                          mex, cin, cex, linecex, font, family,
+                          col, lheight, yLineBias,
+                          allowOverlap, label))
+    }
     if (side == 1) {
         if (las == 2 || las == 3) {
             angle <- 90
@@ -158,6 +165,60 @@ GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
 	    angle <- 90
 	}
         x <- unit(1, "npc") + unit(grconvertX(line, "lines", "in"), "in")
+        y <- at
+    } else {
+        stop("Invalid 'side'")
+    }
+    grid.text(str, x, y, hjust=xadj, vjust=yadj, rot=angle,
+              gp=gpar(cex=cex, fontface=font, fontfamily=family,
+                  col=col, lineheight=lheight),
+              check.overlap=!allowOverlap,
+              name=grobname(label))
+}
+
+################################################################################
+## Version of GMtext() that does not depend on R 3.6.0 features
+old_GMtext <- function(str, side, line, outer=FALSE, at, las, xadj, yadj,
+                   mex, cin, cex, linecex, font, family,
+                   col, lheight, yLineBias,
+                   allowOverlap=TRUE, label) {
+    if (side == 1) {
+        if (las == 2 || las == 3) {
+            angle <- 90
+        } else {
+            line <- line + 1/mex*(1 - yLineBias)
+            angle <- 0
+        }
+        x <- at
+        y <- unit(-line*cin[2]*linecex, "in")
+    } else if (side == 2) {
+        if(las == 1 || las == 2) {
+	    angle <- 0
+	} else {
+	    line <- line + 1/mex*yLineBias
+	    angle <- 90
+	}
+        x <- unit(-line*cin[2]*linecex, "in")
+        y <- at
+    } else if (side == 3) {
+        if(las == 2 || las == 3) {
+	    angle <- 90
+	}
+	else {
+	    line <- line + 1/mex*yLineBias
+	    angle <- 0
+	}
+        x <- at
+        y <- unit(1, "npc") + unit(line*cin[2]*linecex, "in")
+    } else if (side == 4) {
+	if(las == 1 || las == 2) {
+	    angle <- 0
+	}
+	else {
+	    line <- line + 1/mex*(1 - yLineBias)
+	    angle <- 90
+	}
+        x <- unit(1, "npc") + unit(line*cin[2]*linecex, "in")
         y <- at
     } else {
         stop("Invalid 'side'")

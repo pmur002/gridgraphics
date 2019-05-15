@@ -36,38 +36,41 @@ axis4 <- function() {
     axis(2, outer=TRUE)
 }
 
-## Dotchart test (dotchart() modifies then resets par())
-axis5 <- function() {
-    dotchart(1:10, cex=1.5)
-    axis(1, at=1:9, cex.axis=1.5)
-}
-
-## Tests of psychotic behaviour (modifying par() between plot() and axis())
-axis6 <- function() {
-    plot(1)
-    par(cex=2)
-    axis(1)
-}
-
-axis7 <- function() {
-    plot(1)
-    par(mex=2)
-    axis(1)
-}
-
-axis8 <- function() {
-    plot(1)
-    par(mar=rep(4, 4))
-    axis(1)
-}
-
 plotdiff(expression(axis1()), "axis-1")
 plotdiff(expression(axis2()), "axis-2")
 plotdiff(expression(axis3()), "axis-3")
 plotdiff(expression(axis4()), "axis-4")
-plotdiff(expression(axis5()), "axis-5")
-plotdiff(expression(axis6()), "axis-6")
-plotdiff(expression(axis7()), "axis-7")
-plotdiff(expression(axis8()), "axis-8")
+
+if (getRversion() >= "3.6.0") {
+    ## Dotchart test (dotchart() modifies then resets par())
+    axis5 <- function() {
+        dotchart(1:10, cex=1.5)
+        axis(1, at=1:9, cex.axis=1.5)
+    }
+
+    ## Tests of psychotic behaviour (modifying par() between plot() and axis())
+    axis6 <- function() {
+        plot(1)
+        par(cex=2)
+        axis(1)
+    }
+
+    axis7 <- function() {
+        plot(1)
+        par(mex=2)
+        axis(1)
+    }
+
+    axis8 <- function() {
+        plot(1)
+        par(mar=rep(4, 4))
+        axis(1)
+    }
+
+    plotdiff(expression(axis5()), "axis-5")
+    plotdiff(expression(axis6()), "axis-6")
+    plotdiff(expression(axis7()), "axis-7")
+    plotdiff(expression(axis8()), "axis-8")
+}
 
 plotdiffResult()
