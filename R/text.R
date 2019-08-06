@@ -46,6 +46,8 @@ C_text <- function(x) {
         font <- vfont[2]
         family <- mapVfont(vfont[1])
     }
+    ## Protect against NA labels (until fix in 'grid' is released)
+    labels[is.na(labels)] <- ""
     grid.text(labels, xx, yy, default.units="native",
               hjust=adjx, vjust=adjy, rot=par$srt,
               gp=gpar(cex=cex, col=col, fontface=font, fontfamily=family,

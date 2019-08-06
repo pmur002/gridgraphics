@@ -1,6 +1,21 @@
 \name{NEWS}
 \title{NEWS file for the gridGraphics package}
 \encoding{UTF-8}
+\section{Changes in version 0.4-2}{
+  \itemize{
+    \item Protection against NA labels in text (so that they do not get
+    echoed as "NA").
+
+    This will be fixed in \pkg{grid}, but until that is released,
+    this provides a workaround.
+  }
+}
+\section{Changes in version 0.4-1}{
+  \itemize{
+    \item Allow install on R below 3.6.0 (even if the echo results are
+    not as good)
+  }
+}
 \section{Changes in version 0.4-0}{
   \itemize{
     \item New function \code{echoGrob()}.
