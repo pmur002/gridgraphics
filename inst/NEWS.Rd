@@ -6,8 +6,8 @@
     \item Protection against NA labels in text (so that they do not get
     echoed as "NA").
 
-    This will be fixed in \pkg{grid}, but until that is released,
-    this provides a workaround.
+    NOTE that his will NOT be fixed in \pkg{grid} because some existing
+    packages relies on that \pkg{grid} behaviour.
   }
 }
 \section{Changes in version 0.4-1}{
