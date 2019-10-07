@@ -11,6 +11,8 @@
 
     \item Protection against \code{NULL} labels in text (so that
     \pkg{grid} does not complain about them).
+
+    Reported by Patrick Schratz.
   }
 }
 \section{Changes in version 0.4-1}{
