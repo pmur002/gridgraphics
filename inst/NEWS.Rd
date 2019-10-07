@@ -3,11 +3,14 @@
 \encoding{UTF-8}
 \section{Changes in version 0.4-2}{
   \itemize{
-    \item Protection against NA labels in text (so that they do not get
+    \item Protection against \code{NA} labels in text (so that they do not get
     echoed as "NA").
 
     NOTE that his will NOT be fixed in \pkg{grid} because some existing
     packages relies on that \pkg{grid} behaviour.
+
+    \item Protection against \code{NULL} labels in text (so that
+    \pkg{grid} does not complain about them).
   }
 }
 \section{Changes in version 0.4-1}{
