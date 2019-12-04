@@ -1,6 +1,14 @@
 \name{NEWS}
 \title{NEWS file for the gridGraphics package}
 \encoding{UTF-8}
+\section{Changes in version 0.5-0}{
+  \itemize{
+    \item \code{grid.echo()} now supports \code{stats::plot.hclust()} 
+    \item Fix for \code{grid.echo.function()} when start with
+    no devices open
+    (it was opening an extra device on exit).
+  }
+}
 \section{Changes in version 0.4-2}{
   \itemize{
     \item Protection against \code{NA} labels in text (so that they do not get

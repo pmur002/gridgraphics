@@ -26,9 +26,10 @@ dlDispatch <- function(x) {
            C_symbols = C_symbols(x[[2]]),
            # These only partially supported
            C_contour = C_contour(x[[2]]),
-           # These unsupported
            C_persp = C_persp(x[[2]]),
            C_filledcontour = C_filledcontour(x[[2]]),
+           C_dend = C_dend(x[[2]]),
+           C_dendwindow = C_dendwindow(x[[2]]),
            # These are ignored
            C_strWidth = NULL,
            C_strHeight = NULL,
@@ -104,7 +105,14 @@ grid.echo.function <- function(x=NULL, newpage=TRUE, prefix=NULL,
     device(width, height)
     echod <- dev.cur()
     ## Make sure that the device is closed if running x() errors out
-    on.exit({ dev.set(echod); dev.off(); dev.set(cd) })
+    on.exit({
+        dev.set(echod)
+        dev.off()
+        ## If we started with no Device, do not try to go back
+        ## (that would open yet another device)
+        if (cd > 1)
+            dev.set(cd)
+    })
     x()
     dl <- recordPlot()
     ## Switch back to device we are echoing on
