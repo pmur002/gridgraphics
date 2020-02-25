@@ -3,10 +3,14 @@
 \encoding{UTF-8}
 \section{Changes in version 0.5-0}{
   \itemize{
-    \item \code{grid.echo()} now supports \code{stats::plot.hclust()} 
+    \item \code{grid.echo()} now supports \code{stats::plot.hclust()}
+    
     \item Fix for \code{grid.echo.function()} when start with
     no devices open
     (it was opening an extra device on exit).
+
+    \item Ensure old \code{pdf(useDingbats=TRUE)} behaviour for
+    testing.
   }
 }
 \section{Changes in version 0.4-2}{

@@ -119,6 +119,11 @@ demo11 <- function() {
     coplot(lat ~ long | depth, data = quakes, pch = 21, bg = "green3")
 }
 
+## Use old behaviour for drawing circular points
+## (using real circles reveals TINY differences in circle radius
+##  which gets picked up every now and then in PDF -> PNG rasterisation)
+pdf.options(useDingbats=TRUE)
+
 plotdiff(expression(demo1()), "demo-1")
 plotdiff(expression(demo2()), "demo-2")
 plotdiff(expression(demo3()), "demo-3")
