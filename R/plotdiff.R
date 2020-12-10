@@ -73,7 +73,9 @@ fungen <- function() {
             if (curDev != 1) dev.set(curDev)
         })
         # Only convert and compare if have the tools
-        if (haveRecentR) {
+        if (haveRecentR &&
+            requireNamespace("magick") &&
+            (dev == "png" || requireNamespace("pdftools"))) {
             if (dev == "png") {
                 graphicsPNG <- magick::image_read(graphicsFile)
                 gridPNG <- magick::image_read(gridFile)
@@ -110,7 +112,7 @@ fungen <- function() {
             }
         } else{
             if (!haveWarned) {
-                warning("Unable to test output for differences")
+                cat("Unable to test output for differences\n")
                 haveWarned <<- TRUE
             }
         }
