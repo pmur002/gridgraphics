@@ -15,21 +15,32 @@ C_text <- function(x) {
     adjx <- just[1]
     adjy <- just[2]
     pos <- x[[5]]
-    offset <- unit(x[[6]]*par$cin[2]*par$cex, "in")
+    ## C code (graphics/src/plot.c) ONLY uses first value in 'offset'
+    offset <- unit(x[[6]][1]*par$cin[2]*par$cex, "in")
     ## NULL label generates no grob
     if (!is.null(labels)) {
         if (!is.null(pos)) {
             n <- length(labels)
             pos <- rep(pos, length.out=n)
             adjx <- rep(0.5, length.out=n)
-                                        # 0.3333 = yCharOffset
+            ## 0.3333 = yCharOffset
             adjy <- rep(0.3333, length.out=n)
             xx <- rep(xx, length.out=n)
             yy <- rep(yy, length.out=n)
-            xx[pos == 2] <- xx - convertWidth(offset, "native", valueOnly=TRUE)
-            xx[pos == 4] <- xx + convertWidth(offset, "native", valueOnly=TRUE)
-            yy[pos == 1] <- yy - convertHeight(offset, "native", valueOnly=TRUE)
-            yy[pos == 3] <- yy + convertHeight(offset, "native", valueOnly=TRUE)
+            offsetX <- convertWidth(offset, "native", valueOnly=TRUE)
+            offsetY <- convertHeight(offset, "native", valueOnly=TRUE)
+            pos2 <- pos == 2
+            if (any(pos2))
+                xx[pos2] <- xx[pos2] - offsetX
+            pos4 <- pos == 4
+            if (any(pos4))
+                xx[pos4] <- xx[pos4] + offsetX
+            pos1 <- pos == 1
+            if (any(pos1))
+                yy[pos1] <- yy[pos1] - offsetY
+            pos3 <- pos == 3
+            if (any(pos3))
+                yy[pos3] <- yy[pos3] + offsetY
             adjx[pos == 2] <- 1
             adjx[pos == 4] <- 0   
             adjy[pos == 1] <- 1 - (0.5 - 0.3333) 

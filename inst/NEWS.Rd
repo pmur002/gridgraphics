@@ -2,6 +2,13 @@
 \title{NEWS file for the gridGraphics package}
 \encoding{UTF-8}
 
+\section{Changes in version 0.5-2}{
+  \itemize{
+    \item Fix for \code{text()} with multiple values of \code{pos}.
+    Fixes GitHub issue #19.
+    Thanks to Nour Edin Darwish for report and patch.
+  }
+}
 \section{Changes in version 0.5-1}{
   \itemize{
     \item Ensure use of Suggested packages is conditional (so
